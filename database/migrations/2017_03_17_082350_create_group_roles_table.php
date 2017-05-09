@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProducersTable extends Migration
+class CreateGroupRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateProducersTable extends Migration
      */
     public function up()
     {
-        Schema::create('producers', function (Blueprint $table) {
+        Schema::create('group_roles', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('description');
-            $table->boolean('active');
+            $table->string('code')->unique()->comment('Mã');
+            $table->string('name', 100)->comment('Tên');
+            $table->text('description')->nullable()->comment('Mô tả');
+            $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateProducersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('producers');
+        Schema::dropIfExists('group_roles');
     }
 }

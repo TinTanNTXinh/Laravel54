@@ -8,8 +8,6 @@ use Carbon\Carbon;
 
 trait DBHelper
 {
-    use CurrencyHelper, DateTimeHelper;
-
     /** DATABASE HELPER */
     public function generateCode($class_name, $prefix)
     {
@@ -50,7 +48,7 @@ trait DBHelper
         return $device;
     }
 
-    private function createLogging($name, $description, $count, $created_by, $error_type)
+    public function createLogging($name, $description, $count, $created_by, $error_type)
     {
         $logging              = new Logging();
         $logging->name        = $name;
@@ -64,7 +62,7 @@ trait DBHelper
 
     public function getWithCurrencyFormat($field_name, $name_output)
     {
-        return "CONCAT(FORMAT({$field_name}, 0), '{$this->getCurrencySignal()}') as {$name_output}";
+        return "CONCAT(FORMAT({$field_name}, 0), 'đ') as {$name_output}";
     }
 
     public function getWithDateFormat($field_name, $name_output)

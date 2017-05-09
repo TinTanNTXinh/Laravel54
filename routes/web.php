@@ -5,17 +5,13 @@
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| This file is where you may define all of the routes that are handled
+| by your application. Just tell Laravel the URIs it should respond
+| to using a Closure or controller method. Build something great!
 |
 */
 
 Route::group(['middleware' => []], function () {
-
-    Route::get('/welcome', function () {
-        return view('welcome');
-    });
 
     Route::group(['prefix' => 'docs'], function () {
         Route::get('/', function () {
@@ -28,15 +24,22 @@ Route::group(['middleware' => []], function () {
         Route::get('reset', 'ArtisanController@getCommandReset');
     });
 
+    Route::group(['prefix' => 'file'], function () {
+        Route::get('import-export', 'FileController@getImportExport');
+        Route::get('download/{type}', 'FileController@getDownload');
+        Route::post('import', 'FileController@postImport');
+    });
+
     Route::group(['prefix' => 'test'], function () {
         Route::get('test', 'TestController@getTest');
     });
 
-    // Route::any('{slug}', function () {
-    //     return "Hello World Xinh";
-    // })->where('slug', '([A-z\d-\/_.]+)?');
+     Route::any('/{slug}', function () {
+         return File::get(public_path() . '/home/index.html');
+     })->where('slug', '([A-z\d-\/_.]+)?');
 
-    Route::get('/{any}', function ($any) {
-        return File::get(public_path() . '/home/index.html');
-    })->where('any', '.*');
+//    Route::get('/{any}', function ($any) {
+//        return File::get(public_path() . '/home/index.html');
+//    })->where('any', '.*');
 });
+
