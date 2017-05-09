@@ -140,58 +140,13 @@ class ReportVsysController extends Controller
         $distributor_id = $filter['distributor_id'];
         $visitor_id     = $filter['visitor_id'];
 
-        if ($from_date && $to_date) {
-            $from_date = Carbon::createFromFormat('d/m/Y', $from_date)->toDateString();
-            $to_date   = Carbon::createFromFormat('d/m/Y', $to_date)->toDateString();
-            $reports   = $reports->whereBetween('user_card_moneys.created_date', [$this->addTimeForDate($from_date, 'min'), $this->addTimeForDate($to_date, 'max')]);
-        }
+        $reports = $this->searchFromDateToDate($reports, 'user_card_moneys.created_date', $from_date, $to_date);
+        $reports = $this->searchRangeDate($reports, 'user_card_moneys.created_date', $range);
 
-        if ($range && $range != 'none') {
-            switch ($range) {
-                case 'yesterday':
-                    $reports = $reports
-                        ->whereDate('user_card_moneys.created_date', $this->getYesterday('Y-m-d'));
-                    break;
-                case 'today':
-                    $reports = $reports
-                        ->whereDate('user_card_moneys.created_date', date('Y-m-d'));
-                    break;
-                case 'week':
-                    $start_of_week = Carbon::now()->startOfWeek()->toDateString();
-                    $end_of_week   = Carbon::now()->endOfWeek()->toDateString();
-                    $reports       = $reports
-                        ->whereBetween('user_card_moneys.created_date', [$this->addTimeForDate($start_of_week, 'min'), $this->addTimeForDate($end_of_week, 'max')]);
-                    break;
-                case 'month':
-                    $reports = $reports
-                        ->whereMonth('user_card_moneys.created_date', date('m'))
-                        ->whereYear('user_card_moneys.created_date', date('Y'));
-                    break;
-                case 'year':
-                    $reports = $reports
-                        ->whereYear('user_card_moneys.created_date', date('Y'));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        if ($card_id) {
-            $reports = $reports
-                ->where('user_cards.card_id', $card_id);
-        }
-        if ($cdm_id) {
-            $reports = $reports
-                ->where('cdms.id', $cdm_id);
-        }
-        if ($distributor_id) {
-            $reports = $reports
-                ->where('distributors.id', $distributor_id);
-        }
-        if ($visitor_id) {
-            $reports = $reports
-                ->where('visitors.id', $visitor_id);
-        }
+        $reports = $this->searchFieldName($reports, 'user_cards.card_id', $card_id);
+        $reports = $this->searchFieldName($reports, 'cdms.id', $cdm_id);
+        $reports = $this->searchFieldName($reports, 'distributors.id', $distributor_id);
+        $reports = $this->searchFieldName($reports, 'visitors.id', $visitor_id);
 
         return $this->downloadFile($this->changeColumnName($reports->get(), 'dps'));
         /*
@@ -262,17 +217,9 @@ class ReportVsysController extends Controller
         $visitor_id     = $filter['visitor_id'];
         $card_id        = $filter['card_id'];
 
-        if ($distributor_id) {
-            $reports = $reports->where('distributors.id', $distributor_id);
-        }
-
-        if ($visitor_id) {
-            $reports = $reports->where('visitors.id', $visitor_id);
-        }
-
-        if ($card_id) {
-            $reports = $reports->where('cards.id', $card_id);
-        }
+        $reports = $this->searchFieldName($reports, 'cards.id', $card_id);
+        $reports = $this->searchFieldName($reports, 'distributors.id', $distributor_id);
+        $reports = $this->searchFieldName($reports, 'visitors.id', $visitor_id);
 
         return [
             'report_balances' => $reports->get()

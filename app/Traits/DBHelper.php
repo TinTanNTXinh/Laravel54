@@ -160,7 +160,7 @@ trait DBHelper
             switch ($range) {
                 case 'yesterday':
                     $query = $query
-                        ->whereDate($field_name, $this->getYesterday('Y-m-d'));
+                        ->whereDate($field_name, $this->getYesterday('Y-m-d')['yesterday']);
                     break;
                 case 'today':
                     $query = $query
