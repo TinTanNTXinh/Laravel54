@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use App\Logging;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\DateTimeHelper;
 use DB;
 
 class ReportLoggingController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper;
+    use UserHelper, DBHelper;
 
     private $first_day, $last_day, $today;
     private $user;

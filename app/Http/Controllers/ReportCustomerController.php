@@ -16,12 +16,11 @@ use DB;
 use App\Device;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\DateTimeHelper;
 use App\Traits\FileHelper;
 
 class ReportCustomerController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper, FileHelper;
+    use UserHelper, DBHelper, FileHelper;
 
     private $first_day, $last_day, $today;
     private $user;

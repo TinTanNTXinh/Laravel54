@@ -14,11 +14,10 @@ use DB;
 use League\Flysystem\Exception;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\DateTimeHelper;
 
 class ButtonProductController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper;
+    use UserHelper, DBHelper;
 
     private $first_day, $last_day, $today;
     private $user;

@@ -18,11 +18,10 @@ use App\Mail\Reminder;
 use Mail;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\DateTimeHelper;
 
 class VsysController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper;
+    use UserHelper, DBHelper;
 
     private $format_datetime;
 

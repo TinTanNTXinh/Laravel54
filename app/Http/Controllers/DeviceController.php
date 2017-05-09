@@ -11,11 +11,10 @@ use Route;
 use DB;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
-use App\Traits\DateTimeHelper;
 
 class DeviceController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper;
+    use UserHelper, DBHelper;
 
     private $first_day, $last_day, $today;
     private $user;
