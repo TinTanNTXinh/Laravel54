@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-/*
         ### DEFAULT SEED
         # Nhóm người dùng
         $this->call(GroupRolesTableSeeder::class);
@@ -38,11 +37,11 @@ class DatabaseSeeder extends Seeder
 
         # Nhóm khách hàng
 
-
-
-
-
-*/
+        /*
+         * ===========================================
+         * */
+        
+        /*
         ### DEVELOP
         # Nhóm người dùng
         $this->call(GroupRolesTableSeeder::class);
@@ -86,7 +85,7 @@ class DatabaseSeeder extends Seeder
         # Nhóm khách hàng
         $this->call(DistributorsTableSeeder::class);
         $this->call(SuppliersTableSeeder::class);
-
+        */
 
     }
 }
