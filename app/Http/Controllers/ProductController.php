@@ -57,7 +57,7 @@ class ProductController extends Controller
 
     public function getReadOne(Request $request)
     {
-        $id  = Route::current()->getParameter('id');
+        $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
         return response()->json($one, 200);
     }
@@ -99,7 +99,7 @@ class ProductController extends Controller
 
     public function deleteDeleteOne(Request $request)
     {
-        $id = Route::current()->getParameter('id');
+        $id = Route::current()->parameter('id');
         if (!$this->deleteOne($id))
             return response()->json(['msg' => 'Delete failed!'], 404);
         $arr_datas = $this->readAll();

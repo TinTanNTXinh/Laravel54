@@ -17,7 +17,7 @@ class CollectionController extends Controller
     }
 
     public function getReadOne(Request $request){
-        $id = Route::current()->getParameter('id');$id = 0;
+        $id = Route::current()->parameter('id');$id = 0;
         $collection = $this->readOne($id);
         return response()->json([
             'collection' => $collection
@@ -50,7 +50,7 @@ class CollectionController extends Controller
     }
 
     public function deleteDeleteOne(Request $request){
-        $id = Route::current()->getParameter('id');
+        $id = Route::current()->parameter('id');
         $this->deleteOne($id);
         $arr_datas = $this->readAll();
         return response()->json([

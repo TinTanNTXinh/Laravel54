@@ -52,15 +52,15 @@ class IOCenterController extends Controller
 
     public function getReadAllWithPage()
     {
-        $page      = $id = Route::current()->getParameter('page');
-        $pageSize  = $id = Route::current()->getParameter('pageSize');
+        $page      = $id = Route::current()->parameter('page');
+        $pageSize  = $id = Route::current()->parameter('pageSize');
         $arr_datas = $this->readAllWithPage($page, $pageSize);
         return response()->json($arr_datas, 200);
     }
 
     public function getReadOne(Request $request)
     {
-        $id  = Route::current()->getParameter('id');
+        $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
         return response()->json($one, 200);
     }
@@ -102,7 +102,7 @@ class IOCenterController extends Controller
 
     public function deleteDeleteOne(Request $request)
     {
-        $id = Route::current()->getParameter('id');
+        $id = Route::current()->parameter('id');
         if (!$this->deleteOne($id))
             return response()->json(['msg' => 'Delete failed!'], 404);
         $arr_datas = $this->readAll();

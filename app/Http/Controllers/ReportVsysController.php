@@ -51,7 +51,7 @@ class ReportVsysController extends Controller
 
     public function getReportBalanceDetail()
     {
-        $id  = Route::current()->getParameter('id');
+        $id  = Route::current()->parameter('id');
         $one = $this->reportBalanceDetail($id);
         return response()->json($one, 200);
     }
