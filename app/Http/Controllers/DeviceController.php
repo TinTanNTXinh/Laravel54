@@ -22,6 +22,8 @@ class DeviceController extends Controller
     private $format_date, $format_time;
     private $table_name;
 
+    private $class_name = Device::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -144,7 +146,7 @@ class DeviceController extends Controller
 
             $one                  = new Device();
             $one->collect_code    = $data['collect_code'];
-            $one->code            = $data['code'] ? $data['code'] : $this->generateCode('devices', strtoupper($one->collect_code));
+            $one->code            = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, strtoupper($one->collect_code));
             $one->name            = $data['name'];
             $one->description     = null;
             $one->quantum_product = $data['collect_code'] == 'Tray' ? $data['quantum_product'] : 0;
@@ -193,7 +195,7 @@ class DeviceController extends Controller
 
             $one                  = Device::find($data['id']);
             $one->collect_code    = $data['collect_code'];
-            $one->code            = $data['code'] ? $data['code'] : $this->generateCode('devices', strtoupper($data['collect_code']));
+            $one->code            = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, strtoupper($data['collect_code']));
             $one->name            = $data['name'];
             $one->description     = null;
             $one->quantum_product = $data['quantum_product'];

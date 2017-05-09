@@ -21,6 +21,8 @@ class DistributorController extends Controller
     private $format_date, $format_time;
     private $table_name;
 
+    private $class_name = Distributor::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -125,7 +127,7 @@ class DistributorController extends Controller
             'first_day'        => $this->first_day,
             'last_day'         => $this->last_day,
             'today'            => $this->today,
-            'placeholder_code' => $this->generateCode('distributors', 'DISTRIBUTOR')
+            'placeholder_code' => $this->generateCode($this->class_name, 'DISTRIBUTOR')
         ];
     }
 
@@ -140,7 +142,7 @@ class DistributorController extends Controller
         try {
             DB::beginTransaction();
             $one                = new Distributor();
-            $one->code          = $data['code'] ? $data['code'] : $this->generateCode('distributors', 'DISTRIBUTOR');
+            $one->code          = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'DISTRIBUTOR');
             $one->name          = $data['name'];
             $one->address       = $data['address'];
             $one->address       = $data['address'];
@@ -170,7 +172,7 @@ class DistributorController extends Controller
         try {
             DB::beginTransaction();
             $one                = Distributor::find($data['id']);
-            $one->code          = $data['code'] ? $data['code'] : $this->generateCode('distributors', 'DISTRIBUTOR');
+            $one->code          = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'DISTRIBUTOR');
             $one->name          = $data['name'];
             $one->address       = $data['address'];
             $one->address       = $data['address'];

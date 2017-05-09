@@ -30,6 +30,8 @@ class UserController extends Controller
     private $fake_pwd;
     private $auth_unam_pwd;
 
+    private $class_name = User::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -143,7 +145,7 @@ class UserController extends Controller
             'first_day'        => $this->first_day,
             'last_day'         => $this->last_day,
             'today'            => $this->today,
-            'placeholder_code' => $this->generateCode('users', 'USER'),
+            'placeholder_code' => $this->generateCode($this->class_name, 'USER'),
             'auth'             => $this->auth_unam_pwd
         ];
     }
@@ -160,7 +162,7 @@ class UserController extends Controller
             DB::beginTransaction();
             # User
             $one           = new User();
-            $one->code     = $data['code'] ? $data['code'] : $this->generateCode('users', 'USER');
+            $one->code     = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'USER');
             $one->fullname = $data['fullname'];
             if ($this->auth_unam_pwd) {
                 $one->username = $data['username'];

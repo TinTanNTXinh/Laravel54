@@ -25,6 +25,8 @@ class ProductController extends Controller
     private $format_date, $format_time;
     private $table_name;
 
+    private $class_name = Product::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -157,7 +159,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $one                  = new Product();
-            $one->code            = $this->generateCode('products', 'PRODUCT');
+            $one->code            = $this->generateCode($this->class_name, 'PRODUCT');
             $one->barcode         = $data['barcode'];
             $one->name            = $data['name'];
             $one->description     = $data['description'];
@@ -200,6 +202,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $one                  = Product::find($data['id']);
+            $one->code            = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'PRODUCT');
             $one->barcode         = $data['barcode'];
             $one->name            = $data['name'];
             $one->description     = $data['description'];

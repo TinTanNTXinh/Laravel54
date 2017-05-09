@@ -443,7 +443,7 @@ class VsysController extends Controller
 
             # Create User (KVL)
             $kvl                = new User();
-            $kvl->code          = $this->generateCode('users', 'KVL');
+            $kvl->code          = $this->generateCode(User::class, 'KVL');
             $kvl->fullname      = '';
             $kvl->username      = null;
             $kvl->password      = null;

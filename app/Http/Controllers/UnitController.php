@@ -20,6 +20,8 @@ class UnitController extends Controller
     private $format_date, $format_time;
     private $table_name;
 
+    private $class_name = Unit::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -116,7 +118,7 @@ class UnitController extends Controller
             'first_day'        => $this->first_day,
             'last_day'         => $this->last_day,
             'today'            => $this->today,
-            'placeholder_code' => $this->generateCode('units', 'UNIT')
+            'placeholder_code' => $this->generateCode($this->class_name, 'UNIT')
         ];
     }
 
@@ -131,7 +133,7 @@ class UnitController extends Controller
         try {
             DB::beginTransaction();
             $one              = new Unit();
-            $one->code        = $data['code'] ? $data['code'] : $this->generateCode('units', 'UNIT');
+            $one->code        = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'UNIT');
             $one->name        = $data['name'];
             $one->description = $data['description'];
             $one->active      = true;
@@ -153,7 +155,7 @@ class UnitController extends Controller
         try {
             DB::beginTransaction();
             $one              = Unit::find($data['id']);
-            $one->code        = $data['code'] ? $data['code'] : $this->generateCode('units', 'UNIT');
+            $one->code        = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'UNIT');
             $one->name        = $data['name'];
             $one->description = $data['description'];
             $one->active      = true;

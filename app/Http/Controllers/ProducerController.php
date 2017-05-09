@@ -20,6 +20,8 @@ class ProducerController extends Controller
     private $format_date, $format_time;
     private $table_name;
 
+    private $class_name = Producer::class;
+
     public function __construct()
     {
         $format_date_time  = $this->getFormatDateTime();
@@ -116,7 +118,7 @@ class ProducerController extends Controller
             'first_day'        => $this->first_day,
             'last_day'         => $this->last_day,
             'today'            => $this->today,
-            'placeholder_code' => $this->generateCode('producers', 'PRODUCER')
+            'placeholder_code' => $this->generateCode($this->class_name, 'PRODUCER')
         ];
     }
 
@@ -131,7 +133,7 @@ class ProducerController extends Controller
         try {
             DB::beginTransaction();
             $one          = new Producer();
-            $one->code    = $data['code'] ? $data['code'] : $this->generateCode('producers', 'PRODUCER');
+            $one->code    = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'PRODUCER');
             $one->name    = $data['name'];
             $one->address = $data['address'];
             $one->phone   = $data['phone'];
@@ -157,7 +159,7 @@ class ProducerController extends Controller
         try {
             DB::beginTransaction();
             $one          = Producer::find($data['id']);
-            $one->code    = $data['code'] ? $data['code'] : $this->generateCode('producers', 'PRODUCER');
+            $one->code    = $data['code'] ? $data['code'] : $this->generateCode($this->class_name, 'PRODUCER');
             $one->name    = $data['name'];
             $one->address = $data['address'];
             $one->phone   = $data['phone'];
