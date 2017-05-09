@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
-import {UtilitiesService} from '../../services/utilities/utilities.service';
+import {HttpClientService} from '../../services/httpClient.service';
+import {DateHelperService} from '../../services/helpers/date.helper';
+import {ToastrHelperService} from '../../services/helpers/toastr.helper';
+import {DomHelperService} from '../../services/helpers/dom.helper';
 
 @Component({
     selector: 'app-device',

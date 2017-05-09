@@ -46,8 +46,6 @@ import { SharedModule } from './shared.module';
     AsideComponent,
     FooterComponent,
     LoginComponent,
-    PageHeaderComponent,
-    UserMenuComponent,
     DashboardComponent,
     ChangePasswordComponent
   ],

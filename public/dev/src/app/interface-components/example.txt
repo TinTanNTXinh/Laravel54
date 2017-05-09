@@ -1,0 +1,96 @@
+    /** ICommon **/
+    title: string;
+    placeholder_code: string;
+    prefix_url: string;
+    isLoading: boolean;
+    header: any;
+    action_data: any;
+
+    /** ICrud **/
+    modal: any;
+    isEdit: boolean;
+
+    /** IDatePicker **/
+    range_date: any[];
+    datepickerSettings: any;
+    datepicker_from: Date;
+    datepicker_to: Date;
+    datepickerToOpts: any;
+
+    /** ISearch **/
+    filtering: any;
+
+    constructor() {
+
+    }
+
+    ngOnInit(): void {
+    }
+
+    /** ICommon **/
+    loadData(): void {
+    }
+
+    reloadData(arr_data: any[]): void {
+    }
+
+    refreshData(): void {
+    }
+
+    changeLoading(status: boolean): void {
+    }
+
+    /** ICrud **/
+    loadOne(id: number): void {
+    }
+
+    clearOne(): void {
+    }
+
+    addOne(): void {
+    }
+
+    updateOne(): void {
+    }
+
+    deactivateOne(id: number): void {
+    }
+
+    deleteOne(id: number): void {
+    }
+
+    confirmDeactivateOne(id: number): void {
+    }
+
+    validateOne(): boolean {
+        return null;
+    }
+
+    displayEditBtn(status: boolean): void {
+    }
+
+    fillDataModal(id: number): void {
+    }
+
+    actionCrud(obj: any): void {
+    }
+
+    /** IDatePicker **/
+    handleDateFromChange(dateFrom: Date): void {
+    }
+
+    clearDate(event: any, field: string): void {
+    }
+
+    /** ISearch **/
+    search(): void {
+    }
+
+    reloadDataSearch(arr_data: any[]): void {
+    }
+
+    clearSearch(): void {
+    }
+
+    displayColumn(): void {
+    }

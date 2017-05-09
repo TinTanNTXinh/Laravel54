@@ -1,4 +1,4 @@
-interface IComponent {
+interface ICommon {
 
     title: string;
     placeholder_code: string;
