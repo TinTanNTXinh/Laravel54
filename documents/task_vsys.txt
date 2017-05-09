@@ -1,0 +1,99 @@
+- Token mau het han (fixed by hard code) nhung can refresh token (lan sau dang nhap can tang thoi gian song cua token)
+- bao ve route client
+
+- ben phan cung hay phan mem la ng di cai dat
+- neu can phan cung gui request ve server theo y minh thi ai la ng viet lenh cho phan cung
+- gui du lieu bang phuong thuc GET thi header chua token phai lam sao (fixed by remove middleware with requests send from iocenter)
+
+----- NEW REQUIREMENT -----
+Tong nhap (cua chinh nv ban hang) - tong xuat (cua nv ban hang) = tong ban dc
+
+--------------------
+// ON/OFF cong tac {c2: chan cam, c3: trang thai chan cam}
+{"u":"demo","p":"","id":"IO53A096","cnt":"272","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"5","c3":"ON"}
+{"u":"demo","p":"","id":"IO53A096","cnt":"273","t":"2017-01-20 10:17:47","c1":"20/01/17 10:17:47","c2":"5","c3":"OFF"}
+{"u":"demo","p":"","id":"IO53A096","cnt":"274","t":"2017-01-20 10:18:15","c1":"20/01/17 10:18:15","c2":"4","c3":"OFF"}
+
+// QUET THE {c2: id the}
+{"u":"demo","p":"","id":"IO53A096","cnt":"275","t":"2017-01-20 10:19:09","c1":"20/01/17 10:19:09","c2":"252858287D"}
+{"u":"demo","p":"","id":"IO53A096","cnt":"276","t":"2017-01-20 10:20:10","c1":"20/01/17 10:20:10","c2":"75EC5428E5"}
+
+------------------
+Cau hinh IOCenter
+0000 A2
+A6,0,1: Tim kiem ngoai vi output moi
+A6,0,2: Tim kiem ngoai vi input moi
+A6,1,mI1100ABCDEF-1,I401 kết nối thiết bị có MAC là mI1100ABCDEF-1 thành ngõ vào I401
+A6,1,mR4700ABCDEF-1,O401 kết nối thiết bị có MAC là mR4700ABCDEF-1 thành ngõ ra O401
+A14,1: Khởi động lại thường
+A24I401O401N1: kiểm tra trạng thái hiện tại của I401 và O401 và N1
+N0: chuong trinh tam thoi, chi chay 1 lan, chay het tu dong xoa
+#: la bo nho
+#1-#500: Bộ nhớ tạm, bị xóa khi mất điện
+#501-#800: Bộ nhớ lưu trữ người dùng định nghĩa, không bị xóa khi mất điện
+#801-#900: Bộ nhớ lưu trữ các tham số mạng, phục hồi về mặt định khi xóa hết bộ trung tâm.
+#1: Đọc nội dung của ô nhớ 1
+#1=ABC: Ghi nội dung ABC vào ô nhớ 1
+#1=: Xóa nội dung ô nhớ 1
+D4#1,”ABC”I401: Ghi nội dung ABC và trạng thái I401 vào ô nhớ 1
+
+I401-1 : dua the vao, ON
+I401-2 : rut the ra, OFF
+I401-1'ABCDEF': chờ sự kiện có thẻ đưa vào đúng ID cho trước
+
+Tu quy dinh:
+c1: ngay xay ra hanh dong
+
+// cau hinh web
+#851=192.168.0.141:8000/api/prod-inout
+#852=192.168.0.141:8000/api/login-c
+// Chan cam
+N2=I401-1D21,1,#904,I401,"ON"
+N2=I401-2D21,1,#904,I401,"OFF"
+// RFID
+N3=I402-1D21,2,#904,I402,"IN"
+N4=I402-2D21,2,#904,I402,"OUT"
+
+'252858287D', //ThuocVietInput
+'75EC5428E5', //NhanAiOutput
+
+---------------------------------------------
+Tao Bộ trung tâm (IOCenter)
+Tao Mâm (Button, có số lượng, thuộc IOCenter nào)
+Tạo Thẻ (Card) (Số tiền đc vsys lưu vào thẻ cho iocenter đọc, thuộc IOCenter nào)
+Phân Sản phẩm vào Mâm (Product vào Button)
+Phân Thẻ vào Nhân viên (Card vào User cho cả Supplier và Distributor)
+Nhắc nhở khi sắp hết hàng, gửi vào Email
+Cho admin chỉnh sửa nếu nhập xuất sai
+
+Các request:
+1. Request nạp tiền cho khách hàng (Mã thẻ, số tiền nạp)
+2. Request nhập (nạp) của nhân viên nhập của NCC (Mã mâm, ON, Mã thẻ)
+3. Request xuất (bán) của nhân viên xuât của NPP (Mã mâm, OFF, Mã thẻ)
+4. Request Dang ky the cho KVL
+
+c1: Ngay xay ra hanh dong (dd/mm/yy hh:ii:ss)
+c2: Ma the
+c3: Ma thiet bi (Mam/May nap tien)
+c4: Trang thai (IN/OUT, DPS/WDR/BUY)
+c5: So tien cua the
+
+Nap tien
+c6: So tien nap
+
+Nhap hang/Xuat hang
+c6: So luong nap/ban
+c7: Gia san pham
+
+Dang ky the
+c6: So dien thoai KVL
+
+-------------------
+- Upload image
+- Swagger
+- Review RXJS pattern
+
+- Export file Report Balance in ReportVsys
+- Validate is_numeric in Controller
+
+
