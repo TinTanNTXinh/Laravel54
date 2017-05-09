@@ -1,3 +1,5 @@
+    /** My Variables **/
+
     /** ICommon **/
     title: string;
     placeholder_code: string;
