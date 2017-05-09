@@ -12,7 +12,7 @@
 */
 
 Route::group(['middleware' => []], function () {
-    
+
     Route::get('/welcome', function () {
         return view('welcome');
     });
