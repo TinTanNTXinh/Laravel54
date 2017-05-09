@@ -14,10 +14,11 @@ use Carbon\Carbon;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use App\Traits\DateTimeHelper;
+use App\Traits\FileHelper;
 
 class ReportVsysController extends Controller
 {
-    use UserHelper, DBHelper, DateTimeHelper;
+    use UserHelper, DBHelper, DateTimeHelper, FileHelper;
 
     private $first_day, $last_day, $today;
     private $user;
