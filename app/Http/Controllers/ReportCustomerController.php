@@ -256,6 +256,7 @@ class ReportCustomerController extends Controller
         $unit_id        = $filter['unit_id'];
         $distributor_id = isset($filter['distributor_id']) ? $filter['distributor_id'] : null;
         $cabinet_id     = $filter['cabinet_id'];
+        $show_type      = $filter['show_type'];
 
         /***/
         // Get LIST ALL ID REPORT STOCK
@@ -302,12 +303,12 @@ class ReportCustomerController extends Controller
             $stock->TonDauKy = $TonDauKy;
         }
 
+        if($show_type == 'web') {
+            return [
+                'report_stocks' => $report_stocks
+            ];
+        }
         return $this->downloadFile($this->changeColumnName($report_stocks, 'stock'), 'Báo cáo tồn hàng');
-        /*
-        return [
-            'report_stocks' => $report_stocks
-        ];
-        */
     }
 
     // Nhập hàng
@@ -388,6 +389,7 @@ class ReportCustomerController extends Controller
         $staff_input_id  = isset($filter['staff_input_id']) ? $filter['staff_input_id'] : null;
         $staff_output_id = isset($filter['staff_output_id']) ? $filter['staff_output_id'] : null;
         $cabinet_id      = $filter['cabinet_id'];
+        $show_type       = $filter['show_type'];
 
         $reports = $this->searchFromDateToDate($reports, 'history_input_outputs.created_date', $from_date, $to_date);
         $reports = $this->searchRangeDate($reports, 'history_input_outputs.created_date', $range);
@@ -402,21 +404,21 @@ class ReportCustomerController extends Controller
         switch ($mode) {
             case 'input':
                 $report_inputs = $this->reportInputByUser($reports);
+                if($show_type == 'web') {
+                    return [
+                        'report_inputs' => $report_inputs
+                    ];
+                }
                 return $this->downloadFile($this->changeColumnName($report_inputs, 'input'), 'Báo cáo nhập hàng');
-                /*
-                return [
-                    'report_inputs' => $report_inputs
-                ];
-                */
                 break;
             case 'sale':
                 $report_sales = $this->reportSaleByUser($reports);
+                if($show_type == 'web') {
+                    return [
+                        'report_sales' => $report_sales
+                    ];
+                }
                 return $this->downloadFile($this->changeColumnName($report_sales, 'sale'), 'Báo cáo bán hàng');
-                /*
-                return [
-                    'report_sales' => $report_sales
-                ];
-                */
                 break;
             default:
                 return [];

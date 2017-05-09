@@ -139,6 +139,7 @@ class ReportVsysController extends Controller
         $cdm_id         = $filter['cdm_id'];
         $distributor_id = $filter['distributor_id'];
         $visitor_id     = $filter['visitor_id'];
+        $show_type      = $filter['show_type'];
 
         $reports = $this->searchFromDateToDate($reports, 'user_card_moneys.created_date', $from_date, $to_date);
         $reports = $this->searchRangeDate($reports, 'user_card_moneys.created_date', $range);
@@ -148,12 +149,12 @@ class ReportVsysController extends Controller
         $reports = $this->searchFieldName($reports, 'distributors.id', $distributor_id);
         $reports = $this->searchFieldName($reports, 'visitors.id', $visitor_id);
 
+        if($show_type == 'web') {
+            return [
+                'report_dpss' => $reports->get()
+            ];
+        }
         return $this->downloadFile($this->changeColumnName($reports->get(), 'dps'));
-        /*
-        return [
-            'report_dpss' => $reports->get()
-        ];
-        */
     }
 
     // BUY
