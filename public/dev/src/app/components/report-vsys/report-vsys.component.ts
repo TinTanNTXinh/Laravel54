@@ -177,6 +177,8 @@ export class ReportVsysComponent implements OnInit
         this.changeLoading(false);
         this.clearOne();
         this.clearSearch();
+        this.clearSearchDps();
+        this.clearSearchBalance();
         this.loadData();
     }
 
@@ -343,7 +345,10 @@ export class ReportVsysComponent implements OnInit
         }
 
         this.myChangeLoading('dps', false);
-        this.httpClientService.post(`${this.prefix_url}/report-dpss/search`, {"filter": this.filter_ReportDps}).subscribe(
+
+        this.filter_ReportDps.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-dpss/search?query=${JSON.stringify(this.filter_ReportDps)}`).subscribe(
             (success: any) => {
                 this.reloadDataSearchReportDps(success);
                 this.myDisplayColumn('dps');
@@ -374,7 +379,8 @@ export class ReportVsysComponent implements OnInit
             card_id: 0,
             cdm_id: 0,
             distributor_id: 0,
-            visitor_id: 0
+            visitor_id: 0,
+            show_type: ''
         };
     }
 
@@ -440,6 +446,7 @@ export class ReportVsysComponent implements OnInit
                     this.filter_ReportDps.from_date = from_date;
                     this.filter_ReportDps.to_date = to_date;
                 }
+                this.filter_ReportDps.show_type = 'csv';
                 url = `report-dpss/search?query=${JSON.stringify(this.filter_ReportDps)}`;
                 break;
             case 'balance':

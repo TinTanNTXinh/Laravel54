@@ -85,12 +85,12 @@
                         </div>
                         <div class="row">
                           <div class="col-md-4">
-                            <!--<button type="button"-->
-                                    <!--class="btn m-b-xs w-xs btn-info btn-rounded"-->
-                                    <!--(click)="searchReportDps()">Tìm kiếm-->
-                            <!--</button>-->
-                            <button class="btn m-b-xs w-xs btn-info btn-rounded"
-                                    (click)="downloadFile('dps')">Tìm kiếm
+                            <button type="button"
+                                    class="btn m-b-xs w-xs btn-info btn-rounded"
+                                    (click)="searchReportDps()">Tìm kiếm
+                            </button>
+                            <button class="btn m-b-xs w-xs btn-success btn-rounded"
+                                    (click)="downloadFile('dps')">Xuất file
                             </button>
                           </div>
                         </div>
@@ -99,20 +99,20 @@
                   </div>
                 </div>
               </div>
-              <!--<div class="row">-->
-                <!--<div class="col-md-12">-->
-                  <!--<div class="panel panel-default">-->
-                    <!--<div class="panel-heading font-bold">-->
-                      <!--Báo cáo nạp tiền-->
-                    <!--</div>-->
-                    <!--<div class="panel-body">-->
-                      <!--<spinner-fb [isLoading]="isLoading_Dps"></spinner-fb>-->
-                      <!--<xdatatable [action]="action_data" [body]="report_dpss"-->
-                                  <!--[header]="header_dps"></xdatatable>-->
-                    <!--</div>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                      Báo cáo nạp tiền
+                    </div>
+                    <div class="panel-body">
+                      <spinner-fb [isLoading]="isLoading_Dps"></spinner-fb>
+                      <xdatatable [action]="action_data" [body]="report_dpss"
+                                  [header]="header_dps"></xdatatable>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div id="menu4" class="tab-pane fade">
               <div class="row">
