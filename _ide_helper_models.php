@@ -30,7 +30,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class Logging extends \Eloquent {}
 }
@@ -61,7 +60,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUpdatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereVsysDate($value)
- * @mixin \Eloquent
  */
 	class SessionVsys extends \Eloquent {}
 }
@@ -92,7 +90,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Role whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Role whereRouterLink($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Role whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class Role extends \Eloquent {}
 }
@@ -129,7 +126,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedDate($value)
  * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereVsysDate($value)
- * @mixin \Eloquent
  */
 	class ButtonProduct extends \Eloquent {}
 }
@@ -154,7 +150,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Ward whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Ward whereType($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Ward whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class Ward extends \Eloquent {}
 }
