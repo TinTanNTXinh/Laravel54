@@ -241,6 +241,9 @@ export class ReportSupplierComponent implements OnInit
         this.changeLoading(false);
         this.clearOne();
         this.clearSearch();
+        this.clearSearchReportInput();
+        this.clearSearchReportStock();
+        this.clearSearchReportSale();
         this.loadData();
     }
 

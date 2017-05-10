@@ -194,6 +194,8 @@ export class ReportStaffInputComponent implements OnInit
         this.changeLoading(false);
         this.clearOne();
         this.clearSearch();
+        this.clearSearchReportInput();
+        this.clearSearchReportStock();
         this.loadData();
     }
 
@@ -366,7 +368,9 @@ export class ReportStaffInputComponent implements OnInit
         }
         this.myChangeLoading('input', false);
 
-        this.httpClientService.post(`${this.prefix_url}/report-inputs/search`, {"filter": this.filter_ReportInput}).subscribe(
+        this.filter_ReportInput.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-inputs/search?query=${JSON.stringify(this.filter_ReportInput)}`).subscribe(
             (success: any) => {
                 this.reloadDataReportInput(success);
                 this.myDisplayColumn('input');
@@ -381,7 +385,10 @@ export class ReportStaffInputComponent implements OnInit
     /** Search Report Stock */
     public search_ReportStock() {
         this.myChangeLoading('stock', false);
-        this.httpClientService.post(`${this.prefix_url}/report-stocks/search`, {"filter": this.filter_ReportStock}).subscribe(
+
+        this.filter_ReportStock.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-stocks/search?query=${JSON.stringify(this.filter_ReportStock)}`).subscribe(
             (success: any) => {
                 this.reloadDataReportStock(success);
                 this.myDisplayColumn('stock');
@@ -411,7 +418,8 @@ export class ReportStaffInputComponent implements OnInit
             product_id: 0,
             unit_id: 0,
             staff_input_id: 0,
-            cabinet_id: 0
+            cabinet_id: 0,
+            show_type: ''
         };
     }
 
@@ -421,7 +429,8 @@ export class ReportStaffInputComponent implements OnInit
             year: new Date().getFullYear(),
             product_id: 0,
             unit_id: 0,
-            cabinet_id: 0
+            cabinet_id: 0,
+            show_type: ''
         };
     }
 
@@ -511,9 +520,11 @@ export class ReportStaffInputComponent implements OnInit
                     this.filter_ReportInput.from_date = from_date;
                     this.filter_ReportInput.to_date = to_date;
                 }
+                this.filter_ReportInput.show_type = 'csv';
                 url = `report-inputs/search?query=${JSON.stringify(this.filter_ReportInput)}`;
                 break;
             case 'stock':
+                this.filter_ReportStock.show_type = 'csv';
                 url = `report-stocks/search?query=${JSON.stringify(this.filter_ReportStock)}`;
                 break;
             default: break;

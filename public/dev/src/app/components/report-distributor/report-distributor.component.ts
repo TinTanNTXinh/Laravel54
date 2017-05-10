@@ -250,6 +250,9 @@ export class ReportDistributorComponent implements OnInit
         this.changeLoading(false);
         this.clearOne();
         this.clearSearch();
+        this.clearSearchReportInput();
+        this.clearSearchReportStock();
+        this.clearSearchReportSale();
         this.loadData();
     }
 
@@ -434,7 +437,9 @@ export class ReportDistributorComponent implements OnInit
         }
         this.myChangeLoading('input', false);
 
-        this.httpClientService.post(`${this.prefix_url}/report-inputs/search`, {"filter": this.filter_ReportInput}).subscribe(
+        this.filter_ReportInput.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-inputs/search?query=${JSON.stringify(this.filter_ReportInput)}`).subscribe(
             (success: any) => {
                 this.reloadDataReportInput(success);
                 this.myDisplayColumn('input');
@@ -449,7 +454,10 @@ export class ReportDistributorComponent implements OnInit
     /** Search Report Stock */
     public search_ReportStock() {
         this.myChangeLoading('stock', false);
-        this.httpClientService.post(`${this.prefix_url}/report-stocks/search`, {"filter": this.filter_ReportStock}).subscribe(
+
+        this.filter_ReportStock.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-stocks/search?query=${JSON.stringify(this.filter_ReportStock)}`).subscribe(
             (success: any) => {
                 this.reloadDataReportStock(success);
                 this.myDisplayColumn('stock');
@@ -464,7 +472,10 @@ export class ReportDistributorComponent implements OnInit
     /** Search Report Sale */
     public search_ReportSale() {
         this.myChangeLoading('sale', false);
-        this.httpClientService.post(`${this.prefix_url}/report-sales/search`, {"filter": this.filter_ReportSale}).subscribe(
+
+        this.filter_ReportSale.show_type = 'web';
+
+        this.httpClientService.get(`${this.prefix_url}/report-sales/search?query=${JSON.stringify(this.filter_ReportSale)}`).subscribe(
             (success: any) => {
                 this.reloadDataReportSale(success);
                 this.myDisplayColumn('sale');
@@ -498,7 +509,8 @@ export class ReportDistributorComponent implements OnInit
             product_id: 0,
             unit_id: 0,
             staff_input_id: 0,
-            cabinet_id: 0
+            cabinet_id: 0,
+            show_type: ''
         };
     }
 
@@ -508,7 +520,8 @@ export class ReportDistributorComponent implements OnInit
             year: new Date().getFullYear(),
             product_id: 0,
             unit_id: 0,
-            cabinet_id: 0
+            cabinet_id: 0,
+            show_type: ''
         };
     }
 
@@ -522,7 +535,8 @@ export class ReportDistributorComponent implements OnInit
             product_id: 0,
             unit_id: 0,
             staff_output_id: 0,
-            cabinet_id: 0
+            cabinet_id: 0,
+            show_type: ''
         };
     }
 
@@ -637,6 +651,7 @@ export class ReportDistributorComponent implements OnInit
                     this.filter_ReportInput.from_date = from_date;
                     this.filter_ReportInput.to_date = to_date;
                 }
+                this.filter_ReportInput.show_type = 'csv';
                 url = `report-inputs/search?query=${JSON.stringify(this.filter_ReportInput)}`;
                 break;
             case 'sale':
@@ -647,10 +662,12 @@ export class ReportDistributorComponent implements OnInit
                     this.filter_ReportSale.from_date = from_date;
                     this.filter_ReportSale.to_date = to_date;
                 }
+                this.filter_ReportSale.show_type = 'csv';
                 url = `report-sales/search?query=${JSON.stringify(this.filter_ReportSale)}`;
                 break;
             case 'stock':
                 subfix_filename = 'Ton';
+                this.filter_ReportStock.show_type = 'csv';
                 url = `report-stocks/search?query=${JSON.stringify(this.filter_ReportStock)}`;
                 break;
             default: break;
