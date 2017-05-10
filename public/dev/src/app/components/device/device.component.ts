@@ -9,8 +9,10 @@ import {DomHelperService} from '../../services/helpers/dom.helper';
     selector: 'app-device',
     templateUrl: './device.component.html'
 })
-export class DeviceComponent implements OnInit, IComponent {
+export class DeviceComponent implements OnInit
+    , ICommon, ICrud, IDatePicker, ISearch {
 
+    /** My Variables **/
     public collections: any[] = [];
     public io_centers: any[] = [];
     public devices: any[] = [];
@@ -21,15 +23,40 @@ export class DeviceComponent implements OnInit, IComponent {
     public parent_devices: any[] = [];
     public isDisplayQuickTray: boolean = false;
 
-    constructor(private httpClientService: HttpClientService, private utilitiesService: UtilitiesService) {
+    /** ICommon **/
+    title: string;
+    placeholder_code: string;
+    prefix_url: string;
+    isLoading: boolean;
+    header: any;
+    action_data: any;
+
+    /** ICrud **/
+    modal: any;
+    isEdit: boolean;
+
+    /** IDatePicker **/
+    range_date: any[];
+    datepickerSettings: any;
+    datepicker_from: Date;
+    datepicker_to: Date;
+    datepickerToOpts: any = {};
+
+    /** ISearch **/
+    filtering: any;
+
+    constructor(private httpClientService: HttpClientService
+        , private dateHelperService: DateHelperService
+        , private toastrHelperService: ToastrHelperService
+        , private domHelperService: DomHelperService) {
     }
 
     ngOnInit(): void {
         this.title = 'Thiết bị';
         this.prefix_url = 'devices';
-        this.range_date = this.utilitiesService.range_date;
+        this.range_date = this.dateHelperService.range_date;
         this.refreshData();
-        this.datepickerSettings = this.utilitiesService.datepickerSettings;
+        this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.action_data = {
             ADD: false,
             EDIT: true,
@@ -64,49 +91,7 @@ export class DeviceComponent implements OnInit, IComponent {
         };
     }
 
-    title: string;
-    placeholder_code: string;
-    prefix_url: string;
-    isEdit: boolean;
-    isLoading: boolean;
-    filtering: any;
-    range_date: any[];
-    header: any;
-    modal: any;
-    action_data: any;
-    datepickerSettings: any;
-    datepicker_from: Date;
-    datepicker_to: Date;
-    datepickerToOpts: any = {};
-
-    handleDateFromChange(dateFrom: Date): void {
-        this.datepicker_from = dateFrom;
-        this.datepickerToOpts = {
-            startDate: dateFrom,
-            autoclose: true,
-            todayBtn: 'linked',
-            todayHighlight: true,
-            icon: this.utilitiesService.icon_calendar,
-            placeholder: this.utilitiesService.date_placeholder,
-            format: 'dd/mm/yyyy'
-        };
-    }
-
-    clearDate(event: any, field: string): void {
-        if (event == null) {
-            switch (field) {
-                case 'from':
-                    this.filtering.from_date = '';
-                    break;
-                case 'to':
-                    this.filtering.to_date = '';
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
+    /** ICommon **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
@@ -114,7 +99,7 @@ export class DeviceComponent implements OnInit, IComponent {
                 this.changeLoading(true);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -136,13 +121,8 @@ export class DeviceComponent implements OnInit, IComponent {
         });
 
         this.parent_devices = this.devices_search.filter(function (o) {
-           return ['Cabinet', 'RFID'].includes(o['collect_code']);
+            return ['Cabinet', 'RFID'].includes(o['collect_code']);
         });
-    }
-
-    reloadDataSearch(arr_data: any[]): void {
-        this.devices = arr_data['devices'];
-        this.devices_search = arr_data['devices'];
     }
 
     refreshData(): void {
@@ -152,10 +132,28 @@ export class DeviceComponent implements OnInit, IComponent {
         this.loadData();
     }
 
+    changeLoading(status: boolean): void {
+        this.isLoading = status;
+    }
+
+    /** ICrud **/
     loadOne(id: number): void {
         this.device = this.devices.find(function (o) {
             return o.id == id;
         });
+    }
+
+    clearOne(): void {
+        this.device = {
+            code: "",
+            name: "",
+            quantum_product: 0,
+            active: true,
+            collect_code: "",
+            io_center_id: 0,
+            parent_id: 0,
+            quantum_tray: 0
+        };
     }
 
     addOne(): void {
@@ -168,11 +166,11 @@ export class DeviceComponent implements OnInit, IComponent {
         this.httpClientService.patch(this.prefix_url, {"id": id}).subscribe(
             (success: any) => {
                 this.reloadData(success);
-                this.utilitiesService.showToastr('success', 'Hủy thành công.');
-                this.utilitiesService.toggleModal('modal-confirm');
+                this.toastrHelperService.showToastr('success', 'Hủy thành công.');
+                this.domHelperService.toggleModal('modal-confirm');
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -181,12 +179,156 @@ export class DeviceComponent implements OnInit, IComponent {
         this.httpClientService.delete(`${this.prefix_url}/${id}`).subscribe(
             (success: any) => {
                 this.reloadData(success);
-                this.utilitiesService.showToastr('success', 'Xóa thành công.');
+                this.toastrHelperService.showToastr('success', 'Xóa thành công!');
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
+    }
+
+    confirmDeactivateOne(id: number): void {
+        this.deactivateOne(id);
+    }
+
+    validateOne(): boolean {
+        let flag: boolean = true;
+        if (this.device.name == '') {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Tên ${this.title} không được để trống.`);
+        }
+        if (this.device.collect_code == '') {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Loại ${this.title} không được để trống.`);
+        }
+        if (this.device.io_center_id == 0) {
+            flag = false;
+            this.toastrHelperService.showToastr('warning', `Bộ trung tâm của ${this.title} không được để trống.`);
+        }
+
+        // Exception
+        switch (this.device.collect_code) {
+            case 'RFID':
+            case 'Cabinet':
+            case 'CDM':
+                if (this.device.parent_id != 0) {
+                    flag = false;
+                    this.toastrHelperService.showToastr('warning', `Loại này không thuộc ${this.title} nào.`);
+                }
+                break;
+            case 'Tray':
+            case 'Card':
+                if (this.device.parent_id == 0) {
+                    flag = false;
+                    this.toastrHelperService.showToastr('warning', `Loại này phải thuộc một ${this.title} khác.`);
+                }
+                if (this.device.code == '') {
+                    flag = false;
+                    this.toastrHelperService.showToastr('warning', `Mã ${this.title} không được để trống.`);
+                }
+                break;
+            default:
+                break;
+        }
+
+        return flag;
+    }
+
+    displayEditBtn(status: boolean): void {
+        this.isEdit = status;
+    }
+
+    fillDataModal(id: number): void {
+        this.modal.id = id;
+        this.modal.header = 'Xác nhận';
+        this.modal.body = `Có chắc muốn xóa ${this.title} này?`;
+        this.modal.footer = 'OK';
+    }
+
+    actionCrud(obj: any): void {
+        switch (obj.mode) {
+            case 'add':
+                this.displayEditBtn(false);
+                this.clearOne();
+                this.domHelperService.showTab('menu2');
+                break;
+            case 'edit':
+                this.loadOne(obj.data.id);
+                break;
+            case 'delete':
+                this.fillDataModal(obj.data.id);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /** IDatePicker **/
+    handleDateFromChange(dateFrom: Date): void {
+        this.datepicker_from = dateFrom;
+        this.datepickerToOpts = {
+            startDate: dateFrom,
+            autoclose: true,
+            todayBtn: 'linked',
+            todayHighlight: true,
+            icon: this.dateHelperService.icon_calendar,
+            placeholder: this.dateHelperService.date_placeholder,
+            format: 'dd/mm/yyyy'
+        };
+    }
+
+    clearDate(event: any, field: string): void {
+        if (event == null) {
+            switch (field) {
+                case 'from':
+                    this.filtering.from_date = '';
+                    break;
+                case 'to':
+                    this.filtering.from_date = '';
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /** ISearch **/
+    search(): void {
+        if (this.datepicker_from != null && this.datepicker_to != null) {
+            let from_date = this.dateHelperService.getDate(this.datepicker_from);
+            let to_date = this.dateHelperService.getDate(this.datepicker_to);
+            this.filtering.from_date = from_date;
+            this.filtering.to_date = to_date;
+        }
+        this.changeLoading(false);
+
+        this.httpClientService.get(`${this.prefix_url}/search?query=${JSON.stringify(this.filtering)}`).subscribe(
+            (success: any) => {
+                this.reloadDataSearch(success);
+                this.displayColumn();
+                this.changeLoading(true);
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+    }
+
+    reloadDataSearch(arr_data: any[]): void {
+        this.devices = arr_data['devices'];
+        this.devices_search = arr_data['devices'];
+    }
+
+    clearSearch(): void {
+        this.filtering = {
+            from_date: '',
+            to_date: '',
+            range: '',
+            io_center_id: 0,
+            device_id: 0,
+            collect_code: '',
+            parent_id: 0
+        };
     }
 
     displayColumn(): void {
@@ -208,130 +350,7 @@ export class DeviceComponent implements OnInit, IComponent {
             this.header.parent_name.visible = this.filtering.collect_code == 'Tray' || this.filtering.collect_code == 'Card' || this.filtering.collect_code == '';
     }
 
-    search(): void {
-        if (this.datepicker_from != null && this.datepicker_to != null) {
-            let from_date = this.utilitiesService.getDate(this.datepicker_from);
-            let to_date = this.utilitiesService.getDate(this.datepicker_to);
-            this.filtering.from_date = from_date;
-            this.filtering.to_date = to_date;
-        }
-        this.changeLoading(false);
-
-        this.httpClientService.get(`${this.prefix_url}/search?query=${JSON.stringify(this.filtering)}`).subscribe(
-            (success: any) => {
-                this.reloadDataSearch(success);
-                this.displayColumn();
-                this.changeLoading(true);
-            },
-            (error: any) => {
-                this.utilitiesService.showToastr('error');
-            }
-        );
-    }
-
-    clearSearch(): void {
-        this.filtering = {
-            from_date: '',
-            to_date: '',
-            range: '',
-            io_center_id: 0,
-            device_id: 0,
-            collect_code: '',
-            parent_id: 0
-        };
-    }
-
-    clearOne(): void {
-        this.device = {
-            code: "",
-            name: "",
-            quantum_product: 0,
-            active: true,
-            collect_code: "",
-            io_center_id: 0,
-            parent_id: 0,
-            quantum_tray: 0
-        };
-    }
-
-    displayEditBtn(status: boolean): void {
-    }
-
-    changeLoading(status: boolean): void {
-        this.isLoading = status;
-    }
-
-    fillDataModal(id: number): void {
-        this.modal.id = id;
-        this.modal.header = 'Xác nhận';
-        this.modal.body = `Có chắc muốn xóa ${this.title} này?`;
-        this.modal.footer = 'OK';
-    }
-
-    confirmDeactivateOne(id: number): void {
-        this.deactivateOne(id);
-    }
-
-    validateOne(): boolean {
-        let flag: boolean = true;
-        if (this.device.name == '') {
-            flag = false;
-            this.utilitiesService.showToastr('warning', `Tên ${this.title} không được để trống.`);
-        }
-        if (this.device.collect_code == '') {
-            flag = false;
-            this.utilitiesService.showToastr('warning', `Loại ${this.title} không được để trống.`);
-        }
-        if (this.device.io_center_id == 0) {
-            flag = false;
-            this.utilitiesService.showToastr('warning', `Bộ trung tâm của ${this.title} không được để trống.`);
-        }
-
-        // Exception
-        switch (this.device.collect_code) {
-            case 'RFID':
-            case 'Cabinet':
-            case 'CDM':
-                if (this.device.parent_id != 0) {
-                    flag = false;
-                    this.utilitiesService.showToastr('warning', `Loại này không thuộc ${this.title} nào.`);
-                }
-                break;
-            case 'Tray':
-            case 'Card':
-                if (this.device.parent_id == 0) {
-                    flag = false;
-                    this.utilitiesService.showToastr('warning', `Loại này phải thuộc một ${this.title} khác.`);
-                }
-                if (this.device.code == '') {
-                    flag = false;
-                    this.utilitiesService.showToastr('warning', `Mã ${this.title} không được để trống.`);
-                }
-                break;
-            default:
-                break;
-        }
-
-        return flag;
-    }
-
-    actionCrud(obj: any): void {
-        switch (obj.mode) {
-            case 'add':
-                break;
-            case 'edit':
-                this.loadOne(obj.data.id);
-                this.utilitiesService.showTab(obj.data.collect_code);
-                break;
-            case 'delete':
-                this.fillDataModal(obj.data.id);
-                break;
-            default:
-                break;
-        }
-    }
-
-    /** Funciton **/
+    /** My Function **/
     public myAddOne(collect_code: string): void {
         if (!!collect_code)
             this.customData(collect_code);
@@ -342,11 +361,11 @@ export class DeviceComponent implements OnInit, IComponent {
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
-                this.utilitiesService.showToastr('success', 'Thêm thành công!');
+                this.toastrHelperService.showToastr('success', 'Thêm thành công!');
             },
             (error: any) => {
                 for (let err of error.json()['msg']) {
-                    this.utilitiesService.showToastr('error', err);
+                    this.toastrHelperService.showToastr('error', err);
                 }
             }
         );
@@ -361,11 +380,11 @@ export class DeviceComponent implements OnInit, IComponent {
             (success: any) => {
                 this.reloadData(success);
                 this.clearOne();
-                this.utilitiesService.showToastr('success', 'Cập nhật thành công.');
+                this.toastrHelperService.showToastr('success', 'Cập nhật thành công.');
             },
             (error: any) => {
                 for (let err of error.json()['msg']) {
-                    this.utilitiesService.showToastr('error', err);
+                    this.toastrHelperService.showToastr('error', err);
                 }
             }
         );
@@ -443,5 +462,4 @@ export class DeviceComponent implements OnInit, IComponent {
         this.device.quantum_tray = 0;
         this.device.quantum_product = 0;
     }
-
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
+import {HttpClientService} from '../../services/httpClient.service';
 
 @Component({
     selector: 'app-footer',

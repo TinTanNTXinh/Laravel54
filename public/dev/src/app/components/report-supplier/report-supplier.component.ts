@@ -1,14 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
-import {UtilitiesService} from "../../services/utilities/utilities.service";
+import {HttpClientService} from '../../services/httpClient.service';
+import {DateHelperService} from '../../services/helpers/date.helper';
+import {ToastrHelperService} from '../../services/helpers/toastr.helper';
+import {DomHelperService} from '../../services/helpers/dom.helper';
+import {FileHelperService} from '../../services/helpers/file.helper';
 
 @Component({
     selector: 'app-report-supplier',
     templateUrl: './report-supplier.component.html'
 })
-export class ReportSupplierComponent implements OnInit, IComponent {
+export class ReportSupplierComponent implements OnInit
+    , ICommon, ICrud, IDatePicker, ISearch {
 
+    /** My Variables **/
     public header_input: any;
     public header_stock: any;
     public header_sale: any;
@@ -42,16 +47,41 @@ export class ReportSupplierComponent implements OnInit, IComponent {
     public datepicker_to_sale: Date;
     public datepickerToOpts_sale: any = {};
 
-    constructor(private httpClientService: HttpClientService, public utilitiesService: UtilitiesService) {
+    /** ICommon **/
+    title: string;
+    placeholder_code: string;
+    prefix_url: string;
+    isLoading: boolean;
+    header: any;
+    action_data: any;
 
+    /** ICrud **/
+    modal: any;
+    isEdit: boolean;
+
+    /** IDatePicker **/
+    range_date: any[];
+    datepickerSettings: any;
+    datepicker_from: Date;
+    datepicker_to: Date;
+    datepickerToOpts: any = {};
+
+    /** ISearch **/
+    filtering: any;
+
+    constructor(private httpClientService: HttpClientService
+        , private dateHelperService: DateHelperService
+        , private toastrHelperService: ToastrHelperService
+        , private domHelperService: DomHelperService
+        , private fileHelperService: FileHelperService) {
     }
 
     ngOnInit(): void {
         this.title = 'Báo cáo khách hàng';
         this.prefix_url = 'report-suppliers';
-        this.range_date = this.utilitiesService.range_date;
+        this.range_date = this.dateHelperService.range_date;
         this.refreshData();
-        this.datepickerSettings = this.utilitiesService.datepickerSettings;
+        this.datepickerSettings = this.dateHelperService.datepickerSettings;
         this.action_data = {
             ADD: false,
             EDIT: false,
@@ -170,34 +200,15 @@ export class ReportSupplierComponent implements OnInit, IComponent {
         };
     }
 
-    title: string;
-    placeholder_code: string;
-    prefix_url: string;
-    isEdit: boolean;
-    isLoading: boolean;
-    filtering: any;
-    range_date: any[];
-    header: any;
-    modal: any;
-    action_data: any;
-    datepickerSettings: any;
-    datepicker_from: Date;
-    datepicker_to: Date;
-    datepickerToOpts: any;
-
-    handleDateFromChange(dateFrom: Date): void {
-    }
-
-    clearDate(event: any, field: string): void {
-    }
-
+    /** ICommon **/
     loadData(): void {
         this.httpClientService.get(this.prefix_url).subscribe(
             (success: any) => {
                 this.reloadData(success);
+                this.changeLoading(true);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -226,17 +237,22 @@ export class ReportSupplierComponent implements OnInit, IComponent {
         this.cabinets = arr_data['cabinets'];
     }
 
-    reloadDataSearch(arr_data: any[]): void {
-    }
-
     refreshData(): void {
-        this.clearSearchReportInput();
-        this.clearSearchReportStock();
-        this.clearSearchReportSale();
+        this.changeLoading(false);
+        this.clearOne();
+        this.clearSearch();
         this.loadData();
     }
 
+    changeLoading(status: boolean): void {
+        this.isLoading = status;
+    }
+
+    /** ICrud **/
     loadOne(id: number): void {
+    }
+
+    clearOne(): void {
     }
 
     addOne(): void {
@@ -246,43 +262,128 @@ export class ReportSupplierComponent implements OnInit, IComponent {
     }
 
     deactivateOne(id: number): void {
+        this.httpClientService.patch(this.prefix_url, {"id": id}).subscribe(
+            (success: any) => {
+                this.reloadData(success);
+                this.toastrHelperService.showToastr('success', 'Hủy thành công.');
+                this.domHelperService.toggleModal('modal-confirm');
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
     }
 
     deleteOne(id: number): void {
-    }
-
-    displayColumn(): void {
-    }
-
-    search(): void {
-    }
-
-    clearSearch(): void {
-    }
-
-    clearOne(): void {
-    }
-
-    displayEditBtn(status: boolean): void {
-    }
-
-    changeLoading(status: boolean): void {
-    }
-
-    fillDataModal(id: number): void {
+        this.httpClientService.delete(`${this.prefix_url}/${id}`).subscribe(
+            (success: any) => {
+                this.reloadData(success);
+                this.toastrHelperService.showToastr('success', 'Xóa thành công!');
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
     }
 
     confirmDeactivateOne(id: number): void {
+        this.deactivateOne(id);
     }
 
     validateOne(): boolean {
         return null;
     }
 
-    actionCrud(obj: any): void {
+    displayEditBtn(status: boolean): void {
+        this.isEdit = status;
     }
 
-    /** My Function */
+    fillDataModal(id: number): void {
+        this.modal.id = id;
+        this.modal.header = 'Xác nhận';
+        this.modal.body = `Có chắc muốn xóa ${this.title} này?`;
+        this.modal.footer = 'OK';
+    }
+
+    actionCrud(obj: any): void {
+        switch (obj.mode) {
+            case 'add':
+                this.displayEditBtn(false);
+                this.clearOne();
+                this.domHelperService.showTab('menu2');
+                break;
+            case 'edit':
+                this.loadOne(obj.data.id);
+                break;
+            case 'delete':
+                this.fillDataModal(obj.data.id);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /** IDatePicker **/
+    handleDateFromChange(dateFrom: Date): void {
+        this.datepicker_from = dateFrom;
+        this.datepickerToOpts = {
+            startDate: dateFrom,
+            autoclose: true,
+            todayBtn: 'linked',
+            todayHighlight: true,
+            icon: this.dateHelperService.icon_calendar,
+            placeholder: this.dateHelperService.date_placeholder,
+            format: 'dd/mm/yyyy'
+        };
+    }
+
+    clearDate(event: any, field: string): void {
+        if (event == null) {
+            switch (field) {
+                case 'from':
+                    this.filtering.from_date = '';
+                    break;
+                case 'to':
+                    this.filtering.from_date = '';
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /** ISearch **/
+    search(): void {
+        if (this.datepicker_from != null && this.datepicker_to != null) {
+            let from_date = this.dateHelperService.getDate(this.datepicker_from);
+            let to_date = this.dateHelperService.getDate(this.datepicker_to);
+            this.filtering.from_date = from_date;
+            this.filtering.to_date = to_date;
+        }
+        this.changeLoading(false);
+
+        this.httpClientService.get(`${this.prefix_url}/search?query=${JSON.stringify(this.filtering)}`).subscribe(
+            (success: any) => {
+                this.reloadDataSearch(success);
+                this.displayColumn();
+                this.changeLoading(true);
+            },
+            (error: any) => {
+                this.toastrHelperService.showToastr('error');
+            }
+        );
+    }
+
+    reloadDataSearch(arr_data: any[]): void {
+    }
+
+    clearSearch(): void {
+    }
+
+    displayColumn(): void {
+    }
+
+    /** My Function **/
     public myHandleDateFromChange(dateFrom: Date, mode) {
         switch (mode) {
             case 'input':
@@ -292,8 +393,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
                     autoclose: true,
                     todayBtn: 'linked',
                     todayHighlight: true,
-                    icon: this.utilitiesService.icon_calendar,
-                    placeholder: this.utilitiesService.date_placeholder,
+                    icon: this.dateHelperService.icon_calendar,
+                    placeholder: this.dateHelperService.date_placeholder,
                     format: 'dd/mm/yyyy'
                 };
                 break;
@@ -304,8 +405,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
                     autoclose: true,
                     todayBtn: 'linked',
                     todayHighlight: true,
-                    icon: this.utilitiesService.icon_calendar,
-                    placeholder: this.utilitiesService.date_placeholder,
+                    icon: this.dateHelperService.icon_calendar,
+                    placeholder: this.dateHelperService.date_placeholder,
                     format: 'dd/mm/yyyy'
                 };
                 break;
@@ -317,8 +418,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
     /** Search Report Input */
     public search_ReportInput() {
         if (this.datepicker_from_input != null && this.datepicker_to_input != null) {
-            let from_date = this.utilitiesService.getDate(this.datepicker_from_input);
-            let to_date = this.utilitiesService.getDate(this.datepicker_to_input);
+            let from_date = this.dateHelperService.getDate(this.datepicker_from_input);
+            let to_date = this.dateHelperService.getDate(this.datepicker_to_input);
             this.filter_ReportInput.from_date = from_date;
             this.filter_ReportInput.to_date = to_date;
         }
@@ -333,7 +434,7 @@ export class ReportSupplierComponent implements OnInit, IComponent {
                 this.myChangeLoading('input', true);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -351,7 +452,7 @@ export class ReportSupplierComponent implements OnInit, IComponent {
                 this.myChangeLoading('stock', true);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -360,8 +461,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
     public search_ReportSale() {
 
         if (this.datepicker_from_sale != null && this.datepicker_to_sale != null) {
-            let from_date = this.utilitiesService.getDate(this.datepicker_from_sale);
-            let to_date = this.utilitiesService.getDate(this.datepicker_to_sale);
+            let from_date = this.dateHelperService.getDate(this.datepicker_from_sale);
+            let to_date = this.dateHelperService.getDate(this.datepicker_to_sale);
             this.filter_ReportSale.from_date = from_date;
             this.filter_ReportSale.to_date = to_date;
         }
@@ -377,7 +478,7 @@ export class ReportSupplierComponent implements OnInit, IComponent {
                 this.myChangeLoading('sale', true);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error');
+                this.toastrHelperService.showToastr('error');
             }
         );
     }
@@ -544,8 +645,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
             case 'input':
                 subfix_filename = 'Nhap';
                 if (this.datepicker_from_input != null && this.datepicker_to_input != null) {
-                    let from_date = this.utilitiesService.getDate(this.datepicker_from_input);
-                    let to_date = this.utilitiesService.getDate(this.datepicker_to_input);
+                    let from_date = this.dateHelperService.getDate(this.datepicker_from_input);
+                    let to_date = this.dateHelperService.getDate(this.datepicker_to_input);
                     this.filter_ReportInput.from_date = from_date;
                     this.filter_ReportInput.to_date = to_date;
                 }
@@ -555,8 +656,8 @@ export class ReportSupplierComponent implements OnInit, IComponent {
             case 'sale':
                 subfix_filename = 'Ban';
                 if (this.datepicker_from_sale != null && this.datepicker_to_sale != null) {
-                    let from_date = this.utilitiesService.getDate(this.datepicker_from_sale);
-                    let to_date = this.utilitiesService.getDate(this.datepicker_to_sale);
+                    let from_date = this.dateHelperService.getDate(this.datepicker_from_sale);
+                    let to_date = this.dateHelperService.getDate(this.datepicker_to_sale);
                     this.filter_ReportSale.from_date = from_date;
                     this.filter_ReportSale.to_date = to_date;
                 }
@@ -573,10 +674,10 @@ export class ReportSupplierComponent implements OnInit, IComponent {
         this.httpClientService.get(`${this.prefix_url}/${url}`, 'text')
             .subscribe(
                 (success: any) => {
-                    this.utilitiesService.downloadFile(success, `BaoCaoKhachHang_${subfix_filename}.csv`, 'text/csv');
+                    this.fileHelperService.downloadFile(success, `BaoCaoKhachHang_${subfix_filename}.csv`, 'text/csv');
                 },
                 (error: any) => {
-                    this.utilitiesService.showToastr('error');
+                    this.toastrHelperService.showToastr('error');
                 }
             );
     }

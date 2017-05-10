@@ -21,7 +21,7 @@ import {MasterDetailComponent} from './dynamic-components/master-detail/master-d
 
 // My components
 import {ProductComponent} from './components/product/product.component';
-import {ProductTypeComponent} from './components/productType/productType.component';
+import {ProductTypeComponent} from './components/product-type/product-type.component';
 import {CollectionComponent} from './components/collection/collection.component';
 import {DeviceComponent} from './components/device/device.component';
 import {UserCardComponent} from './components/user-card/user-card.component';

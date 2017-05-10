@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
-import {AuthenticationService} from '../../services/authentication/authentication.service';
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
-import {LoggingService} from '../../services/logging/logging.service';
+import {AuthenticationService} from '../../services/authentication.service';
+import {HttpClientService} from '../../services/httpClient.service';
+import {LoggingService} from '../../services/logging.service';
 import {Subscription} from 'rxjs';
 
 @Component({

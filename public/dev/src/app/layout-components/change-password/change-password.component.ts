@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
-import {UtilitiesService} from '../../services/utilities/utilities.service';
-import {AuthenticationService} from '../../services/authentication/authentication.service';
+import {HttpClientService} from '../../services/httpClient.service';
+import {AuthenticationService} from '../../services/authentication.service';
+import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 
 @Component({
     selector: 'app-change-password',
@@ -12,7 +12,9 @@ export class ChangePasswordComponent implements OnInit {
 
     public data: any;
 
-    constructor(private httpClientService: HttpClientService, private utilitiesService: UtilitiesService, private authenticationService: AuthenticationService) {
+    constructor(private httpClientService: HttpClientService
+        , private authenticationService: AuthenticationService
+        , private toastrHelperService: ToastrHelperService) {
     }
 
     ngOnInit() {
@@ -23,12 +25,12 @@ export class ChangePasswordComponent implements OnInit {
         this.httpClientService.post('users/change-password', {"data": this.data}).subscribe(
             (success: any) => {
                 this.clear();
-                this.utilitiesService.showToastr('success', 'Thay đổi mật khẩu thành công. Vui lòng đăng nhập lại.');
+                this.toastrHelperService.showToastr('success', 'Thay đổi mật khẩu thành công. Vui lòng đăng nhập lại.');
                 this.authenticationService.clearAuthLocalStorage();
                 this.authenticationService.notifyAuthenticate(false);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error', error['error']);
+                this.toastrHelperService.showToastr('error', error['error']);
             }
         );
     }

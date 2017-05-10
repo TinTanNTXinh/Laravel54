@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {AuthenticationService} from '../../services/authentication/authentication.service';
-import {HttpClientService} from '../../services/httpClient/httpClient.service';
-import {UtilitiesService} from '../../services/utilities/utilities.service';
-import {LoggingService} from '../../services/logging/logging.service';
+import {AuthenticationService} from '../../services/authentication.service';
+import {HttpClientService} from '../../services/httpClient.service';
+import {LoggingService} from '../../services/logging.service';
+import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 
 @Component({
     selector: 'app-login',
@@ -19,8 +19,11 @@ export class LoginComponent implements OnInit {
     /**
      *
      */
-    constructor(private authenticationService: AuthenticationService, private httpClientService: HttpClientService, private router: Router, private utilitiesService: UtilitiesService, private loggingService: LoggingService) {
-
+    constructor(private authenticationService: AuthenticationService
+        , private httpClientService: HttpClientService
+        , private router: Router
+        , private loggingService: LoggingService
+        , private toastrHelperService: ToastrHelperService) {
     }
 
     ngOnInit() {
@@ -35,7 +38,7 @@ export class LoginComponent implements OnInit {
                 this.getAuthorization(this.authenticationService.authenticateToken);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error', error['error']);
+                this.toastrHelperService.showToastr('error', error['error']);
             }
         )
     }
@@ -67,7 +70,7 @@ export class LoginComponent implements OnInit {
                 this.router.navigate(['/dashboards']);
             },
             (error: any) => {
-                this.utilitiesService.showToastr('error', error['error']);
+                this.toastrHelperService.showToastr('error', error['error']);
             }
         );
     }

@@ -95,8 +95,9 @@ c6: So dien thoai KVL
 
 - Export file Report Balance in ReportVsys
 
-- Xem bao ca ca tren web va tai file
+- Xem bao cao ca tren web va tai file
 - Refactor project angular 4, van giu theme cu
 - Dua len server de vsys test
+- Implement interface for controller
 
 

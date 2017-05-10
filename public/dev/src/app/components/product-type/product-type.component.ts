@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProductType } from '../../models/product_type.model';
-
 @Component({
-    selector: 'app-productType',
-    templateUrl: './productType.component.html'
+    selector: 'app-product-type',
+    templateUrl: './product-type.component.html'
 })
 export class ProductTypeComponent implements OnInit {
     
