@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Distributor;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Position;
 use App\Supplier;
 use App\User;
 use App\File;
 use App\UserRole;
-use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
 use DB;
@@ -17,7 +19,7 @@ use Config;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class UserController extends Controller
+class UserController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -55,14 +57,14 @@ class UserController extends Controller
         $this->table_name         = 'user';
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadOne(Request $request)
+    public function getReadOne()
     {
         $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
@@ -113,22 +115,15 @@ class UserController extends Controller
         return response()->json($arr_datas, 200);
     }
 
-    public function postChangePassword(Request $request)
-    {
-        $data      = $request->input('data');
-        $arr_datas = $this->changePassword($data);
-        return response()->json($arr_datas, $arr_datas['status_code']);
-    }
-
     public function getSearchOne()
     {
-        $filter    = (array)json_decode($_GET['query']);
+        $filter        = (array)json_decode($_GET['query']);
         $arr_datas = $this->searchOne($filter);
         return response()->json($arr_datas, 200);
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    /** LOGIC METHOD */
+    public function readAll()
     {
         $users        = User::whereActive(true)->get();
         $positions    = Position::whereActive(true)->whereNotIn('id', [1, 2])->get();
@@ -149,13 +144,13 @@ class UserController extends Controller
         ];
     }
 
-    private function readOne($id)
+    public function readOne($id)
     {
         $one = User::find($id);
         return ['user' => $one];
     }
 
-    private function createOne($data)
+    public function createOne($data)
     {
         try {
             DB::beginTransaction();
@@ -272,7 +267,7 @@ class UserController extends Controller
         }
     }
 
-    private function updateOne($data)
+    public function updateOne($data)
     {
         try {
             DB::beginTransaction();
@@ -383,7 +378,7 @@ class UserController extends Controller
         }
     }
 
-    private function deactivateOne($id)
+    public function deactivateOne($id)
     {
         try {
             DB::beginTransaction();
@@ -415,7 +410,7 @@ class UserController extends Controller
         }
     }
 
-    private function deleteOne($id)
+    public function deleteOne($id)
     {
         try {
             DB::beginTransaction();
@@ -446,27 +441,7 @@ class UserController extends Controller
         }
     }
 
-    public function changePassword($data)
-    {
-        if ($data['password'] == $data['new_password'])
-            return ['error' => 'Mật khẩu cũ và mới không được trùng nhau.', 'status_code' => 404];
-        $user = User::find($this->user->id);
-
-        if (!$user) {
-            return ['error' => 'Người dùng không tồn tại.', 'error_en' => 'user is not exist', 'status_code' => 401];
-        }
-        $password_check = Hash::check($data['password'], $user->password);
-        if (!$password_check) {
-            return ['error' => 'Mật khẩu không hợp lệ.', 'error_en' => 'password is not correct', 'status_code' => 401];
-        }
-
-        $user->password = Hash::make($data['new_password']);
-        if (!$user->update())
-            return ['error' => 'Kết nối đến máy chủ thất bại, vui lòng làm mới trình duyệt và thử lại.', 'status_code' => 404];
-        return ['status_code' => 200];
-    }
-
-    private function searchOne($filter)
+    public function searchOne($filter)
     {
         $from_date   = $filter['from_date'];
         $to_date     = $filter['to_date'];
@@ -528,7 +503,7 @@ class UserController extends Controller
         ];
     }
 
-    /** Validation */
+    /** VALIDATION */
     public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
@@ -568,4 +543,33 @@ class UserController extends Controller
             'errors' => $msg_error
         ];
     }
+
+    /** My Function */
+    public function postChangePassword(Request $request)
+    {
+        $data      = $request->input('data');
+        $arr_datas = $this->changePassword($data);
+        return response()->json($arr_datas, $arr_datas['status_code']);
+    }
+
+    public function changePassword($data)
+    {
+        if ($data['password'] == $data['new_password'])
+            return ['error' => 'Mật khẩu cũ và mới không được trùng nhau.', 'status_code' => 404];
+        $user = User::find($this->user->id);
+
+        if (!$user) {
+            return ['error' => 'Người dùng không tồn tại.', 'error_en' => 'user is not exist', 'status_code' => 401];
+        }
+        $password_check = Hash::check($data['password'], $user->password);
+        if (!$password_check) {
+            return ['error' => 'Mật khẩu không hợp lệ.', 'error_en' => 'password is not correct', 'status_code' => 401];
+        }
+
+        $user->password = Hash::make($data['new_password']);
+        if (!$user->update())
+            return ['error' => 'Kết nối đến máy chủ thất bại, vui lòng làm mới trình duyệt và thử lại.', 'status_code' => 404];
+        return ['status_code' => 200];
+    }
+
 }

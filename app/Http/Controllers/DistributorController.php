@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Distributor;
 use App\Supplier;
-use Illuminate\Http\Request;
 use League\Flysystem\Exception;
 use Route;
 use DB;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class DistributorController extends Controller
+class DistributorController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -43,14 +45,14 @@ class DistributorController extends Controller
         $this->table_name = 'distributor';
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadOne(Request $request)
+    public function getReadOne()
     {
         $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
@@ -103,13 +105,13 @@ class DistributorController extends Controller
 
     public function getSearchOne()
     {
-        $filter    = (array)json_decode($_GET['query']);
+        $filter        = (array)json_decode($_GET['query']);
         $arr_datas = $this->searchOne($filter);
         return response()->json($arr_datas, 200);
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    /** LOGIC METHOD */
+    public function readAll()
     {
         $distributors = Distributor::where('distributors.active', true)
             ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
@@ -130,13 +132,13 @@ class DistributorController extends Controller
         ];
     }
 
-    private function readOne($id)
+    public function readOne($id)
     {
         $one = Distributor::find($id);
         return ['distributor' => $one];
     }
 
-    private function createOne($data)
+    public function createOne($data)
     {
         try {
             DB::beginTransaction();
@@ -166,7 +168,7 @@ class DistributorController extends Controller
         }
     }
 
-    private function updateOne($data)
+    public function updateOne($data)
     {
         try {
             DB::beginTransaction();
@@ -196,7 +198,7 @@ class DistributorController extends Controller
         }
     }
 
-    private function deactivateOne($id)
+    public function deactivateOne($id)
     {
         try {
             DB::beginTransaction();
@@ -215,7 +217,7 @@ class DistributorController extends Controller
         }
     }
 
-    private function deleteOne($id)
+    public function deleteOne($id)
     {
         try {
             DB::beginTransaction();
@@ -233,7 +235,7 @@ class DistributorController extends Controller
         }
     }
 
-    private function searchOne($filter)
+    public function searchOne($filter)
     {
         $from_date      = $filter['from_date'];
         $to_date        = $filter['to_date'];
@@ -266,8 +268,8 @@ class DistributorController extends Controller
         ];
     }
 
-    /** Validation */
-    private function validateInput($data)
+    /** VALIDATION */
+    public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
             return ['status' => false, 'errors' => 'Dữ liệu không hợp lệ.'];
@@ -304,4 +306,7 @@ class DistributorController extends Controller
             'errors' => $msg_error
         ];
     }
+
+    /** My Function */
+
 }

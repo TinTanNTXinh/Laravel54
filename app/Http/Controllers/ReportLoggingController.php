@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Logging;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use DB;
 
-class ReportLoggingController extends Controller
+class ReportLoggingController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -35,21 +37,47 @@ class ReportLoggingController extends Controller
         }
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReportLoggingBySearch()
+    public function getReadOne()
     {
-        $report_loggings = $this->reportBySearch((array)json_decode($_GET['query']));
-        return response()->json($report_loggings, 200);
+        // TODO: Implement getReadOne() method.
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    public function postCreateOne(Request $request)
+    {
+        // TODO: Implement postCreateOne() method.
+    }
+
+    public function putUpdateOne(Request $request)
+    {
+        // TODO: Implement putUpdateOne() method.
+    }
+
+    public function patchDeactivateOne(Request $request)
+    {
+        // TODO: Implement patchDeactivateOne() method.
+    }
+
+    public function deleteDeleteOne(Request $request)
+    {
+        // TODO: Implement deleteDeleteOne() method.
+    }
+
+    public function getSearchOne()
+    {
+        $filter        = (array)json_decode($_GET['query']);
+        $arr_datas = $this->searchOne($filter);
+        return response()->json($arr_datas, 200);
+    }
+
+    /** LOGIC METHOD */
+    public function readAll()
     {
         switch ($this->user->dis_or_sup) {
             case 'system':
@@ -67,7 +95,32 @@ class ReportLoggingController extends Controller
         return $response;
     }
 
-    private function reportBySearch($filter)
+    public function readOne($id)
+    {
+        // TODO: Implement readOne() method.
+    }
+
+    public function createOne($data)
+    {
+        // TODO: Implement createOne() method.
+    }
+
+    public function updateOne($data)
+    {
+        // TODO: Implement updateOne() method.
+    }
+
+    public function deactivateOne($id)
+    {
+        // TODO: Implement deactivateOne() method.
+    }
+
+    public function deleteOne($id)
+    {
+        // TODO: Implement deleteOne() method.
+    }
+
+    public function searchOne($filter)
     {
         $reports = Logging::whereActive(true)
             ->select('loggings.id', 'loggings.name', 'loggings.description', 'loggings.count'
@@ -88,4 +141,23 @@ class ReportLoggingController extends Controller
             'report_loggings' => $reports->get()
         ];
     }
+
+    /** VALIDATION */
+    public function validateInput($data)
+    {
+        // TODO: Implement validateInput() method.
+    }
+
+    public function validateEmpty($data)
+    {
+        // TODO: Implement validateEmpty() method.
+    }
+
+    public function validateLogic($data)
+    {
+        // TODO: Implement validateLogic() method.
+    }
+
+    /** My Function */
+
 }

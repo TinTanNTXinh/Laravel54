@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Distributor;
 use App\IOCenter;
 use App\Supplier;
@@ -12,7 +14,7 @@ use DB;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class IOCenterController extends Controller
+class IOCenterController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -42,22 +44,14 @@ class IOCenterController extends Controller
         $this->table_name = 'io_center';
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadAllWithPage()
-    {
-        $page      = $id = Route::current()->parameter('page');
-        $pageSize  = $id = Route::current()->parameter('pageSize');
-        $arr_datas = $this->readAllWithPage($page, $pageSize);
-        return response()->json($arr_datas, 200);
-    }
-
-    public function getReadOne(Request $request)
+    public function getReadOne()
     {
         $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
@@ -115,8 +109,8 @@ class IOCenterController extends Controller
         return response()->json($arr_datas, 200);
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    /** LOGIC METHOD */
+    public function readAll()
     {
         $io_centers   = IOCenter::whereActive(true)->get();
         $distributors = Distributor::whereActive(true)->get();
@@ -132,31 +126,13 @@ class IOCenterController extends Controller
         ];
     }
 
-    public function readAllWithPage($page, $pageSize)
-    {
-        $io_centers = IOCenter::where('io_centers.active', true)
-            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
-            ->select('io_centers.*', 'distributors.id as distributor_id', 'distributors.name as distributor_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
-            ->skip($page)
-            ->take($pageSize)
-            ->get();
-
-        $total_records = IOCenter::whereActive(true)->count();
-
-        return [
-            'io_centers'    => $io_centers,
-            'total_records' => $total_records
-        ];
-    }
-
-    private function readOne($id)
+    public function readOne($id)
     {
         $one = IOCenter::find($id);
-        return ['io_center' => $one];
+        return [$this->table_name => $one];
     }
 
-    private function createOne($data)
+    public function createOne($data)
     {
         try {
             DB::beginTransaction();
@@ -181,7 +157,7 @@ class IOCenterController extends Controller
         }
     }
 
-    private function updateOne($data)
+    public function updateOne($data)
     {
         try {
             DB::beginTransaction();
@@ -205,7 +181,7 @@ class IOCenterController extends Controller
         }
     }
 
-    private function deactivateOne($id)
+    public function deactivateOne($id)
     {
         try {
             DB::beginTransaction();
@@ -224,7 +200,7 @@ class IOCenterController extends Controller
         }
     }
 
-    private function deleteOne($id)
+    public function deleteOne($id)
     {
         try {
             DB::beginTransaction();
@@ -242,7 +218,7 @@ class IOCenterController extends Controller
         }
     }
 
-    private function searchOne($filter)
+    public function searchOne($filter)
     {
         $from_date      = $filter['from_date'];
         $to_date        = $filter['to_date'];
@@ -273,7 +249,7 @@ class IOCenterController extends Controller
         ];
     }
 
-    /** Validation */
+    /** VALIDATION */
     public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
@@ -283,7 +259,7 @@ class IOCenterController extends Controller
         return $msgs;
     }
 
-    private function validateEmpty($data)
+    public function validateEmpty($data)
     {
         if (!$data['code']) return false;
         if (!$data['name']) return false;
@@ -308,4 +284,32 @@ class IOCenterController extends Controller
             'errors' => $msg_error
         ];
     }
+
+    /** My Function */
+    public function getReadAllWithPage()
+    {
+        $page      = $id = Route::current()->parameter('page');
+        $pageSize  = $id = Route::current()->parameter('pageSize');
+        $arr_datas = $this->readAllWithPage($page, $pageSize);
+        return response()->json($arr_datas, 200);
+    }
+
+    public function readAllWithPage($page, $pageSize)
+    {
+        $io_centers = IOCenter::where('io_centers.active', true)
+            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
+            ->select('io_centers.*', 'distributors.id as distributor_id', 'distributors.name as distributor_name', 'suppliers.id as supplier_id', 'suppliers.name as supplier_name')
+            ->skip($page)
+            ->take($pageSize)
+            ->get();
+
+        $total_records = IOCenter::whereActive(true)->count();
+
+        return [
+            'io_centers'    => $io_centers,
+            'total_records' => $total_records
+        ];
+    }
+
 }

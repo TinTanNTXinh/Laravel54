@@ -196,7 +196,7 @@ Route::group(['prefix' => 'v1'], function() {
 
         Route::group(['middleware' => 'report-logging', 'prefix' => 'report-loggings'], function () {
             Route::get('/', 'ReportLoggingController@getReadAll');
-            Route::get('/search', 'ReportLoggingController@getReportLoggingBySearch');
+            Route::get('/search', 'ReportLoggingController@getSearchOne');
         });
     });
 });

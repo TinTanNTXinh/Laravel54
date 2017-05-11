@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Device;
 use App\Collection;
 use App\IOCenter;
@@ -12,7 +14,7 @@ use DB;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class DeviceController extends Controller
+class DeviceController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -44,14 +46,14 @@ class DeviceController extends Controller
         $this->table_name = 'device';
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadOne(Request $request)
+    public function getReadOne()
     {
         $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
@@ -104,12 +106,12 @@ class DeviceController extends Controller
 
     public function getSearchOne()
     {
-        $filter    = (array)json_decode($_GET['query']);
+        $filter        = (array)json_decode($_GET['query']);
         $arr_datas = $this->searchOne($filter);
         return response()->json($arr_datas, 200);
     }
 
-    /* LOGIC METHOD */
+    /** LOGIC METHOD */
     public function readAll()
     {
         $devices     = Device::where('devices.active', true)
@@ -253,7 +255,7 @@ class DeviceController extends Controller
         }
     }
 
-    private function searchOne($filter)
+    public function searchOne($filter)
     {
         $from_date    = $filter['from_date'];
         $to_date      = $filter['to_date'];
@@ -286,7 +288,7 @@ class DeviceController extends Controller
         ];
     }
 
-    /** Validation */
+    /** VALIDATION */
     public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
@@ -330,4 +332,6 @@ class DeviceController extends Controller
             'errors' => $msg_error
         ];
     }
+
+    /** My Function */
 }

@@ -9,7 +9,7 @@ interface ICrud
     /** API METHOD */
     public function getReadAll();
 
-    public function getReadOne(Request $request);
+    public function getReadOne();
 
     public function postCreateOne(Request $request);
 

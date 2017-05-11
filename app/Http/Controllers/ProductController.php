@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\Producer;
 use App\ProductPrice;
 use App\Supplier;
 use App\Unit;
-use Illuminate\Http\Request;
 use App\Product;
 use App\ProductType;
 use League\Flysystem\Exception;
@@ -15,7 +17,7 @@ use DB;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class ProductController extends Controller
+class ProductController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper;
 
@@ -47,14 +49,14 @@ class ProductController extends Controller
         $this->table_name = 'product';
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadOne(Request $request)
+    public function getReadOne()
     {
         $id  = Route::current()->parameter('id');
         $one = $this->readOne($id);
@@ -107,13 +109,13 @@ class ProductController extends Controller
 
     public function getSearchOne()
     {
-        $filter    = (array)json_decode($_GET['query']);
+        $filter        = (array)json_decode($_GET['query']);
         $arr_datas = $this->searchOne($filter);
         return response()->json($arr_datas, 200);
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    /** LOGIC METHOD */
+    public function readAll()
     {
         $products      = Product::where('products.active', true)
             ->leftJoin('product_prices', 'product_prices.product_id', '=', 'products.id')
@@ -147,13 +149,13 @@ class ProductController extends Controller
         ];
     }
 
-    private function readOne($id)
+    public function readOne($id)
     {
         $one = Product::find($id);
         return [$this->table_name => $one];
     }
 
-    private function createOne($data)
+    public function createOne($data)
     {
         try {
             DB::beginTransaction();
@@ -196,7 +198,7 @@ class ProductController extends Controller
         }
     }
 
-    private function updateOne($data)
+    public function updateOne($data)
     {
         try {
             DB::beginTransaction();
@@ -235,7 +237,7 @@ class ProductController extends Controller
         }
     }
 
-    private function deactivateOne($id)
+    public function deactivateOne($id)
     {
         try {
             DB::beginTransaction();
@@ -254,7 +256,7 @@ class ProductController extends Controller
         }
     }
 
-    private function deleteOne($id)
+    public function deleteOne($id)
     {
         try {
             DB::beginTransaction();
@@ -272,7 +274,7 @@ class ProductController extends Controller
         }
     }
 
-    private function searchOne($filter)
+    public function searchOne($filter)
     {
         $from_date   = $filter['from_date'];
         $to_date     = $filter['to_date'];
@@ -310,8 +312,8 @@ class ProductController extends Controller
         ];
     }
 
-    /** Validation */
-    private function validateInput($data)
+    /** VALIDATION */
+    public function validateInput($data)
     {
         if (!$this->validateEmpty($data))
             return ['status' => false, 'errors' => 'Dữ liệu không hợp lệ.'];
@@ -320,7 +322,7 @@ class ProductController extends Controller
         return $msgs;
     }
 
-    private function validateEmpty($data)
+    public function validateEmpty($data)
     {
         if (!$data['name']) return false;
         if (!$data['producer_id']) return false;
@@ -330,7 +332,7 @@ class ProductController extends Controller
         return true;
     }
 
-    private function validateLogic($data)
+    public function validateLogic($data)
     {
         $msg_error = [];
 
@@ -344,4 +346,7 @@ class ProductController extends Controller
             'errors' => $msg_error
         ];
     }
+
+    /** My Function */
+
 }
