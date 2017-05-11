@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Interfaces\Vsys\IProductInputOutput;
+use App\Interfaces\Vsys\IRegisterVisitor;
+use App\Interfaces\Vsys\IUserCardMoney;
 use App\Distributor;
 use App\UserCardMoney;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\ButtonProduct;
 use App\HistoryInputOutput;
 use App\Device;
@@ -19,7 +22,7 @@ use Mail;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class VsysController extends Controller
+class VsysController extends Controller implements IProductInputOutput, IUserCardMoney, IRegisterVisitor
 {
     use UserHelper, DBHelper;
 
@@ -532,7 +535,39 @@ class VsysController extends Controller
         }
     }
 
-    /** Validation JSON */
+    /** VALIDATE JSON */
+    public function validateJsonProductInputOutput($json)
+    {
+        $tray_status   = (strtoupper($json->c4) == 'IN' || strtoupper($json->c4) == 'OUT') ? strtoupper($json->c4) : null;
+        $quantum       = $json->c6;
+        $product_price = $json->c7;
+        $cabinet_code  = $json->c8;
+
+        if (!$tray_status) return false;
+        if (!is_numeric($quantum) || $quantum < 0) return false;
+        if (!is_numeric($product_price) || $product_price < 0) return false;
+        if (!$cabinet_code) return false;
+        return true;
+    }
+
+    public function validateJsonUserCardMoney($json)
+    {
+        $cdm_status = (strtoupper($json->c4) == 'DPS' || strtoupper($json->c4) == 'WDR') ? strtoupper($json->c4) : null;
+        $money      = $json->c6;
+
+        if (!$cdm_status) return false;
+        if (!is_numeric($money) || $money < 0) return false;
+        return true;
+    }
+
+    public function validateJsonRegVisitor($json)
+    {
+        $phone_number = $json->c6;
+        if (!$phone_number) return false;
+        return true;
+    }
+
+    /** MY FUNCTION */
     public function validateJson($json)
     {
         // $username       = $json->u;
@@ -555,38 +590,6 @@ class VsysController extends Controller
         return true;
     }
 
-    private function validateJsonProductInputOutput($json)
-    {
-        $tray_status   = (strtoupper($json->c4) == 'IN' || strtoupper($json->c4) == 'OUT') ? strtoupper($json->c4) : null;
-        $quantum       = $json->c6;
-        $product_price = $json->c7;
-        $cabinet_code  = $json->c8;
-
-        if (!$tray_status) return false;
-        if (!is_numeric($quantum) || $quantum < 0) return false;
-        if (!is_numeric($product_price) || $product_price < 0) return false;
-        if (!$cabinet_code) return false;
-        return true;
-    }
-
-    private function validateJsonUserCardMoney($json)
-    {
-        $cdm_status = (strtoupper($json->c4) == 'DPS' || strtoupper($json->c4) == 'WDR') ? strtoupper($json->c4) : null;
-        $money      = $json->c6;
-
-        if (!$cdm_status) return false;
-        if (!is_numeric($money) || $money < 0) return false;
-        return true;
-    }
-
-    private function validateJsonRegVisitor($json)
-    {
-        $phone_number = $json->c6;
-        if (!$phone_number) return false;
-        return true;
-    }
-
-    /** Other */
     private function debugJson($json)
     {
         return (property_exists($json, 'debug') && $json->debug);
