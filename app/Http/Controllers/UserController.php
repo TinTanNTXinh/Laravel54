@@ -15,7 +15,6 @@ use League\Flysystem\Exception;
 use Route;
 use DB;
 use Hash;
-use Config;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
@@ -52,7 +51,7 @@ class UserController extends Controller implements ICrud, IValidate
         }
 
         $this->carbon_format_date = 'd/m/Y';
-        $this->fake_pwd           = substr(Config::get('app.key'), 10);
+        $this->fake_pwd           = substr(config('app.key'), 10);
         $this->auth_unam_pwd      = ($this->user->position_id == 1) ? true : false;
         $this->table_name         = 'user';
     }
