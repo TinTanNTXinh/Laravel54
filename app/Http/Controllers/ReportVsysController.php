@@ -5,19 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Device;
 use App\Distributor;
-use App\Interfaces\ICrud;
-use App\Interfaces\IValidate;
+use App\Interfaces\IReport;
 use App\User;
 use App\UserCard;
 use App\UserCardMoney;
 use DB;
 use Route;
-use Carbon\Carbon;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use App\Traits\FileHelper;
 
-class ReportVsysController extends Controller implements ICrud, IValidate
+class ReportVsysController extends Controller implements IReport
 {
     use UserHelper, DBHelper, FileHelper;
 
@@ -49,31 +47,6 @@ class ReportVsysController extends Controller implements ICrud, IValidate
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
-    }
-
-    public function getReadOne()
-    {
-        // TODO: Implement getReadOne() method.
-    }
-
-    public function postCreateOne(Request $request)
-    {
-        // TODO: Implement postCreateOne() method.
-    }
-
-    public function putUpdateOne(Request $request)
-    {
-        // TODO: Implement putUpdateOne() method.
-    }
-
-    public function patchDeactivateOne(Request $request)
-    {
-        // TODO: Implement patchDeactivateOne() method.
-    }
-
-    public function deleteDeleteOne(Request $request)
-    {
-        // TODO: Implement deleteDeleteOne() method.
     }
 
     public function getSearchOne()
@@ -111,50 +84,9 @@ class ReportVsysController extends Controller implements ICrud, IValidate
         return $response;
     }
 
-    public function readOne($id)
-    {
-        // TODO: Implement readOne() method.
-    }
-
-    public function createOne($data)
-    {
-        // TODO: Implement createOne() method.
-    }
-
-    public function updateOne($data)
-    {
-        // TODO: Implement updateOne() method.
-    }
-
-    public function deactivateOne($id)
-    {
-        // TODO: Implement deactivateOne() method.
-    }
-
-    public function deleteOne($id)
-    {
-        // TODO: Implement deleteOne() method.
-    }
-
     public function searchOne($filter)
     {
         // TODO: Implement searchOne() method.
-    }
-
-    /** VALIDATION */
-    public function validateInput($data)
-    {
-        // TODO: Implement validateInput() method.
-    }
-
-    public function validateEmpty($data)
-    {
-        // TODO: Implement validateEmpty() method.
-    }
-
-    public function validateLogic($data)
-    {
-        // TODO: Implement validateLogic() method.
     }
 
     /** MY FUNCTION */

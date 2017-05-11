@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Interfaces\ICrud;
-use App\Interfaces\IValidate;
+use App\Interfaces\IReport;
 use App\Logging;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use DB;
 
-class ReportLoggingController extends Controller implements ICrud, IValidate
+class ReportLoggingController extends Controller implements IReport
 {
     use UserHelper, DBHelper;
 
@@ -44,31 +43,6 @@ class ReportLoggingController extends Controller implements ICrud, IValidate
         return response()->json($arr_datas, 200);
     }
 
-    public function getReadOne()
-    {
-        // TODO: Implement getReadOne() method.
-    }
-
-    public function postCreateOne(Request $request)
-    {
-        // TODO: Implement postCreateOne() method.
-    }
-
-    public function putUpdateOne(Request $request)
-    {
-        // TODO: Implement putUpdateOne() method.
-    }
-
-    public function patchDeactivateOne(Request $request)
-    {
-        // TODO: Implement patchDeactivateOne() method.
-    }
-
-    public function deleteDeleteOne(Request $request)
-    {
-        // TODO: Implement deleteDeleteOne() method.
-    }
-
     public function getSearchOne()
     {
         $filter        = (array)json_decode($_GET['query']);
@@ -95,31 +69,6 @@ class ReportLoggingController extends Controller implements ICrud, IValidate
         return $response;
     }
 
-    public function readOne($id)
-    {
-        // TODO: Implement readOne() method.
-    }
-
-    public function createOne($data)
-    {
-        // TODO: Implement createOne() method.
-    }
-
-    public function updateOne($data)
-    {
-        // TODO: Implement updateOne() method.
-    }
-
-    public function deactivateOne($id)
-    {
-        // TODO: Implement deactivateOne() method.
-    }
-
-    public function deleteOne($id)
-    {
-        // TODO: Implement deleteOne() method.
-    }
-
     public function searchOne($filter)
     {
         $reports = Logging::whereActive(true)
@@ -140,22 +89,6 @@ class ReportLoggingController extends Controller implements ICrud, IValidate
         return [
             'report_loggings' => $reports->get()
         ];
-    }
-
-    /** VALIDATION */
-    public function validateInput($data)
-    {
-        // TODO: Implement validateInput() method.
-    }
-
-    public function validateEmpty($data)
-    {
-        // TODO: Implement validateEmpty() method.
-    }
-
-    public function validateLogic($data)
-    {
-        // TODO: Implement validateLogic() method.
     }
 
     /** My Function */
