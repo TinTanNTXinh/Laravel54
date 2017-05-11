@@ -125,6 +125,6 @@ class TestController extends Controller implements ICrud, IValidate
         // TODO: Implement validateLogic() method.
     }
 
-    /** My Function */
+    /** MY FUNCTION */
 
 }

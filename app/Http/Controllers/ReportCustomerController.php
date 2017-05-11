@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\IOCenter;
 use App\Unit;
-use Illuminate\Http\Request;
 use App\HistoryInputOutput;
 use App\Distributor;
 use App\Producer;
@@ -18,7 +20,7 @@ use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use App\Traits\FileHelper;
 
-class ReportCustomerController extends Controller
+class ReportCustomerController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper, FileHelper;
 
@@ -45,36 +47,45 @@ class ReportCustomerController extends Controller
         }
     }
 
-    /* API METHOD */
+    /** API METHOD */
     public function getReadAll()
     {
         $arr_datas = $this->readAll();
         return response()->json($arr_datas, 200);
     }
 
-    public function getReportInputBySearch()
+    public function getReadOne()
     {
-        $filter        = (array)json_decode($_GET['query']);
-        $report_inputs = $this->reportBySearch($filter, 'input');
-        return response()->json($report_inputs, 200);
+        // TODO: Implement getReadOne() method.
     }
 
-    public function getReportStockBySearch()
+    public function postCreateOne(Request $request)
     {
-        $filter        = (array)json_decode($_GET['query']);
-        $report_stocks = $this->reportStockBySearch($filter);
-        return response()->json($report_stocks, 200);
+        // TODO: Implement postCreateOne() method.
     }
 
-    public function getReportSaleBySearch()
+    public function putUpdateOne(Request $request)
     {
-        $filter       = (array)json_decode($_GET['query']);
-        $report_sales = $this->reportBySearch($filter, 'sale');
-        return response()->json($report_sales, 200);
+        // TODO: Implement putUpdateOne() method.
     }
 
-    /* LOGIC METHOD */
-    private function readAll()
+    public function patchDeactivateOne(Request $request)
+    {
+        // TODO: Implement patchDeactivateOne() method.
+    }
+
+    public function deleteDeleteOne(Request $request)
+    {
+        // TODO: Implement deleteDeleteOne() method.
+    }
+
+    public function getSearchOne()
+    {
+        // TODO: Implement getSearchOne() method.
+    }
+
+    /** LOGIC METHOD */
+    public function readAll()
     {
         switch ($this->user->dis_or_sup) {
             case 'system':
@@ -169,6 +180,78 @@ class ReportCustomerController extends Controller
         ];
         return $response;
     }
+
+    public function readOne($id)
+    {
+        // TODO: Implement readOne() method.
+    }
+
+    public function createOne($data)
+    {
+        // TODO: Implement createOne() method.
+    }
+
+    public function updateOne($data)
+    {
+        // TODO: Implement updateOne() method.
+    }
+
+    public function deactivateOne($id)
+    {
+        // TODO: Implement deactivateOne() method.
+    }
+
+    public function deleteOne($id)
+    {
+        // TODO: Implement deleteOne() method.
+    }
+
+    public function searchOne($filter)
+    {
+        // TODO: Implement searchOne() method.
+    }
+
+    /** VALIDATION */
+    public function validateInput($data)
+    {
+        // TODO: Implement validateInput() method.
+    }
+
+    public function validateEmpty($data)
+    {
+        // TODO: Implement validateEmpty() method.
+    }
+
+    public function validateLogic($data)
+    {
+        // TODO: Implement validateLogic() method.
+    }
+
+    /** MY FUNCTION */
+
+    # MY API
+    public function getReportInputBySearch()
+    {
+        $filter        = (array)json_decode($_GET['query']);
+        $report_inputs = $this->reportBySearch($filter, 'input');
+        return response()->json($report_inputs, 200);
+    }
+
+    public function getReportStockBySearch()
+    {
+        $filter        = (array)json_decode($_GET['query']);
+        $report_stocks = $this->reportStockBySearch($filter);
+        return response()->json($report_stocks, 200);
+    }
+
+    public function getReportSaleBySearch()
+    {
+        $filter       = (array)json_decode($_GET['query']);
+        $report_sales = $this->reportBySearch($filter, 'sale');
+        return response()->json($report_sales, 200);
+    }
+
+    # MY LOGIC
 
     // Tồn hàng
     private function reportStock()
@@ -366,6 +449,63 @@ class ReportCustomerController extends Controller
         }
     }
 
+    // Bán hàng
+    private function reportSale()
+    {
+        $report_sales = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'OUT'], ['history_input_outputs.isSysAdmin', false]])
+            ->leftJoin('devices', 'devices.id', '=', 'history_input_outputs.button_id')
+            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
+            ->leftJoin('products', 'products.id', '=', 'history_input_outputs.product_id')
+            ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+            ->leftJoin('distributors', 'distributors.id', '=', 'history_input_outputs.dis_id')
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
+            ->leftJoin('users as staff_output', 'staff_output.id', '=', 'history_input_outputs.user_output_id')
+            ->select('history_input_outputs.total_pay'
+                , 'history_input_outputs.total_pay'
+                , DB::raw($this->getWithCurrencyFormat('history_input_outputs.total_pay', 'fc_total_pay'))
+                , 'history_input_outputs.product_price'
+                , DB::raw($this->getWithCurrencyFormat('history_input_outputs.product_price', 'fc_product_price'))
+                , 'history_input_outputs.quantum_out', 'history_input_outputs.product_price'
+                , 'devices.id as tray_id', 'devices.name as tray_name'
+                , 'cabinets.id as cabinet_id', 'cabinets.name as cabinet_name'
+                , 'products.id as product_id', 'products.name as product_name', 'products.barcode as product_barcode'
+                , 'units.id as unit_id', 'units.name as unit_name'
+                , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
+                , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name'
+                , 'staff_output.id as staff_output_id', 'staff_output.fullname as staff_output_fullname', 'staff_output.phone as staff_output_phone'
+                , DB::raw($this->getWithDateFormat('history_input_outputs.created_date', 'date_output'))
+                , DB::raw($this->getWithTimeFormat('history_input_outputs.created_date', 'time_output')))
+            ->orderBy('history_input_outputs.created_date', 'desc');
+        return $report_sales;
+    }
+
+    private function reportSaleByUser($report_sales)
+    {
+        switch ($this->user->dis_or_sup) {
+            case 'system':
+                return $report_sales->get();
+                break;
+            case 'sup':
+                $distributors    = Distributor::whereActive(true)->where('sup_id', $this->user->dis_or_sup_id)->get();
+                $distributor_ids = $distributors->pluck('id')->toArray();
+                $user_ids        = User::whereActive(true)->where('dis_or_sup', 'dis')->whereIn('dis_or_sup_id', $distributor_ids)->pluck('id');
+                return $report_sales->whereIn('dis_id', $distributor_ids)
+                    ->whereIn('history_input_outputs.user_output_id', $user_ids)
+                    ->get();
+                break;
+            case 'dis':
+                $user_ids = User::whereActive(true)->where([['dis_or_sup', 'dis'], ['dis_or_sup_id', $this->user->dis_or_sup_id]])->pluck('id');
+                return $report_sales
+                    ->whereIn('history_input_outputs.user_output_id', $user_ids)
+                    ->get();
+                break;
+            default:
+                return [];
+                break;
+        }
+    }
+
+    // Other
     private function reportBySearch($filter, $mode)
     {
         switch ($mode) {
@@ -426,63 +566,6 @@ class ReportCustomerController extends Controller
         }
     }
 
-    // Bán hàng
-    private function reportSale()
-    {
-        $report_sales = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'OUT'], ['history_input_outputs.isSysAdmin', false]])
-            ->leftJoin('devices', 'devices.id', '=', 'history_input_outputs.button_id')
-            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
-            ->leftJoin('products', 'products.id', '=', 'history_input_outputs.product_id')
-            ->leftJoin('units', 'units.id', '=', 'products.unit_id')
-            ->leftJoin('distributors', 'distributors.id', '=', 'history_input_outputs.dis_id')
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
-            ->leftJoin('users as staff_output', 'staff_output.id', '=', 'history_input_outputs.user_output_id')
-            ->select('history_input_outputs.total_pay'
-                , 'history_input_outputs.total_pay'
-                , DB::raw($this->getWithCurrencyFormat('history_input_outputs.total_pay', 'fc_total_pay'))
-                , 'history_input_outputs.product_price'
-                , DB::raw($this->getWithCurrencyFormat('history_input_outputs.product_price', 'fc_product_price'))
-                , 'history_input_outputs.quantum_out', 'history_input_outputs.product_price'
-                , 'devices.id as tray_id', 'devices.name as tray_name'
-                , 'cabinets.id as cabinet_id', 'cabinets.name as cabinet_name'
-                , 'products.id as product_id', 'products.name as product_name', 'products.barcode as product_barcode'
-                , 'units.id as unit_id', 'units.name as unit_name'
-                , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
-                , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name'
-                , 'staff_output.id as staff_output_id', 'staff_output.fullname as staff_output_fullname', 'staff_output.phone as staff_output_phone'
-                , DB::raw($this->getWithDateFormat('history_input_outputs.created_date', 'date_output'))
-                , DB::raw($this->getWithTimeFormat('history_input_outputs.created_date', 'time_output')))
-            ->orderBy('history_input_outputs.created_date', 'desc');
-        return $report_sales;
-    }
-
-    private function reportSaleByUser($report_sales)
-    {
-        switch ($this->user->dis_or_sup) {
-            case 'system':
-                return $report_sales->get();
-                break;
-            case 'sup':
-                $distributors    = Distributor::whereActive(true)->where('sup_id', $this->user->dis_or_sup_id)->get();
-                $distributor_ids = $distributors->pluck('id')->toArray();
-                $user_ids        = User::whereActive(true)->where('dis_or_sup', 'dis')->whereIn('dis_or_sup_id', $distributor_ids)->pluck('id');
-                return $report_sales->whereIn('dis_id', $distributor_ids)
-                    ->whereIn('history_input_outputs.user_output_id', $user_ids)
-                    ->get();
-                break;
-            case 'dis':
-                $user_ids = User::whereActive(true)->where([['dis_or_sup', 'dis'], ['dis_or_sup_id', $this->user->dis_or_sup_id]])->pluck('id');
-                return $report_sales
-                    ->whereIn('history_input_outputs.user_output_id', $user_ids)
-                    ->get();
-                break;
-            default:
-                return [];
-                break;
-        }
-    }
-
-    // Other
     private function changeColumnName($data, $mode)
     {
         switch ($this->user->dis_or_sup) {
@@ -622,4 +705,5 @@ class ReportCustomerController extends Controller
         }
         return $data;
     }
+
 }

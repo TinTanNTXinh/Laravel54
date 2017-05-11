@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Device;
 use App\Distributor;
+use App\Interfaces\ICrud;
+use App\Interfaces\IValidate;
 use App\User;
-use Illuminate\Http\Request;
 use App\UserCard;
 use App\UserCardMoney;
 use DB;
@@ -15,7 +17,7 @@ use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 use App\Traits\FileHelper;
 
-class ReportVsysController extends Controller
+class ReportVsysController extends Controller implements ICrud, IValidate
 {
     use UserHelper, DBHelper, FileHelper;
 
@@ -49,25 +51,34 @@ class ReportVsysController extends Controller
         return response()->json($arr_datas, 200);
     }
 
-    public function getReportBalanceDetail()
+    public function getReadOne()
     {
-        $id  = Route::current()->parameter('id');
-        $one = $this->reportBalanceDetail($id);
-        return response()->json($one, 200);
+        // TODO: Implement getReadOne() method.
     }
 
-    public function getReportBalanceBySearch()
+    public function postCreateOne(Request $request)
     {
-        $filter          = (array)json_decode($_GET['query']);
-        $report_balances = $this->reportBalanceBySearch($filter);
-        return response()->json($report_balances, 200);
+        // TODO: Implement postCreateOne() method.
     }
 
-    public function getReportDpsBySearch()
+    public function putUpdateOne(Request $request)
     {
-        $filter      = (array)json_decode($_GET['query']);
-        $report_dpss = $this->reportDpsBySearch($filter);
-        return response()->json($report_dpss, 200);
+        // TODO: Implement putUpdateOne() method.
+    }
+
+    public function patchDeactivateOne(Request $request)
+    {
+        // TODO: Implement patchDeactivateOne() method.
+    }
+
+    public function deleteDeleteOne(Request $request)
+    {
+        // TODO: Implement deleteDeleteOne() method.
+    }
+
+    public function getSearchOne()
+    {
+        // TODO: Implement getSearchOne() method.
     }
 
     /** LOGIC METHOD */
@@ -100,6 +111,77 @@ class ReportVsysController extends Controller
         return $response;
     }
 
+    public function readOne($id)
+    {
+        // TODO: Implement readOne() method.
+    }
+
+    public function createOne($data)
+    {
+        // TODO: Implement createOne() method.
+    }
+
+    public function updateOne($data)
+    {
+        // TODO: Implement updateOne() method.
+    }
+
+    public function deactivateOne($id)
+    {
+        // TODO: Implement deactivateOne() method.
+    }
+
+    public function deleteOne($id)
+    {
+        // TODO: Implement deleteOne() method.
+    }
+
+    public function searchOne($filter)
+    {
+        // TODO: Implement searchOne() method.
+    }
+
+    /** VALIDATION */
+    public function validateInput($data)
+    {
+        // TODO: Implement validateInput() method.
+    }
+
+    public function validateEmpty($data)
+    {
+        // TODO: Implement validateEmpty() method.
+    }
+
+    public function validateLogic($data)
+    {
+        // TODO: Implement validateLogic() method.
+    }
+
+    /** MY FUNCTION */
+
+    # MY API
+    public function getReportBalanceDetail()
+    {
+        $id  = Route::current()->parameter('id');
+        $one = $this->reportBalanceDetail($id);
+        return response()->json($one, 200);
+    }
+
+    public function getReportBalanceBySearch()
+    {
+        $filter          = (array)json_decode($_GET['query']);
+        $report_balances = $this->reportBalanceBySearch($filter);
+        return response()->json($report_balances, 200);
+    }
+
+    public function getReportDpsBySearch()
+    {
+        $filter      = (array)json_decode($_GET['query']);
+        $report_dpss = $this->reportDpsBySearch($filter);
+        return response()->json($report_dpss, 200);
+    }
+
+    # MY LOGIC
     // DPS
     public function reportDps()
     {
