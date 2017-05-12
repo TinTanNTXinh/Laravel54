@@ -89,17 +89,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                DB::rollback();
                 $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
-                return 'ERROR';
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                DB::rollback();
                 $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Find Cabinet
@@ -111,9 +107,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             # Find Distributor
             $distributor = Distributor::find($io_center->dis_id);
             if (!$distributor || !$distributor->active) {
-                DB::rollback();
                 $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Find Card -> UserCard -> User
@@ -123,9 +117,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
-                DB::rollback();
                 $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Update Button_Product
@@ -135,23 +127,17 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 case "IN":
                     $tray_product->total_quantum += $quantum;
                     if ($tray_product->total_quantum > $tray->quantum_product) {
-                        DB::rollback();
                         $this->createLogging('Nạp sản phẩm vượt số lượng tối đa trên mâm', '', $json->cnt, 'Vsys', 'danger');
-                        return 'ERROR';
                     }
                     break;
                 case "OUT":
                     $tray_product->total_quantum -= $quantum;
                     if ($tray_product->total_quantum < 0) {
-                        DB::rollback();
                         $this->createLogging('Bán sản phẩm vượt số lượng còn lại trên mâm.', '', $json->cnt, 'Vsys', 'danger');
-                        return 'ERROR';
                     }
                     break;
                 default:
-                    DB::rollBack();
                     $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, 'Vsys', 'danger');
-                    return 'ERROR';
                     break;
             }
 
@@ -160,9 +146,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $tray_product->updated_date = $user_date;
             $tray_product->vsys_date    = $vsys_date;
             if (!$tray_product->update()) {
-                DB::rollback();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật TrayProduct thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Create History_Input_Output
@@ -190,9 +174,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     $history_input_output->user_output_id = $user->id;
                     break;
                 default:
-                    DB::rollBack();
                     $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, 'Vsys', 'danger');
-                    return 'ERROR';
                     break;
             }
 
@@ -216,9 +198,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $history_input_output->active         = true;
 
             if (!$history_input_output->save()) {
-                DB::rollback();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật HistoryInputOutput thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             if ($tray_status == 'OUT') {
@@ -241,9 +221,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $user_card->updated_date = $user_date;
                 $user_card->vsys_date    = $vsys_date;
                 if (!$user_card->update()) {
-                    DB::rollback();
                     $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
-                    return 'ERROR';
                 }
 
                 # Create User_Card_Money
@@ -261,9 +239,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $user_card_money->vsys_date    = $vsys_date;
                 $user_card_money->active       = true;
                 if (!$user_card_money->save()) {
-                    DB::rollback();
                     $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
-                    return 'ERROR';
                 }
 
                 # Mail Reminder
@@ -310,17 +286,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                DB::rollback();
                 $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
-                return 'ERROR';
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                DB::rollback();
                 $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Find CDM
@@ -333,9 +305,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
-                DB::rollBack();
                 $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Update User_Card
@@ -365,9 +335,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card->updated_date = $user_date;
             $user_card->vsys_date    = $vsys_date;
             if (!$user_card->update()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Create User_Card_Money
@@ -385,15 +353,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card_money->vsys_date    = $vsys_date;
             $user_card_money->active       = true;
             if (!$user_card_money->save()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             DB::commit();
             return 'OK';
         } catch (Exception $ex) {
-            DB::rollback();
+            DB::rollBack();
             $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, 'TinTan', 'danger');
             return 'ERROR';
         }
@@ -427,17 +393,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                DB::rollback();
                 $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
-                return 'ERROR';
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                DB::rollback();
                 $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Find Device
@@ -464,9 +426,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $kvl->dis_or_sup    = 'dis';
             $kvl->dis_or_sup_id = $io_center->dis_id;
             if (!$kvl->save()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm khách vãng lai thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Create Card
@@ -481,9 +441,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $card->io_center_id    = $io_center->id;
             $card->parent_id       = 0;
             if (!$card->save()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm thẻ thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Create UserCard
@@ -501,9 +459,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card->vsys_date    = $vsys_date;
             $user_card->active       = true;
             if (!$user_card->save()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             # Create UserCardMoney
@@ -521,9 +477,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card_money->vsys_date    = $vsys_date;
             $user_card_money->active       = true;
             if (!$user_card_money->save()) {
-                DB::rollBack();
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
-                return 'ERROR';
             }
 
             DB::commit();

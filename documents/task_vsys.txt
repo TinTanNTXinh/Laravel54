@@ -89,6 +89,7 @@ Dang ky the
 c6: So dien thoai KVL
 
 -------------------
+- ButtonProduct => TrayProduct
 - Upload image
 - Swagger
 - Review RXJS pattern
@@ -96,11 +97,10 @@ c6: So dien thoai KVL
 - Export file Report Balance in ReportVsys
 
 - Web app hỏi trả lời Google API
-- Doi Mâm thành Box
 - Kiểm tra tồn kho thực >< lý thuyết
-- Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm
+- Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm (x)
 - Có thể sửa báo cáo nếu là QTV (Thêm dòng nhập xuất mới)
 - Filter dữ liệu chỉnh sửa của QTV
-- ButtonProduct => TrayProduct
+
 
 
