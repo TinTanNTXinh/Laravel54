@@ -95,7 +95,11 @@ c6: So dien thoai KVL
 
 - Export file Report Balance in ReportVsys
 
-- Dua len server de vsys test
-- Implement interface for controller
+- Web app hỏi trả lời Google API
+- Doi Mâm thành Box
+- Kiểm tra tồn kho thực >< lý thuyết
+- Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm
+- Có thể sửa báo cáo nếu là QTV (Thêm dòng nhập xuất mới)
+- Filter dữ liệu chỉnh sửa của QTV
 
 
