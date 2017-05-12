@@ -97,7 +97,7 @@ class RolesTableSeeder extends Seeder
             'Người dùng',
             'Nhà cung cấp sản phẩm',
             'Đơn vị tính',
-            'Mâm - Sản phẩm',
+            'Box - Sản phẩm',
             'Người dùng - Thẻ',
             'Chức vụ',
             'Báo cáo khách hàng',

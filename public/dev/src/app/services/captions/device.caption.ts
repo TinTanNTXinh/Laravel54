@@ -10,16 +10,10 @@ export class DeviceCaptionService {
     public cdm: string;
 
     constructor() {
-        // this.cabinet = 'Tủ';
-        // this.tray = 'Box';
-        // this.rfid = 'Máy đọc thẻ';
-        // this.card = 'Thẻ';
-        // this.cdm = 'Máy nạp tiền';
-
-        this.cabinet = 'Tủ111';
-        this.tray = 'Box111';
-        this.rfid = 'Máy đọc thẻ111';
-        this.card = 'Thẻ111';
-        this.cdm = 'Máy nạp tiền111';
+        this.cabinet = 'Tủ';
+        this.tray = 'Box';
+        this.rfid = 'Máy đọc thẻ';
+        this.card = 'Thẻ';
+        this.cdm = 'Máy nạp tiền';
     }
 }
