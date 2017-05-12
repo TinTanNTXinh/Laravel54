@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {DeviceCaptionService} from '../../services/captions/device.caption';
 
 @Component({
     selector: 'app-device',
@@ -22,6 +23,7 @@ export class DeviceComponent implements OnInit
     public device: any;
     public parent_devices: any[] = [];
     public isDisplayQuickTray: boolean = false;
+    public _deviceCaptionService;
 
     /** ICommon **/
     title: string;
@@ -48,7 +50,9 @@ export class DeviceComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private deviceCaptionService: DeviceCaptionService) {
+        this._deviceCaptionService = this.deviceCaptionService;
     }
 
     ngOnInit(): void {

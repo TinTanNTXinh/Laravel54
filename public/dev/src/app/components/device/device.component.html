@@ -20,15 +20,15 @@
             <li class="active"><a data-toggle="tab" href="#home"><i
                 class="glyphicon glyphicon-th-list icon text-primary-lter"></i> Tất cả</a></li>
             <li><a data-toggle="tab" href="#Cabinet"><i
-                class="glyphicon glyphicon-edit icon text-success-lter"></i> Tủ</a></li>
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.cabinet}}</a></li>
             <li><a data-toggle="tab" href="#Tray"><i
-                class="glyphicon glyphicon-edit icon text-success-lter"></i> Mâm</a></li>
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.tray}}</a></li>
             <li><a data-toggle="tab" href="#RFID"><i
-                class="glyphicon glyphicon-edit icon text-success-lter"></i> Máy đọc thẻ</a></li>
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.rfid}}</a></li>
             <li><a data-toggle="tab" href="#Card"><i
-                class="glyphicon glyphicon-edit icon text-success-lter"></i> Thẻ</a></li>
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.card}}</a></li>
             <li><a data-toggle="tab" href="#CDM"><i
-                class="glyphicon glyphicon-edit icon text-success-lter"></i> Máy nạp tiền</a></li>
+                class="glyphicon glyphicon-edit icon text-success-lter"></i> {{_deviceCaptionService.cdm}}</a></li>
           </ul>
 
           <div class="tab-content">
@@ -127,7 +127,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thêm/Cập nhật tủ</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.cabinet}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
@@ -155,18 +155,18 @@
                                           value="{{ io_center.id }}">{{ io_center.name }}
                                   </option>
                                 </select>
-                                <button (click)="displayQuickTray()" class="pull-right text-sm btn btn-xs btn-default">Nhập nhanh mâm</button>
+                                <button (click)="displayQuickTray()" class="pull-right text-sm btn btn-xs btn-default">Nhập nhanh {{_deviceCaptionService.tray}}</button>
                               </div>
                             </div>
                             <ng-container *ngIf="isDisplayQuickTray">
                               <div class="form-group">
-                                <label class="col-lg-2 control-label">Số mâm</label>
+                                <label class="col-lg-2 control-label">Số {{_deviceCaptionService.tray}}</label>
                                 <div class="col-lg-10">
                                   <input type="text" class="form-control" [(ngModel)]="device.quantum_tray" name="quantum_tray">
                                 </div>
                               </div>
                               <div class="form-group">
-                                <label class="col-lg-2 control-label">Lượng hàng/mâm</label>
+                                <label class="col-lg-2 control-label">Lượng hàng/{{_deviceCaptionService.tray}}</label>
                                 <div class="col-lg-10">
                                   <input type="text" class="form-control" [(ngModel)]="device.quantum_product" name="quantum_product">
                                 </div>
@@ -206,7 +206,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thêm/Cập nhật mâm</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.tray}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
@@ -248,7 +248,7 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Thuộc tủ</label>
+                              <label class="col-lg-2 control-label">Thuộc {{_deviceCaptionService.cabinet}}</label>
                               <div class="col-lg-10">
                                 <select [(ngModel)]="device.parent_id" name="parent_id"
                                         class="form-control m-b">
@@ -292,7 +292,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thêm/Cập nhật máy đọc thẻ</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.rfid}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
@@ -349,7 +349,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thêm/Cập nhật thẻ</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.card}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
@@ -382,7 +382,7 @@
                               </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-lg-2 control-label">Thuộc máy đọc thẻ</label>
+                              <label class="col-lg-2 control-label">Thuộc {{_deviceCaptionService.rfid}}</label>
                               <div class="col-lg-10">
                                 <select [(ngModel)]="device.parent_id" name="parent_id"
                                         class="form-control m-b">
@@ -426,7 +426,7 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Thêm/Cập nhật máy nạp tiền</div>
+                    <div class="panel-heading font-bold">Thêm/Cập nhật {{_deviceCaptionService.cdm}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">

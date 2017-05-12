@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {DeviceCaptionService} from '../../services/captions/device.caption';
 
 @Component({
     selector: 'app-button-product',
@@ -24,6 +25,7 @@ export class ButtonProductComponent implements OnInit
     public io_centers: any[] = [];
     public cabinets: any[] = [];
     public distributors: any[] = [];
+    public _deviceCaptionService;
 
     /** ICommon **/
     title: string;
@@ -50,11 +52,13 @@ export class ButtonProductComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private deviceCaptionService: DeviceCaptionService) {
+        this._deviceCaptionService = this.deviceCaptionService;
     }
 
     ngOnInit(): void {
-        this.title = 'Mâm - Sản phẩm';
+        this.title = `${this._deviceCaptionService.tray} - Sản phẩm`;
         this.prefix_url = 'button-products';
         this.range_date = this.dateHelperService.range_date;
         this.refreshData();
@@ -70,13 +74,13 @@ export class ButtonProductComponent implements OnInit
                 title: 'Đại lý'
             },
             cabinet_name: {
-                title: 'Tủ'
+                title: this._deviceCaptionService.cabinet
             },
             tray_name: {
-                title: 'Mâm'
+                title: this._deviceCaptionService.tray
             },
             tray_code: {
-                title: 'Mã mâm'
+                title: `Mã ${this._deviceCaptionService.tray}`
             },
             tray_quantum_product: {
                 title: 'Tối đa'
@@ -85,7 +89,7 @@ export class ButtonProductComponent implements OnInit
                 title: 'Hiện tại'
             },
             tray_description: {
-                title: 'Mô tả mâm'
+                title: `Mô tả ${this._deviceCaptionService.tray}`
             },
             product_name: {
                 title: 'Sản phẩm'
@@ -213,7 +217,7 @@ export class ButtonProductComponent implements OnInit
     validateOne(): boolean {
         let flag: boolean = true;
         if (this.tray_product.arr_tray_id.length == 0) {
-            this.toastrHelperService.showToastr('warning', 'Vui lòng chọn ít nhất 1 mâm.');
+            this.toastrHelperService.showToastr('warning', `Vui lòng chọn ít nhất 1 ${this._deviceCaptionService.tray}.`);
             flag = false;
         }
         if (this.tray_product.product_id == 0) {
@@ -230,7 +234,7 @@ export class ButtonProductComponent implements OnInit
     fillDataModal(id: number): void {
         this.modal.id = id;
         this.modal.header = 'Xác nhận';
-        this.modal.body = 'Có chắc muốn xóa sản phẩm này ra khỏi mâm?';
+        this.modal.body = `Có chắc muốn xóa sản phẩm này ra khỏi ${this._deviceCaptionService.tray}?`;
         this.modal.footer = 'OK';
     }
 

@@ -4,6 +4,7 @@ import {HttpClientService} from '../../services/httpClient.service';
 import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
+import {DeviceCaptionService} from '../../services/captions/device.caption';
 
 @Component({
     selector: 'app-user-card',
@@ -24,6 +25,7 @@ export class UserCardComponent implements OnInit
     public positions: any[] = [];
     public io_centers: any[] = [];
     public rfids: any[] = [];
+    public _deviceCaptionService;
 
     /** ICommon **/
     title: string;
@@ -50,11 +52,13 @@ export class UserCardComponent implements OnInit
     constructor(private httpClientService: HttpClientService
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
-        , private domHelperService: DomHelperService) {
+        , private domHelperService: DomHelperService
+        , private deviceCaptionService: DeviceCaptionService) {
+        this._deviceCaptionService = this.deviceCaptionService;
     }
 
     ngOnInit(): void {
-        this.title = 'Cấp thẻ cho nhân viên';
+        this.title = `Cấp ${this._deviceCaptionService.card} cho nhân viên`;
         this.prefix_url = 'user-cards';
         this.range_date = this.dateHelperService.range_date;
         this.refreshData();
@@ -72,16 +76,16 @@ export class UserCardComponent implements OnInit
                 title: 'Bộ trung tâm'
             },
             parent_name: {
-                title: 'RFID'
+                title: this._deviceCaptionService.rfid
             },
             card_name: {
-                title: 'Thẻ'
+                title: this._deviceCaptionService.card
             },
             card_code: {
-                title: 'Mã thẻ'
+                title: `Mã ${this._deviceCaptionService.card}`
             },
             card_description: {
-                title: 'Mô tả thẻ'
+                title: `Mô tả ${this._deviceCaptionService.card}`
             },
             user_fullname: {
                 title: 'Nhân viên'
@@ -202,7 +206,7 @@ export class UserCardComponent implements OnInit
         let flag: boolean = true;
 
         if (this.user_card.card_id == 0) {
-            this.toastrHelperService.showToastr('warning', 'Vui lòng chọn 1 thẻ.');
+            this.toastrHelperService.showToastr('warning', `Vui lòng chọn 1 ${this._deviceCaptionService.card}.`);
             flag = false;
         }
 

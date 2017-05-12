@@ -59,12 +59,12 @@
                                           [datepicker]="datepickerToOpts"></datetime>
                               </div>
                               <div class="col-md-3">
-                                <label>Thẻ</label>
+                                <label>{{_deviceCaptionService.card}}</label>
                                 <autocomplete [name]="'code'" [data]="cards"
                                               [(ngModel)]="filter_ReportDps.card_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
-                                <label>Máy nạp tiền</label>
+                                <label>{{_deviceCaptionService.cdm}}</label>
                                 <autocomplete [name]="'name'" [data]="cdms"
                                               [(ngModel)]="filter_ReportDps.cdm_id"></autocomplete>
                               </div>
@@ -135,7 +135,7 @@
                                           [(ngModel)]="filter_ReportBalance.visitor_id"></autocomplete>
                           </div>
                           <div class="col-md-3">
-                            <label>Thẻ</label>
+                            <label>{{_deviceCaptionService.card}}</label>
                             <autocomplete [name]="'code'" [data]="cards"
                                           [(ngModel)]="filter_ReportBalance.card_id"></autocomplete>
                           </div>

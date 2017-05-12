@@ -4,7 +4,7 @@
     <div class="bg-light lter b-b wrapper-md">
       <div class="row">
         <div class="col-md-12">
-          <span class="m-n font-thin h3" style="font-size: 2em">Phân sản phẩm vào mâm</span>
+          <span class="m-n font-thin h3" style="font-size: 2em">Phân sản phẩm vào {{_deviceCaptionService.tray}}</span>
           <div class="pull-right">
             <button class="btn m-b-xs btn-rounded btn-default btn-addon"
                     (click)="refreshData()"><i class="fa fa-refresh"></i>Refresh
@@ -71,7 +71,7 @@
                                 <autocomplete [data]="distributors" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.distributor_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
-                                <label>Tủ</label>
+                                <label>{{_deviceCaptionService.cabinet}}</label>
                                 <autocomplete [data]="cabinets" [name]="'name'" [model_name]="'id'" [(ngModel)]="filtering.cabinet_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
@@ -98,7 +98,7 @@
                 <div class="col-md-12">
                   <div class="panel panel-default">
                     <div class="panel-heading font-bold">
-                      Danh sách mâm đã phân sản phẩm
+                      Danh sách {{_deviceCaptionService.tray}} đã phân sản phẩm
                     </div>
                     <div class="panel-body">
                       <button id="btn-show-modal1" data-toggle="modal" data-target="#modal-update" hidden></button>
@@ -114,13 +114,13 @@
               <div class="row">
                 <div class="col-sm-12">
                   <div class="panel panel-default">
-                    <div class="panel-heading font-bold">Phân sản phẩm vào mâm</div>
+                    <div class="panel-heading font-bold">Phân sản phẩm vào {{_deviceCaptionService.tray}}</div>
                     <div class="panel-body">
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group">
-                              <label class="col-sm-2 control-label">Mâm:</label>
+                              <label class="col-sm-2 control-label">{{_deviceCaptionService.tray}}:</label>
                               <div class="col-sm-10">
                                 <div class="checkbox" *ngFor="let tray of trays">
                                   <label class="i-checks">
@@ -189,13 +189,13 @@
                              name="distributor_name" readonly>
                     </div>
                     <div class="form-group">
-                      <label class="control-label">Tủ:</label>
+                      <label class="control-label">{{_deviceCaptionService.cabinet}}:</label>
                       <input type="text" class="form-control"
                              [ngModel]="modal_update.cabinet_name"
                              name="cabinet_name" readonly>
                     </div>
                     <div class="form-group">
-                      <label class="control-label">Mâm:</label>
+                      <label class="control-label">{{_deviceCaptionService.tray}}:</label>
                       <input type="text" class="form-control"
                              [ngModel]="modal_update.tray_name"
                              name="tray_name" readonly>

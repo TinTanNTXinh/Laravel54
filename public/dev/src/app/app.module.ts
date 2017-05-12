@@ -20,7 +20,7 @@ import {NumberHelperService} from './services/helpers/number.helper';
 import {PaginationHelperService} from './services/helpers/pagination.helper';
 import {StringHelperService} from './services/helpers/string.helper';
 import {ToastrHelperService} from './services/helpers/toastr.helper';
-
+import {DeviceCaptionService} from './services/captions/device.caption';
 
 // My share components
 import {HeaderComponent} from './layout-components/header/header.component';
@@ -71,7 +71,8 @@ import { SharedModule } from './shared.module';
     NumberHelperService,
     PaginationHelperService,
     StringHelperService,
-    ToastrHelperService
+    ToastrHelperService,
+    DeviceCaptionService
   ],
   bootstrap: [AppComponent]
 })

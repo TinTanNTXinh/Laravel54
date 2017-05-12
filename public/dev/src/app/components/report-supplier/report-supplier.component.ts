@@ -5,6 +5,7 @@ import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 import {FileHelperService} from '../../services/helpers/file.helper';
+import {DeviceCaptionService} from '../../services/captions/device.caption';
 
 @Component({
     selector: 'app-report-supplier',
@@ -47,6 +48,8 @@ export class ReportSupplierComponent implements OnInit
     public datepicker_to_sale: Date;
     public datepickerToOpts_sale: any = {};
 
+    public _deviceCaptionService;
+
     /** ICommon **/
     title: string;
     placeholder_code: string;
@@ -73,7 +76,9 @@ export class ReportSupplierComponent implements OnInit
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
         , private domHelperService: DomHelperService
-        , private fileHelperService: FileHelperService) {
+        , private fileHelperService: FileHelperService
+        , private deviceCaptionService: DeviceCaptionService) {
+        this._deviceCaptionService = this.deviceCaptionService;
     }
 
     ngOnInit(): void {
@@ -101,10 +106,10 @@ export class ReportSupplierComponent implements OnInit
                 title: 'Nhân viên nhập'
             },
             cabinet_name: {
-                title: 'Tủ'
+                title: this._deviceCaptionService.cabinet
             },
             tray_name: {
-                title: 'Mâm'
+                title: this._deviceCaptionService.tray
             },
             product_barcode: {
                 title: 'Mã vạch SP'
@@ -130,10 +135,10 @@ export class ReportSupplierComponent implements OnInit
                 title: 'Đại lý'
             },
             cabinet_name: {
-                title: 'Tủ'
+                title: this._deviceCaptionService.cabinet
             },
             tray_name: {
-                title: 'Mâm'
+                title: this._deviceCaptionService.tray
             },
             product_barcode: {
                 title: 'Mã vạch SP'
@@ -168,10 +173,10 @@ export class ReportSupplierComponent implements OnInit
                 title: 'Giờ bán'
             },
             cabinet_name: {
-                title: 'Tủ'
+                title: this._deviceCaptionService.cabinet
             },
             tray_name: {
-                title: 'Mâm'
+                title: this._deviceCaptionService.tray
             },
             staff_output_phone: {
                 title: 'SĐT'

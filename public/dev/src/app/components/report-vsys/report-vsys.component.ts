@@ -5,6 +5,7 @@ import {DateHelperService} from '../../services/helpers/date.helper';
 import {ToastrHelperService} from '../../services/helpers/toastr.helper';
 import {DomHelperService} from '../../services/helpers/dom.helper';
 import {FileHelperService} from '../../services/helpers/file.helper';
+import {DeviceCaptionService} from '../../services/captions/device.caption';
 
 @Component({
     selector: 'app-report-vsys',
@@ -34,6 +35,8 @@ export class ReportVsysComponent implements OnInit
     public isLoading_Dps: boolean = true;
     public isLoading_Balance: boolean = true;
 
+    public _deviceCaptionService;
+
     /** ICommon **/
     title: string;
     placeholder_code: string;
@@ -60,7 +63,9 @@ export class ReportVsysComponent implements OnInit
         , private dateHelperService: DateHelperService
         , private toastrHelperService: ToastrHelperService
         , private domHelperService: DomHelperService
-        , private fileHelperService: FileHelperService) {
+        , private fileHelperService: FileHelperService
+        , private deviceCaptionService: DeviceCaptionService) {
+        this._deviceCaptionService = this.deviceCaptionService;
     }
 
     ngOnInit(): void {
@@ -82,7 +87,7 @@ export class ReportVsysComponent implements OnInit
                 title: "Đại lý"
             },
             card_code: {
-                title: "Mã thẻ"
+                title: `Mã ${this._deviceCaptionService.card}`
             },
             fc_sum_dps: {
                 title: "Tổng nạp"
@@ -129,10 +134,10 @@ export class ReportVsysComponent implements OnInit
                 title: 'SĐT'
             },
             card_code: {
-                title: 'Mã thẻ'
+                title: `Mã ${this._deviceCaptionService.card}`
             },
             cdm_name: {
-                title: 'Máy nạp'
+                title: this._deviceCaptionService.cdm
             },
             date_dps: {
                 title: 'Ngày'

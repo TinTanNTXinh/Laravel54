@@ -78,7 +78,7 @@
                                               [(ngModel)]="filter_ReportInput.staff_input_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
-                                <label>Tủ</label>
+                                <label>{{_deviceCaptionService.cabinet}}</label>
                                 <autocomplete [data]="cabinets" [name]="'name'" [model_name]="'id'"
                                               [(ngModel)]="filter_ReportInput.cabinet_id"></autocomplete>
                               </div>
@@ -150,7 +150,7 @@
                                           [(ngModel)]="filter_ReportStock.distributor_id"></autocomplete>
                           </div>
                           <div class="col-md-3">
-                            <label>Tủ</label>
+                            <label>{{_deviceCaptionService.cabinet}}</label>
                             <autocomplete [name]="'name'" [data]="cabinets" [model_name]="'id'"
                                           [(ngModel)]="filter_ReportStock.cabinet_id"></autocomplete>
                           </div>

@@ -101,5 +101,6 @@ c6: So dien thoai KVL
 - Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm
 - Có thể sửa báo cáo nếu là QTV (Thêm dòng nhập xuất mới)
 - Filter dữ liệu chỉnh sửa của QTV
+- ButtonProduct => TrayProduct
 
 
