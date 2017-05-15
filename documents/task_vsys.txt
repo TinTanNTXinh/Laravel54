@@ -89,6 +89,8 @@ Dang ky the
 c6: So dien thoai KVL
 
 Kiem tra ton kho
+c2: Ma tu
+c3: Ma box
 
 -------------------
 - ButtonProduct => TrayProduct

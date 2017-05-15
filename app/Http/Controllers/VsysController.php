@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Interfaces\Vsys\IProductInputOutput;
 use App\Interfaces\Vsys\IRegisterVisitor;
 use App\Interfaces\Vsys\IUserCardMoney;
+use App\Interfaces\Vsys\ICheckStock;
 use App\Distributor;
 use App\UserCardMoney;
 use Carbon\Carbon;
@@ -22,7 +23,7 @@ use Mail;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class VsysController extends Controller implements IProductInputOutput, IUserCardMoney, IRegisterVisitor
+class VsysController extends Controller implements IProductInputOutput, IUserCardMoney, IRegisterVisitor, ICheckStock
 {
     use UserHelper, DBHelper;
 
