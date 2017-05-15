@@ -1,7 +1,7 @@
-TÀI LIỆU MÔ TẢ ĐỊNH DẠNG DỮ LIỆU (v3.1.0)
+TÀI LIỆU MÔ TẢ ĐỊNH DẠNG DỮ LIỆU (v3.2.0)
 ===================
 
-Phần mềm quản lý tủ ký gửi tự động
+Ứng dụng web quản lý ***tủ ký gửi, máy bán nước, kho *** tự động
 
 ----------
 
@@ -27,7 +27,7 @@ Server: http://showroom.app-demo.info/api/v1/cdm
 > - c6: Số tiền nạp
 
 
-Ví dụ minh họa cho nạp tiền:
+Ví dụ minh họa:
 ```
 http://showroom.app-demo.info/api/v1/cdm?param={"u":"","p":"","id":"IO53A096","cnt":"1","t":"2017-01-20 10:16:38","c1":"15/03/17 10:16:38","c2":"75EC5428E5","c3":"CDM1","c4":"DPS","c5":"500000","c6":"500000"}
 ```
@@ -48,7 +48,7 @@ Server: http://showroom.app-demo.info/api/v1/prod-inout
 > - c7: Giá sản phẩm
 > - c8: Mã tủ
 
-Ví dụ minh họa cho nạp hàng:
+Ví dụ minh họa:
 ```
 http://showroom.app-demo.info/api/v1/prod-inout?param={"u":"","p":"","id":"IO53A096","cnt":"2","t":"2017-01-20 10:16:38","c1":"15/03/17 10:16:38","c2":"252858287D","c3":"1","c4":"IN","c5":"510000","c6":"1","c7":"10000","c8":"TU1"}
 ```
@@ -69,7 +69,7 @@ Server: http://showroom.app-demo.info/api/v1/prod-inout
 > - c7: Giá sản phẩm
 > - c8: Mã tủ
 
-Ví dụ minh họa cho bán hàng:
+Ví dụ minh họa:
 ```
 http://showroom.app-demo.info/api/v1/prod-inout?param={"u":"demo","p":"","id":"IO53A096","cnt":"3","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"75EC5428E5","c3":"1","c4":"OUT","c5":"490000","c6":"1","c7":"10000","c8":"TU1"}
 ```
@@ -88,12 +88,12 @@ Server: http://showroom.app-demo.info/api/v1/reg-visitor
 > - c5: Số tiền của thẻ
 > - c6: Số điện thoại của Khách vãng lai
 
-Ví dụ minh họa đăng ký thẻ cho khách vãng lai:
+Ví dụ minh họa:
 ```
 http://showroom.app-demo.info/api/v1/reg-visitor?param={"u":"demo","p":"","id":"IO53A096","cnt":"3","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"75EC5428E5","c3":"CDM1","c4":"","c5":"0","c6":"0987654321"}
 ```
 
-Kiểm tra tồn trên box
+Kiểm tra số lượng hàng tồn trên box
 -------------
 Server sẽ trả về số lượng hàng trên box mà ta gửi. 
 
@@ -105,7 +105,7 @@ Server: http://showroom.app-demo.info/api/v1/check-stock
 > - c2: Mã tủ
 > - c3: Mã box
 
-Ví dụ minh họa kiểm tra tồn trên box:
+Ví dụ minh họa:
 ```
 http://showroom.app-demo.info/api/v1/check-stock?param={"u":"demo","p":"","id":"IO53A096","cnt":"3","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"TU1","c3":"1"}
 ```
