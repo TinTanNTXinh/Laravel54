@@ -18,6 +18,7 @@ class CreateLoggingsTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->unsignedBigInteger('count');
+            $table->longText('json');
             $table->enum('created_by', ['TinTan', 'Vsys']);
             $table->enum('error_type', ['warning', 'danger']);
             $table->boolean('active')->default(false);

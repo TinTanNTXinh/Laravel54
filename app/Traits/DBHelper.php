@@ -106,18 +106,19 @@ trait DBHelper
                 $device = $devices->first();
                 break;
             default:
-                $this->createLogging('Cảnh báo', "Trùng mã thiết bị {$code}.", 0, "TinTan", "warning");
+                $this->createLogging('Cảnh báo', "Trùng mã thiết bị {$code}.", 0, '', "TinTan", "warning");
                 break;
         }
         return $device;
     }
 
-    public function createLogging($name, $description, $count, $created_by, $error_type)
+    public function createLogging($name, $description, $count, $json, $created_by, $error_type)
     {
         $logging              = new Logging();
         $logging->name        = $name;
         $logging->description = $description;
         $logging->count       = $count;
+        $logging->json        = json_encode($json);
         $logging->created_by  = $created_by;
         $logging->error_type  = $error_type;
         $logging->active      = true;

@@ -58,6 +58,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
         return $msg;
     }
 
+    public function getCheckStock() {
+        error_log($_GET['param']);
+        $json = json_decode($_GET['param']);
+        $msg  = $this->checkStock($json);
+        return $msg;
+    }
+
     /** LOGIC METHOD */
     public function productInputOutput($json)
     {
@@ -65,7 +72,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             return response()->json(['data' => $json], 200);
 
         if (!$this->validateJson($json) || !$this->validateJsonProductInputOutput($json)) {
-            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, 'Vsys', 'danger');
+            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, $json, 'Vsys', 'danger');
             return 'ERROR';
         }
 
@@ -89,13 +96,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Find Cabinet
@@ -107,7 +114,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             # Find Distributor
             $distributor = Distributor::find($io_center->dis_id);
             if (!$distributor || !$distributor->active) {
-                $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Find Card -> UserCard -> User
@@ -117,7 +124,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
-                $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Update Button_Product
@@ -127,17 +134,17 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 case "IN":
                     $tray_product->total_quantum += $quantum;
                     if ($tray_product->total_quantum > $tray->quantum_product) {
-                        $this->createLogging('Nạp sản phẩm vượt số lượng tối đa trên mâm', '', $json->cnt, 'Vsys', 'danger');
+                        $this->createLogging('Nạp sản phẩm vượt số lượng tối đa trên mâm', '', $json->cnt, $json, 'Vsys', 'danger');
                     }
                     break;
                 case "OUT":
                     $tray_product->total_quantum -= $quantum;
                     if ($tray_product->total_quantum < 0) {
-                        $this->createLogging('Bán sản phẩm vượt số lượng còn lại trên mâm.', '', $json->cnt, 'Vsys', 'danger');
+                        $this->createLogging('Bán sản phẩm vượt số lượng còn lại trên mâm.', '', $json->cnt, $json, 'Vsys', 'danger');
                     }
                     break;
                 default:
-                    $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, 'Vsys', 'danger');
+                    $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, $json, 'Vsys', 'danger');
                     break;
             }
 
@@ -146,7 +153,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $tray_product->updated_date = $user_date;
             $tray_product->vsys_date    = $vsys_date;
             if (!$tray_product->update()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật TrayProduct thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật TrayProduct thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Create History_Input_Output
@@ -174,7 +181,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     $history_input_output->user_output_id = $user->id;
                     break;
                 default:
-                    $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, 'Vsys', 'danger');
+                    $this->createLogging('Trạng thái không phải IN hoặc OUT.', '', $json->cnt, $json, 'Vsys', 'danger');
                     break;
             }
 
@@ -198,7 +205,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $history_input_output->active         = true;
 
             if (!$history_input_output->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật HistoryInputOutput thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật HistoryInputOutput thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             if ($tray_status == 'OUT') {
@@ -211,7 +218,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 # Validate Total Money
                 $total_money_on_server = $user_card->total_money - $total_pay;
                 if ($total_money_on_server != $total_money_in_card) {
-                    $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, 'Vsys', 'warning');
+                    $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, $json, 'Vsys', 'warning');
                 }
 
                 $user_card->total_money  = $total_money_in_card;
@@ -221,7 +228,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $user_card->updated_date = $user_date;
                 $user_card->vsys_date    = $vsys_date;
                 if (!$user_card->update()) {
-                    $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
+                    $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, $json, 'TinTan', 'danger');
                 }
 
                 # Create User_Card_Money
@@ -239,7 +246,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $user_card_money->vsys_date    = $vsys_date;
                 $user_card_money->active       = true;
                 if (!$user_card_money->save()) {
-                    $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
+                    $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, $json, 'TinTan', 'danger');
                 }
 
                 # Mail Reminder
@@ -253,7 +260,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             return 'OK';
         } catch (Exception $ex) {
             DB::rollback();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -264,7 +271,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             return response()->json(['data' => $json], 200);
 
         if (!$this->validateJson($json) || !$this->validateJsonUserCardMoney($json)) {
-            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, 'Vsys', 'danger');
+            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, $json, 'Vsys', 'danger');
             return 'ERROR';
         }
 
@@ -286,13 +293,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Find CDM
@@ -305,7 +312,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
-                $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Update User_Card
@@ -326,7 +333,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     break;
             }
             if ($total_money_on_server != $total_money_in_card) {
-                $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, 'Vsys', 'warning');
+                $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, $json, 'Vsys', 'warning');
             }
 
             $user_card->total_money  = $total_money_in_card;
@@ -335,7 +342,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card->updated_date = $user_date;
             $user_card->vsys_date    = $vsys_date;
             if (!$user_card->update()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Create User_Card_Money
@@ -353,14 +360,14 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card_money->vsys_date    = $vsys_date;
             $user_card_money->active       = true;
             if (!$user_card_money->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             DB::commit();
             return 'OK';
         } catch (Exception $ex) {
             DB::rollBack();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -371,7 +378,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             return response()->json(['data' => $json], 200);
 
         if (!$this->validateJson($json) || !$this->validateJsonRegVisitor($json)) {
-            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, 'Vsys', 'danger');
+            $this->createLogging('Dữ liệu không hợp lệ.', 'Dữ liệu bộ trung tâm gửi đến máy chủ không hợp lệ.', $json->cnt, $json, 'Vsys', 'danger');
             return 'ERROR';
         }
 
@@ -393,13 +400,13 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Check count
             if ($io_center->count >= $count) {
-                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, 'Vsys', 'danger');
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
             }
 
             # Update count
             $io_center->count = $count;
             if (!$io_center->update()) {
-                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Find Device
@@ -426,7 +433,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $kvl->dis_or_sup    = 'dis';
             $kvl->dis_or_sup_id = $io_center->dis_id;
             if (!$kvl->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm khách vãng lai thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm khách vãng lai thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Create Card
@@ -441,7 +448,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $card->io_center_id    = $io_center->id;
             $card->parent_id       = 0;
             if (!$card->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm thẻ thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm thẻ thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Create UserCard
@@ -459,7 +466,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card->vsys_date    = $vsys_date;
             $user_card->active       = true;
             if (!$user_card->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCard thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCard thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             # Create UserCardMoney
@@ -477,14 +484,66 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $user_card_money->vsys_date    = $vsys_date;
             $user_card_money->active       = true;
             if (!$user_card_money->save()) {
-                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCardMoney thất bại.', $json->cnt, 'TinTan', 'danger');
+                $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCardMoney thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
             DB::commit();
             return 'OK';
         } catch (Exception $ex) {
             DB::rollback();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
+            return 'ERROR';
+        }
+    }
+
+    public function checkStock($json) {
+        if ($this->debugJson($json))
+            return response()->json(['data' => $json], 200);
+
+        $io_center_code      = $json->id;
+        $count               = $json->cnt;
+        // $vsys_date           = $json->t;
+        // $user_date           = Carbon::createFromFormat($this->format_datetime, $json->c1);
+        $tray_code           = $json->c3;
+        $cabinet_code        = $json->c8;
+
+        try {
+            DB::beginTransaction();
+
+            # Find IOCenter & Update Count
+            $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
+
+            # Check count
+            if ($io_center->count >= $count) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Biến đếm bộ trung tâm gửi đến bé hơn hoặc bằng biến đếm trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
+
+            # Update count
+            $io_center->count = $count;
+            if (!$io_center->update()) {
+                $this->createLogging('Cập nhật biến đếm cho bộ trung tâm thất bại.', '', $json->cnt, $json, 'TinTan', 'danger');
+            }
+
+            # Find Cabinet
+            $cabinet = $this->getDeviceByCode('Cabinet', $io_center->id, null, $cabinet_code);
+
+            # Find Tray
+            $tray = $this->getDeviceByCode('Tray', $io_center->id, $cabinet->id, $tray_code);
+
+            # Find Distributor
+            $distributor = Distributor::find($io_center->dis_id);
+            if (!$distributor || !$distributor->active) {
+                $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
+            }
+
+            # Find Button_Product
+            $tray_product = ButtonProduct::whereActive(true)->where([['dis_id', $distributor->id], ['button_id', $tray->id]])->first();
+
+            DB::commit();
+            return $tray_product->total_quantum;
+        } catch (Exception $ex) {
+            DB::rollback();
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }

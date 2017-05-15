@@ -16,6 +16,7 @@ namespace App{
  * @property string $name
  * @property string $description
  * @property int $count
+ * @property string $json
  * @property string $created_by
  * @property string $error_type
  * @property bool $active
@@ -28,6 +29,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereDescription($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereErrorType($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereJson($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Logging whereUpdatedAt($value)
  */

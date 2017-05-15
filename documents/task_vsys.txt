@@ -88,6 +88,8 @@ c7: Gia san pham
 Dang ky the
 c6: So dien thoai KVL
 
+Kiem tra ton kho
+
 -------------------
 - ButtonProduct => TrayProduct
 - Upload image
@@ -97,7 +99,7 @@ c6: So dien thoai KVL
 - Export file Report Balance in ReportVsys
 
 - Web app hỏi trả lời Google API
-- Kiểm tra tồn kho thực >< lý thuyết
+- Kiểm tra tồn kho thực >< lý thuyết (x)
 - Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm (x)
 - Có thể sửa báo cáo nếu là QTV (Thêm dòng nhập xuất mới)
 - Filter dữ liệu chỉnh sửa của QTV
