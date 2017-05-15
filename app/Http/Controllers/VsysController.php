@@ -502,10 +502,10 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
         $io_center_code      = $json->id;
         $count               = $json->cnt;
-        // $vsys_date           = $json->t;
-        // $user_date           = Carbon::createFromFormat($this->format_datetime, $json->c1);
+        $vsys_date           = $json->t;
+        $user_date           = Carbon::createFromFormat($this->format_datetime, $json->c1);
+        $cabinet_code        = $json->c2;
         $tray_code           = $json->c3;
-        $cabinet_code        = $json->c8;
 
         try {
             DB::beginTransaction();

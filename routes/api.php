@@ -19,6 +19,7 @@ Route::group(['prefix' => 'v1'], function() {
         Route::get('/prod-inout', 'VsysController@getProductInputOutput');
         Route::get('/cdm', 'VsysController@getUserCardMoney');
         Route::get('/reg-visitor', 'VsysController@getRegisterVisitor');
+        Route::get('/check-stock', 'VsysController@getCheckStock');
     });
 
 // Co header la "Bearer + token" thi duoc vao

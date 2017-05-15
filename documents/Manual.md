@@ -41,7 +41,7 @@ Server: http://showroom.app-demo.info/api/v1/prod-inout
 
 > - c1: Ngày xảy ra hành động (dd/mm/yy hh:ii:ss)
 > - c2: Mã thẻ
-> - c3: Mã mâm
+> - c3: Mã box
 > - c4: Trạng thái (“IN”)
 > - c5: Số tiền của thẻ
 > - c6: Số lượng nạp
@@ -62,7 +62,7 @@ Server: http://showroom.app-demo.info/api/v1/prod-inout
 
 > - c1: Ngày xảy ra hành động (dd/mm/yy hh:ii:ss)
 > - c2: Mã thẻ
-> - c3: Mã mâm
+> - c3: Mã box
 > - c4: Trạng thái (“OUT”)
 > - c5: Số tiền của thẻ
 > - c6: Số lượng bán
@@ -91,6 +91,23 @@ Server: http://showroom.app-demo.info/api/v1/reg-visitor
 Ví dụ minh họa đăng ký thẻ cho khách vãng lai:
 ```
 http://showroom.app-demo.info/api/v1/reg-visitor?param={"u":"demo","p":"","id":"IO53A096","cnt":"3","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"75EC5428E5","c3":"CDM1","c4":"","c5":"0","c6":"0987654321"}
+```
+
+Kiểm tra tồn trên box
+-------------
+Server sẽ trả về số lượng hàng trên box mà ta gửi. 
+
+Server: http://showroom.app-demo.info/api/v1/check-stock
+
+> **Cấu trúc dữ liệu gửi lên server:**
+
+> - c1: Ngày xảy ra hành động (dd/mm/yy hh:ii:ss)
+> - c2: Mã tủ
+> - c3: Mã box
+
+Ví dụ minh họa kiểm tra tồn trên box:
+```
+http://showroom.app-demo.info/api/v1/check-stock?param={"u":"demo","p":"","id":"IO53A096","cnt":"3","t":"2017-01-20 10:16:38","c1":"20/01/17 10:16:38","c2":"TU1","c3":"1"}
 ```
 
 Debug

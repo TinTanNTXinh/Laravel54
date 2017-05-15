@@ -102,7 +102,7 @@ Kiem tra ton kho
 - Kiểm tra tồn kho thực >< lý thuyết (x)
 - Không rollback transaction nếu lỗi, báo cáo chấp nhận số âm (x)
 - Có thể sửa báo cáo nếu là QTV (Thêm dòng nhập xuất mới) (x)
-- Filter dữ liệu chỉnh sửa của QTV
+- Filter dữ liệu chỉnh sửa của QTV (x)
 
 
 
