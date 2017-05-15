@@ -35,7 +35,7 @@ class FilesTableSeeder extends Seeder
                 'updated_date' => null,
                 'active'       => true,
                 'table_name'   => 'users',
-                'table_id'     => ++$key + 2
+                'table_id'     => ++$key + 3
             ]);
         }
     }

@@ -185,17 +185,20 @@ class UserController extends Controller implements ICrud, IValidate
             }
 
             # UserRole
-            $user_role          = new UserRole();
-            $user_role->user_id = $one->id;
+
+            # Find Array Role
+            $roles = [];
             switch ($one->dis_or_sup) {
                 case 'sup':
                     switch ($one->position_id) {
                         case 3:
-                            $user_role->role_id = 15;
+                            array_push($roles, 15); //ReportSupplier
+                            array_push($roles, 12); //ButtonProduct
+                            array_push($roles, 6); //Product
                             break;
                         case 4:
                         case 5:
-                            $user_role->role_id = 17;
+                            array_push($roles, 17); //ReportStaffInput
                             break;
                         default:
                             break;
@@ -204,9 +207,13 @@ class UserController extends Controller implements ICrud, IValidate
                 case 'dis':
                     switch ($one->position_id) {
                         case 3:
+                            array_push($roles, 16); //ReportDistributor
+                            array_push($roles, 12);
+                            array_push($roles, 6);
+                            break;
                         case 4:
                         case 5:
-                            $user_role->role_id = 16;
+                            array_push($roles, 16);
                             break;
                         default:
                             break;
@@ -215,28 +222,21 @@ class UserController extends Controller implements ICrud, IValidate
                 default:
                     break;
             }
-            $user_role->created_by   = $this->user->id;
-            $user_role->updated_by   = 0;
-            $user_role->created_date = date('Y-m-d H:i:s');
-            $user_role->updated_date = null;
-            $user_role->active       = true;
-            if (!$user_role->save()) {
-                DB::rollback();
-                return false;
-            }
 
-            # Add Role Product
-            $user_role               = new UserRole();
-            $user_role->user_id      = $one->id;
-            $user_role->role_id      = 6;
-            $user_role->created_by   = $this->user->id;
-            $user_role->updated_by   = 0;
-            $user_role->created_date = date('Y-m-d H:i:s');
-            $user_role->updated_date = null;
-            $user_role->active       = true;
-            if (!$user_role->save()) {
-                DB::rollback();
-                return false;
+            # Add Role
+            foreach($roles as $role_id) {
+                $user_role               = new UserRole();
+                $user_role->user_id      = $one->id;
+                $user_role->role_id      = $role_id;
+                $user_role->created_by   = $this->user->id;
+                $user_role->updated_by   = 0;
+                $user_role->created_date = date('Y-m-d H:i:s');
+                $user_role->updated_date = null;
+                $user_role->active       = true;
+                if (!$user_role->save()) {
+                    DB::rollback();
+                    return false;
+                }
             }
 
             # File
