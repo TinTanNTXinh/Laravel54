@@ -224,7 +224,8 @@ class ButtonProductController extends Controller implements ICrud, IValidate
             $two->created_date = date('Y-m-d H:i:s');
             $two->updated_date = null;
             $two->vsys_date    = date('Y-m-d H:i:s');
-            $two->isSysAdmin   = true;
+            $two->isDefault    = false;
+            $two->adjust_by    = $this->user->id;
             $two->active       = true;
             if (!$two->save()) {
                 DB::rollBack();
@@ -411,7 +412,8 @@ class ButtonProductController extends Controller implements ICrud, IValidate
                     $two->created_date      = date('Y-m-d H:i:s');
                     $two->updated_date      = null;
                     $two->vsys_date         = date('Y-m-d H:i:s');
-                    $two->isSysAdmin        = true;
+                    $two->isDefault         = true;
+                    $two->adjust_by         = 0;
                     $two->active            = true;
                     if (!$two->save()) {
                         DB::rollBack();
@@ -455,7 +457,8 @@ class ButtonProductController extends Controller implements ICrud, IValidate
                     $two->created_date      = date('Y-m-d H:i:s');
                     $two->updated_date      = null;
                     $two->vsys_date         = date('Y-m-d H:i:s');
-                    $two->isSysAdmin        = true;
+                    $two->isDefault         = true;
+                    $two->adjust_by         = 0;
                     $two->active            = true;
                     if (!$two->save()) {
                         DB::rollBack();

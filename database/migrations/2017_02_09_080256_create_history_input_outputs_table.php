@@ -36,7 +36,8 @@ class CreateHistoryInputOutputsTable extends Migration
             $table->dateTime('created_date')->default(date('Y-m-d H:i:s'))->comment('Ngày tạo');
             $table->dateTime('updated_date')->nullable()->comment('Ngày cập nhật');
             $table->dateTime('vsys_date')->default(date('Y-m-d H:i:s'))->comment('Ngày bộ trung tâm');
-            $table->boolean('isSysAdmin')->default(false)->comment('Là dòng dữ liệu nhập xuất cân bằng của admin');
+            $table->boolean('isDefault')->default(false)->comment('Là dòng dữ liệu mặc định của admin');
+            $table->integer('adjust_by')->default(0)->comment('Người điều chỉnh số lượng (nhập xuất cân bằng)');
             $table->boolean('active')->default(false)->comment('Kích hoạt');
             $table->timestamps();
         });

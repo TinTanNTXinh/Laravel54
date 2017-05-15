@@ -39,7 +39,8 @@ class HistoryInputOutputsTableSeeder extends Seeder
                 'created_date'      => date("Y-m-d H:i:s"),
                 'updated_date'      => null,
                 'vsys_date'         => date("Y-m-d H:i:s"),
-                'isSysAdmin'        => true,
+                'isDefault'         => true,
+                'adjust_by'         => 0,
                 'active'            => true
             ]);
         }

@@ -455,11 +455,13 @@ namespace App{
  * @property \Carbon\Carbon $created_date Ngày tạo
  * @property string $updated_date Ngày cập nhật
  * @property string $vsys_date Ngày bộ trung tâm
- * @property bool $isSysAdmin Là dòng dữ liệu nhập xuất cân bằng của admin
+ * @property bool $isDefault Là dòng dữ liệu mặc định của admin
+ * @property int $adjust_by Người điều chỉnh số lượng (nhập xuất cân bằng)
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereAdjustBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereButtonId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereButtonProductId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereCount($value)
@@ -469,7 +471,7 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereDisId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereIoCenterId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereIsSysAdmin($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereIsDefault($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereProductId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereProductPrice($value)
  * @method static \Illuminate\Database\Query\Builder|\App\HistoryInputOutput whereQuantumIn($value)

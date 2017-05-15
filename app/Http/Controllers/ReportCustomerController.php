@@ -330,7 +330,7 @@ class ReportCustomerController extends Controller implements IReport
     // Nhập hàng
     private function reportInput()
     {
-        $report_inputs = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'IN']])
+        $report_inputs = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'IN'], ['history_input_outputs.isDefault', false]])
             ->leftJoin('devices', 'devices.id', '=', 'history_input_outputs.button_id')
             ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
             ->leftJoin('products', 'products.id', '=', 'history_input_outputs.product_id')
@@ -385,7 +385,7 @@ class ReportCustomerController extends Controller implements IReport
     // Bán hàng
     private function reportSale()
     {
-        $report_sales = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'OUT']])
+        $report_sales = HistoryInputOutput::where([['history_input_outputs.active', true], ['history_input_outputs.status', 'OUT'], ['history_input_outputs.isDefault', false]])
             ->leftJoin('devices', 'devices.id', '=', 'history_input_outputs.button_id')
             ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
             ->leftJoin('products', 'products.id', '=', 'history_input_outputs.product_id')
@@ -456,7 +456,7 @@ class ReportCustomerController extends Controller implements IReport
         $from_date       = $filter['from_date'];
         $to_date         = $filter['to_date'];
         $range           = $filter['range'];
-        $isSysAdmin      = $filter['isSysAdmin'];
+        $adjust_by       = $filter['adjust_by'];
         $product_id      = $filter['product_id'];
         $unit_id         = $filter['unit_id'];
         $distributor_id  = isset($filter['distributor_id']) ? $filter['distributor_id'] : null;
@@ -468,7 +468,7 @@ class ReportCustomerController extends Controller implements IReport
         $reports = $this->searchFromDateToDate($reports, 'history_input_outputs.created_date', $from_date, $to_date);
         $reports = $this->searchRangeDate($reports, 'history_input_outputs.created_date', $range);
 
-        $reports = $reports->where('history_input_outputs.isSysAdmin', $isSysAdmin);
+        $reports = $this->searchFieldName($reports, 'history_input_outputs.adjust_by', $adjust_by);
 
         $reports = $this->searchFieldName($reports, 'products.id', $product_id);
         $reports = $this->searchFieldName($reports, 'units.id', $unit_id);

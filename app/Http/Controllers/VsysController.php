@@ -201,7 +201,8 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
             $history_input_output->created_date   = $user_date;
             $history_input_output->updated_date   = null;
             $history_input_output->vsys_date      = $vsys_date;
-            $history_input_output->isSysAdmin     = false;
+            $history_input_output->isDefault      = false;
+            $history_input_output->adjust_by      = 0;
             $history_input_output->active         = true;
 
             if (!$history_input_output->save()) {

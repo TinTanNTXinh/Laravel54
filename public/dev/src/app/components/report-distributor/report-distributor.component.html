@@ -80,12 +80,9 @@
                                               [(ngModel)]="filter_ReportInput.cabinet_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
-                                <label>Chỉnh sửa</label>
-                                <br>
-                                <label class="i-switch m-t-xs m-r">
-                                  <input type="checkbox" [(ngModel)]="filter_ReportInput.isSysAdmin" name="isSysAdmin">
-                                  <i></i>
-                                </label>
+                                <label>Nhân viên điều chỉnh số lượng</label>
+                                <autocomplete [data]="staffs" [name]="'fullname'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportInput.adjust_by"></autocomplete>
                               </div>
                             </div>
                           </div>
@@ -243,12 +240,9 @@
                                               [(ngModel)]="filter_ReportSale.cabinet_id"></autocomplete>
                               </div>
                               <div class="col-md-3">
-                                <label>Chỉnh sửa</label>
-                                <br>
-                                <label class="i-switch m-t-xs m-r">
-                                  <input type="checkbox" [(ngModel)]="filter_ReportSale.isSysAdmin" name="isSysAdmin">
-                                  <i></i>
-                                </label>
+                                <label>Nhân viên điều chỉnh số lượng</label>
+                                <autocomplete [data]="staffs" [name]="'fullname'" [model_name]="'id'"
+                                              [(ngModel)]="filter_ReportSale.adjust_by"></autocomplete>
                               </div>
                             </div>
                           </div>
