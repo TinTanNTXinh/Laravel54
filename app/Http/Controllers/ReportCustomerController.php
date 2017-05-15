@@ -336,6 +336,7 @@ class ReportCustomerController extends Controller implements IReport
             ->leftJoin('products', 'products.id', '=', 'history_input_outputs.product_id')
             ->leftJoin('units', 'units.id', '=', 'products.unit_id')
             ->leftJoin('users as staff_input', 'staff_input.id', '=', 'history_input_outputs.user_input_id')
+            ->leftJoin('users as adjuster', 'adjuster.id', '=', 'history_input_outputs.adjust_by')
             ->leftJoin('distributors', 'distributors.id', '=', 'history_input_outputs.dis_id')
             ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
             ->select(DB::raw('SUM(history_input_outputs.quantum_in) as quantum_in')
@@ -348,6 +349,7 @@ class ReportCustomerController extends Controller implements IReport
                 , 'products.id as product_id', 'products.name as product_name', 'products.barcode as product_barcode'
                 , 'units.id as unit_id', 'units.name as unit_name'
                 , 'staff_input.id as staff_input_id', 'staff_input.fullname as staff_input_fullname'
+                , 'adjuster.id as adjuster_id', 'adjuster.fullname as adjuster_fullname', 'adjuster.phone as adjuster_phone'
                 , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
                 , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name'
                 , 'history_input_outputs.created_date'
@@ -393,6 +395,7 @@ class ReportCustomerController extends Controller implements IReport
             ->leftJoin('distributors', 'distributors.id', '=', 'history_input_outputs.dis_id')
             ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
             ->leftJoin('users as staff_output', 'staff_output.id', '=', 'history_input_outputs.user_output_id')
+            ->leftJoin('users as adjuster', 'adjuster.id', '=', 'history_input_outputs.adjust_by')
             ->select('history_input_outputs.total_pay'
                 , 'history_input_outputs.total_pay'
                 , DB::raw($this->getWithCurrencyFormat('history_input_outputs.total_pay', 'fc_total_pay'))
@@ -406,6 +409,7 @@ class ReportCustomerController extends Controller implements IReport
                 , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
                 , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name'
                 , 'staff_output.id as staff_output_id', 'staff_output.fullname as staff_output_fullname', 'staff_output.phone as staff_output_phone'
+                , 'adjuster.id as adjuster_id', 'adjuster.fullname as adjuster_fullname', 'adjuster.phone as adjuster_phone'
                 , DB::raw($this->getWithDateFormat('history_input_outputs.created_date', 'date_output'))
                 , DB::raw($this->getWithTimeFormat('history_input_outputs.created_date', 'time_output')))
             ->orderBy('history_input_outputs.created_date', 'desc');

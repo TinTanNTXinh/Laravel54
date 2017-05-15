@@ -97,7 +97,10 @@ export class ReportStaffInputComponent implements OnInit
                 title: 'Giờ'
             },
             staff_input_fullname: {
-                title: 'Nhân viên nhập'
+                title: 'NV nhập'
+            },
+            adjuster_fullname: {
+                title: 'NV điều chỉnh'
             },
             cabinet_name: {
                 title: this._deviceCaptionService.cabinet
@@ -492,7 +495,8 @@ export class ReportStaffInputComponent implements OnInit
             distributor_id: ['distributor_name'],
             staff_input_id: ['staff_input_name'],
             staff_output_id: ['staff_output_name'],
-            cabinet_id: ['cabinet_name']
+            cabinet_id: ['cabinet_name'],
+            adjust_by: ['adjuster_fullname']
         };
         switch (mode) {
             case 'input':

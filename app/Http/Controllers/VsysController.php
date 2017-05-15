@@ -23,7 +23,8 @@ use Mail;
 use App\Traits\UserHelper;
 use App\Traits\DBHelper;
 
-class VsysController extends Controller implements IProductInputOutput, IUserCardMoney, IRegisterVisitor, ICheckStock
+class VsysController extends Controller implements
+    IProductInputOutput, IUserCardMoney, IRegisterVisitor, ICheckStock
 {
     use UserHelper, DBHelper;
 
@@ -92,8 +93,11 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
         try {
             DB::beginTransaction();
 
-            # Find IOCenter & Update Count
+            # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
+            if(!$io_center) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Bộ trung tâm không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Check count
             if ($io_center->count >= $count) {
@@ -108,9 +112,15 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Find Cabinet
             $cabinet = $this->getDeviceByCode('Cabinet', $io_center->id, null, $cabinet_code);
+            if(!$cabinet) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Tủ không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Find Tray
             $tray = $this->getDeviceByCode('Tray', $io_center->id, $cabinet->id, $tray_code);
+            if(!$tray) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Box không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Find Distributor
             $distributor = Distributor::find($io_center->dis_id);
@@ -118,18 +128,29 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            # Find Card -> UserCard -> User
+            # Find Card
             $card = $this->getDeviceByCode('Card', null, null, $card_code);
+            if(!$card) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Thẻ không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
+            # Find UserCard
             $user_card = UserCard::whereActive(true)->where('card_id', $card->id)->first();
+            if (!$user_card) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Thẻ chưa cài đặt cho người dùng.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
+            # Find User
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
                 $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            # Update Button_Product
+            # Find ButtonProduct
             $tray_product = ButtonProduct::whereActive(true)->where([['dis_id', $distributor->id], ['button_id', $tray->id]])->first();
+            if (!$tray_product) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Box chưa cài đặt cho người dùng.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             switch ($tray_status) {
                 case "IN":
@@ -149,6 +170,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     break;
             }
 
+            # Update ButtonProduct
             $tray_product->count        = $count;
             $tray_product->updated_by   = $user->id;
             $tray_product->updated_date = $user_date;
@@ -214,8 +236,11 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 # Compute Total_Pay
                 $total_pay = $quantum * $product_price;
 
-                # Update User_Card
+                # Find UserCard
                 $user_card = UserCard::whereActive(true)->where([['user_id', $user->id], ['card_id', $card->id]])->first();
+                if (!$user_card) {
+                    $this->createLogging('Dữ liệu không hợp lệ.', 'Thẻ chưa cài đặt cho người dùng.', $json->cnt, $json, 'Vsys', 'danger');
+                }
 
                 # Validate Total Money
                 $total_money_on_server = $user_card->total_money - $total_pay;
@@ -223,6 +248,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, $json, 'Vsys', 'warning');
                 }
 
+                # Update UserCard
                 $user_card->total_money  = $total_money_in_card;
                 $user_card->sum_buy      += $total_pay;
                 $user_card->count        = $count;
@@ -233,7 +259,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                     $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, $json, 'TinTan', 'danger');
                 }
 
-                # Create User_Card_Money
+                # Create UserCardMoney
                 $user_card_money               = new UserCardMoney();
                 $user_card_money->io_center_id = $io_center->id;
                 $user_card_money->device_id    = $tray->id;
@@ -290,8 +316,11 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
         try {
             DB::beginTransaction();
 
-            # Find IOCenter & Update Count
+            # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
+            if(!$io_center) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Bộ trung tâm không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Check count
             if ($io_center->count >= $count) {
@@ -306,19 +335,27 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Find CDM
             $cdm = $this->getDeviceByCode('CDM', $io_center->id, null, $cdm_code);
+            if(!$cdm) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Máy nạp tiền không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
-            # Find Card -> UserCard -> User
+            # Find Card
             $card = $this->getDeviceByCode('Card', null, null, $card_code);
+            if(!$card) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Thẻ không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
+            # Find UserCard
             $user_card = UserCard::whereActive(true)->where('card_id', $card->id)->first();
+            if (!$user_card) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Thẻ chưa cài đặt cho người dùng.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
+            # Find User
             $user = User::find($user_card->user_id);
             if (!$user || !$user->active) {
                 $this->createLogging('Không tìm thấy Người dùng hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
-
-            # Update User_Card
-            $user_card = UserCard::whereActive(true)->where([['user_id', $user->id], ['card_id', $card->id]])->first();
 
             # Validate Total Money
             $total_money_on_server = 0;
@@ -338,6 +375,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $this->createLogging('Cảnh báo tiền trong thẻ', "Số tiền tính toán trên Máy chủ và Bộ trung tâm gửi lên không bằng nhau. Số tiền máy chủ: {$total_money_on_server}, Số tiền bộ trung tâm: {$total_money_in_card}", $json->cnt, $json, 'Vsys', 'warning');
             }
 
+            # Update UserCard
             $user_card->total_money  = $total_money_in_card;
             $user_card->count        = $count;
             $user_card->updated_by   = $user->id;
@@ -347,7 +385,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCard thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            # Create User_Card_Money
+            # Create UserCardMoney
             $user_card_money               = new UserCardMoney();
             $user_card_money->io_center_id = $io_center->id;
             $user_card_money->device_id    = $cdm->id;
@@ -397,8 +435,11 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
         try {
             DB::beginTransaction();
 
-            # Find IOCenter & Update Count
+            # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
+            if (!$io_center) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Bộ trung tâm không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Check count
             if ($io_center->count >= $count) {
@@ -413,6 +454,9 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
 
             # Find Device
             $device = $this->getDeviceByCode(null, $io_center->id, null, $device_code);
+            if (!$device) {
+                $this->createLogging('Dữ liệu không hợp lệ.', 'Thiết bị không tồn tại trên máy chủ.', $json->cnt, $json, 'Vsys', 'danger');
+            }
 
             # Create User (KVL)
             $kvl                = new User();
@@ -512,7 +556,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
         try {
             DB::beginTransaction();
 
-            # Find IOCenter & Update Count
+            # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
 
             # Check count
@@ -538,7 +582,7 @@ class VsysController extends Controller implements IProductInputOutput, IUserCar
                 $this->createLogging('Không tìm thấy Đại lý hoặc đã ngừng kích hoạt.', '', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            # Find Button_Product
+            # Find ButtonProduct
             $tray_product = ButtonProduct::whereActive(true)->where([['dis_id', $distributor->id], ['button_id', $tray->id]])->first();
 
             DB::commit();
