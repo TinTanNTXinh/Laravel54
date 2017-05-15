@@ -420,6 +420,7 @@ export class ReportStaffInputComponent implements OnInit
             from_date: '',
             to_date: '',
             range: '',
+            isSysAdmin: false,
             product_id: 0,
             unit_id: 0,
             staff_input_id: 0,

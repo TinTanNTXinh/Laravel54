@@ -89,6 +89,14 @@
                                 <autocomplete [data]="cabinets" [name]="'name'" [model_name]="'id'"
                                               [(ngModel)]="filter_ReportInput.cabinet_id"></autocomplete>
                               </div>
+                              <div class="col-md-3">
+                                <label>Chỉnh sửa</label>
+                                <br>
+                                <label class="i-switch m-t-xs m-r">
+                                  <input type="checkbox" [(ngModel)]="filter_ReportInput.isSysAdmin" name="isSysAdmin">
+                                  <i></i>
+                                </label>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -243,7 +251,6 @@
                                 <label>Đại lý</label>
                                 <autocomplete [data]="distributors" [name]="'name'" [model_name]="'id'"
                                               [(ngModel)]="filter_ReportSale.distributor_id"></autocomplete>
-                                {{filter_ReportSale.distributor_id}}
                               </div>
                               <div class="col-md-3">
                                 <label>Nhân viên/Khách vãng lai</label>
@@ -254,6 +261,14 @@
                                 <label>{{_deviceCaptionService.cabinet}}</label>
                                 <autocomplete [data]="cabinets" [name]="'name'" [model_name]="'id'"
                                               [(ngModel)]="filter_ReportSale.cabinet_id"></autocomplete>
+                              </div>
+                              <div class="col-md-3">
+                                <label>Chỉnh sửa</label>
+                                <br>
+                                <label class="i-switch m-t-xs m-r">
+                                  <input type="checkbox" [(ngModel)]="filter_ReportSale.isSysAdmin" name="isSysAdmin">
+                                  <i></i>
+                                </label>
                               </div>
                             </div>
                           </div>
