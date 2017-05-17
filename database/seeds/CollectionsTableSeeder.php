@@ -14,7 +14,7 @@ class CollectionsTableSeeder extends Seeder
         $array_name = [
             'Máy đọc thẻ',
             'Tủ',
-            'Mâm',
+            'Box',
             'Thẻ',
             'Máy nạp tiền'
         ];
