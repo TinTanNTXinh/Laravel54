@@ -241,7 +241,7 @@ class UserController extends Controller implements ICrud, IValidate
 
             # File
             $two               = new File();
-            $two->code         = $one->username;
+            $two->code         = $this->generateCode(File::class, 'FILE');
             $two->name         = $one->fullname;
             $two->extension    = 'png';
             $two->mime_type    = 'image/png';

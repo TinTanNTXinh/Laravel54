@@ -166,7 +166,7 @@ class DeviceController extends Controller implements ICrud, IValidate
                     $two                  = new Device();
                     $two->collect_code    = 'Tray';
                     $two->code            = $i;
-                    $two->name            = 'MÂM ' . $i;
+                    $two->name            = 'Box ' . $i;
                     $two->description     = null;
                     $two->quantum_product = $data['quantum_product'];
                     $two->active          = true;
@@ -318,7 +318,7 @@ class DeviceController extends Controller implements ICrud, IValidate
             // Check exist Tray by code along with Cabinet
             $tray = $this->getDeviceByCode('Tray', null, $data['parent_id'], $data['code'], $skip_id);
             if ($tray)
-                array_push($msg_error, 'Mã mâm đã tồn tại trong tủ này.');
+                array_push($msg_error, 'Mã box đã tồn tại trong tủ này.');
         } else {
             if ($data['code'] && $this->checkExistData(Device::class, 'code', $data['code'], $skip_id))
                 array_push($msg_error, 'Mã thiết bị đã tồn tại.');
