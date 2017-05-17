@@ -16,9 +16,9 @@ class CreateButtonProductsTable extends Migration
         Schema::create('button_products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('dis_id')->unsigned()->comment('Distributor');
-            $table->integer('button_id')->unsigned()->comment('Mâm');
+            $table->integer('button_id')->unsigned()->comment('Box');
             $table->integer('product_id')->unsigned()->comment('Sản phẩm');
-            $table->integer('total_quantum')->default(0)->unsigned()->comment('Số sản phẩm hiện tại');
+            $table->integer('total_quantum')->default(0)->comment('Số sản phẩm hiện tại');
             $table->unsignedBigInteger('count')->default(0)->comment('Biến đếm');
             $table->integer('created_by')->default(0)->unsigned()->comment('Người tạo');
             $table->integer('updated_by')->default(0)->unsigned()->comment('Nguời cập nhật');
