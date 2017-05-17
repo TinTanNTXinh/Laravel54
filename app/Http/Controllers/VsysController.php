@@ -17,7 +17,6 @@ use App\UserCard;
 use App\User;
 use App\IOCenter;
 use Exception;
-use DB;
 use App\Mail\Reminder;
 use Mail;
 use App\Traits\UserHelper;
@@ -91,7 +90,6 @@ class VsysController extends Controller implements
         $cabinet_code        = $json->c8;
 
         try {
-            DB::beginTransaction();
 
             # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
@@ -284,11 +282,9 @@ class VsysController extends Controller implements
                 }
             }
 
-            DB::commit();
             return 'OK';
         } catch (Exception $ex) {
-            DB::rollback();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -314,7 +310,6 @@ class VsysController extends Controller implements
         $money               = $json->c6;
 
         try {
-            DB::beginTransaction();
 
             # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
@@ -403,11 +398,9 @@ class VsysController extends Controller implements
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Cập nhật UserCardMoney thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            DB::commit();
             return 'OK';
         } catch (Exception $ex) {
-            DB::rollBack();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -433,7 +426,6 @@ class VsysController extends Controller implements
         $phone_number        = $json->c6;
 
         try {
-            DB::beginTransaction();
 
             # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
@@ -533,11 +525,9 @@ class VsysController extends Controller implements
                 $this->createLogging('Lỗi thao tác dữ liệu máy chủ', 'Thêm UserCardMoney thất bại.', $json->cnt, $json, 'TinTan', 'danger');
             }
 
-            DB::commit();
             return 'OK';
         } catch (Exception $ex) {
-            DB::rollback();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -554,7 +544,6 @@ class VsysController extends Controller implements
         $tray_code           = $json->c3;
 
         try {
-            DB::beginTransaction();
 
             # Find IOCenter
             $io_center = IOCenter::whereActive(true)->whereCode($io_center_code)->first();
@@ -585,11 +574,9 @@ class VsysController extends Controller implements
             # Find ButtonProduct
             $tray_product = ButtonProduct::whereActive(true)->where([['dis_id', $distributor->id], ['button_id', $tray->id]])->first();
 
-            DB::commit();
             return $tray_product->total_quantum;
         } catch (Exception $ex) {
-            DB::rollback();
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }

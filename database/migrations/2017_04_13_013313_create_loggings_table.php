@@ -16,7 +16,7 @@ class CreateLoggingsTable extends Migration
         Schema::create('loggings', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->text('description');
+            $table->longText('description');
             $table->unsignedBigInteger('count');
             $table->longText('json');
             $table->enum('created_by', ['TinTan', 'Vsys']);
