@@ -102,7 +102,7 @@ namespace App{
  *
  * @property int $id
  * @property int $dis_id Distributor
- * @property int $button_id Mâm
+ * @property int $button_id Box
  * @property int $product_id Sản phẩm
  * @property int $total_quantum Số sản phẩm hiện tại
  * @property int $count Biến đếm
