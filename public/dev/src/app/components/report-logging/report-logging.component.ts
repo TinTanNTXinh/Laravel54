@@ -56,17 +56,20 @@ export class ReportLoggingComponent implements OnInit
             DELETE: false
         };
         this.header = {
+            created_by: {
+                title: 'Lỗi do'
+            },
             name: {
                 title: 'Tên'
             },
             description: {
                 title: 'Mô tả'
             },
+            json: {
+                title: 'Json'
+            },
             count: {
                 title: 'Biến đếm'
-            },
-            created_by: {
-                title: 'Lỗi do'
             },
             error_type: {
                 title: 'Loại'

@@ -284,7 +284,7 @@ class VsysController extends Controller implements
 
             return 'OK';
         } catch (Exception $ex) {
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -400,7 +400,7 @@ class VsysController extends Controller implements
 
             return 'OK';
         } catch (Exception $ex) {
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -527,7 +527,7 @@ class VsysController extends Controller implements
 
             return 'OK';
         } catch (Exception $ex) {
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }
@@ -576,7 +576,7 @@ class VsysController extends Controller implements
 
             return $tray_product->total_quantum;
         } catch (Exception $ex) {
-            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', substr($ex, 0, 100), $json->cnt, $json, 'TinTan', 'danger');
+            $this->createLogging('Lỗi thao tác dữ liệu máy chủ', $ex, $json->cnt, $json, 'TinTan', 'danger');
             return 'ERROR';
         }
     }

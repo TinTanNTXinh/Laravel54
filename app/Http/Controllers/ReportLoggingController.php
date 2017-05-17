@@ -72,8 +72,9 @@ class ReportLoggingController extends Controller implements IReport
     public function searchOne($filter)
     {
         $reports = Logging::whereActive(true)
-            ->select('loggings.id', 'loggings.name', 'loggings.description', 'loggings.count'
-                , 'loggings.created_by', 'loggings.error_type'
+            ->select('loggings.id', 'loggings.name', 'loggings.count'
+                , 'loggings.created_by', 'loggings.error_type', 'loggings.json'
+                , DB::raw('SUBSTRING(loggings.description, 1, 200) as description')
                 , DB::raw($this->getWithDateFormat('loggings.created_at', 'created_date'))
                 , DB::raw($this->getWithTimeFormat('loggings.created_at', 'created_time'))
             )
