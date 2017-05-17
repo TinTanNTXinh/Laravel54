@@ -93,14 +93,25 @@ c2: Ma tu
 c3: Ma box
 
 -------------------
-- ButtonProduct => TrayProduct
 - Upload image
 - Swagger
 - Review RXJS pattern
-
+- ButtonProduct => TrayProduct
 - Export file Report Balance in ReportVsys
-
 - Web app hỏi trả lời Google API
+
+- Khách hàng, Đại lý: Cho trùng tên khác địa chỉ.
+- Người dùng: Luôn chọn Khách hàng.
+- Khách hàng: thêm trường ngày hết hạn.
+- Tài khoản khách hàng hết hạn, deactive tất cả tài khoản Đại lý của nó.
+- Cước phí theo từng tháng cho mỗi Khách hàng là khác nhau.
+- Cho chọn một cước phí làm cước phí mặc định.
+- Báo cáo thu phí:
+ + Search theo trạng thái: Tất cả, Sắt hết hạn (15 ngày), Chưa thanh toán, Ngưng sử dụng.
+ + Cột: Tên KH, Địa chỉ, Cước phí, SL tài khoản, Tổng tiền, Ngày SD, Ngày hết hạn, Số tiền thanh toán, Số tiền chưa thanh toán, Tình trạng (Chưa TT, Đã TT, Ngưng SD).
+ + Các cột load lên tự động: Tên KH, Địa chỉ, Cước phí, Trạng thái.
+- Quản lý thu chi:
+ + Tên KH, Nội dung, Số tiền.
 
 
 
