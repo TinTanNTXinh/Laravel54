@@ -541,8 +541,10 @@ class ReportCustomerController extends Controller implements IReport
                     unset($data[$key]['date_input']);
                     $data[$key]['Giờ'] = $data[$key]['time_input'];
                     unset($data[$key]['time_input']);
-                    $data[$key]['Nhân viên nhập'] = $data[$key]['staff_input_fullname'];
+                    $data[$key]['NV nhập'] = $data[$key]['staff_input_fullname'];
                     unset($data[$key]['staff_input_fullname']);
+                    $data[$key]['NV điều chỉnh'] = $data[$key]['adjuster_fullname'];
+                    unset($data[$key]['adjuster_fullname']);
                     $data[$key]['Tủ'] = $data[$key]['cabinet_name'];
                     unset($data[$key]['cabinet_name']);
                     $data[$key]['Mâm'] = $data[$key]['tray_name'];
@@ -570,6 +572,8 @@ class ReportCustomerController extends Controller implements IReport
                     unset($data[$key]['staff_input_id']);
                     unset($data[$key]['unit_id']);
                     unset($data[$key]['tray_id']);
+                    unset($data[$key]['adjuster_id']);
+                    unset($data[$key]['adjuster_phone']);
                 }
                 break;
             case 'sale':
@@ -584,8 +588,10 @@ class ReportCustomerController extends Controller implements IReport
                     unset($data[$key]['tray_name']);
                     $data[$key]['SĐT'] = $data[$key]['staff_output_phone'];
                     unset($data[$key]['staff_output_phone']);
-                    $data[$key]['Nhân viên xuất'] = $data[$key]['staff_output_fullname'];
+                    $data[$key]['NV xuất'] = $data[$key]['staff_output_fullname'];
                     unset($data[$key]['staff_output_fullname']);
+                    $data[$key]['NV điều chỉnh'] = $data[$key]['adjuster_fullname'];
+                    unset($data[$key]['adjuster_fullname']);
                     $data[$key]['Mã vạch SP'] = $data[$key]['product_barcode'];
                     unset($data[$key]['product_barcode']);
                     $data[$key]['Tên sản phẩm'] = $data[$key]['product_name'];
@@ -608,6 +614,8 @@ class ReportCustomerController extends Controller implements IReport
                     unset($data[$key]['distributor_id']);
                     unset($data[$key]['supplier_id']);
                     unset($data[$key]['staff_output_id']);
+                    unset($data[$key]['adjuster_id']);
+                    unset($data[$key]['adjuster_phone']);
                 }
                 break;
             case 'stock':
