@@ -20,6 +20,7 @@ class ProducerController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     private $class_name = Producer::class;
 
@@ -42,6 +43,7 @@ class ProducerController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'producer';
+        $this->skeleton = Producer::whereActive(true);
     }
 
     /** API METHOD */
@@ -112,7 +114,7 @@ class ProducerController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $producers = Producer::whereActive(true)->get();
+        $producers = $this->skeleton->get();
 
         return [
             'producers'        => $producers,
@@ -225,7 +227,7 @@ class ProducerController extends Controller implements ICrud, IValidate
         $range       = $filter['range'];
         $producer_id = $filter['producer_id'];
 
-        $producers = Producer::whereActive(true);
+        $producers = $this->skeleton;
 
         $producers = $this->searchFromDateToDate($producers, 'producers.created_at', $from_date, $to_date);
 

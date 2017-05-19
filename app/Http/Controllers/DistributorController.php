@@ -21,6 +21,7 @@ class DistributorController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     private $class_name = Distributor::class;
 
@@ -43,6 +44,16 @@ class DistributorController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'distributor';
+        $this->skeleton = Distributor::where('distributors.active', true)
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
+            ->leftJoin('cities', 'cities.code', '=', 'distributors.city_code')
+            ->leftJoin('districts', 'districts.code', '=', 'distributors.district_code')
+            ->leftJoin('wards', 'wards.code', '=', 'distributors.ward_code')
+            ->select('distributors.*'
+                , 'suppliers.name as supplier_name'
+                , 'cities.name as city'
+                , 'districts.name as district'
+                , 'wards.name as ward');
     }
 
     /** API METHOD */
@@ -113,13 +124,7 @@ class DistributorController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $distributors = Distributor::where('distributors.active', true)
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
-            ->leftJoin('cities', 'cities.code', '=', 'distributors.city_code')
-            ->leftJoin('districts', 'districts.code', '=', 'distributors.district_code')
-            ->leftJoin('wards', 'wards.code', '=', 'distributors.ward_code')
-            ->select('distributors.*', 'suppliers.name as supplier_name', 'cities.name as city', 'districts.name as district', 'wards.name as ward')
-            ->get();
+        $distributors = $this->skeleton->get();
         $suppliers    = Supplier::whereActive(true)->get();
 
         return [
@@ -246,12 +251,7 @@ class DistributorController extends Controller implements ICrud, IValidate
         $district_code  = $filter['district_code'];
         $ward_code      = $filter['ward_code'];
 
-        $distributors = Distributor::where('distributors.active', true)
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
-            ->leftJoin('cities', 'cities.code', '=', 'distributors.city_code')
-            ->leftJoin('districts', 'districts.code', '=', 'distributors.district_code')
-            ->leftJoin('wards', 'wards.code', '=', 'distributors.ward_code')
-            ->select('distributors.*', 'suppliers.name as supplier_name', 'cities.name as city', 'districts.name as district', 'wards.name as ward');
+        $distributors = $this->skeleton;
 
         $distributors = $this->searchFromDateToDate($distributors, 'distributors.created_at', $from_date, $to_date);
 

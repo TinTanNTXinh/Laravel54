@@ -25,6 +25,7 @@ class ButtonProductController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
     private $http_status_code;
 
     public function __construct()
@@ -47,6 +48,18 @@ class ButtonProductController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name       = 'tray_product';
+        $this->skeleton = ButtonProduct::where('button_products.active', true)
+            ->leftJoin('products', 'products.id', '=', 'button_products.product_id')
+            ->leftJoin('devices', 'devices.id', '=', 'button_products.button_id')
+            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
+            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
+            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
+            ->select('button_products.id', 'button_products.button_id', 'button_products.total_quantum', 'products.name as product_name'
+                , 'devices.code as tray_code', 'devices.name as tray_name', 'devices.description as tray_description', 'devices.quantum_product as tray_quantum_product'
+                , 'io_centers.code as io_center_code', 'io_centers.name as io_center_name', 'io_centers.description as io_center_description'
+                , 'cabinets.code as cabinet_code', 'cabinets.name as cabinet_name', 'cabinets.description as cabinet_description'
+                , 'distributors.name as distributor_name'
+            );
         $this->http_status_code = 200;
     }
 
@@ -113,19 +126,7 @@ class ButtonProductController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $tray_products = ButtonProduct::where('button_products.active', true)
-            ->leftJoin('products', 'products.id', '=', 'button_products.product_id')
-            ->leftJoin('devices', 'devices.id', '=', 'button_products.button_id')
-            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
-            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
-            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
-            ->select('button_products.id', 'button_products.button_id', 'button_products.total_quantum', 'products.name as product_name'
-                , 'devices.code as tray_code', 'devices.name as tray_name', 'devices.description as tray_description', 'devices.quantum_product as tray_quantum_product'
-                , 'io_centers.code as io_center_code', 'io_centers.name as io_center_name', 'io_centers.description as io_center_description'
-                , 'cabinets.code as cabinet_code', 'cabinets.name as cabinet_name', 'cabinets.description as cabinet_description'
-                , 'distributors.name as distributor_name'
-            )
-            ->get();
+        $tray_products = $this->skeleton->get();
         $products      = Product::whereActive(true)->get();
         $trays         = Device::where('devices.active', true)
             ->where('devices.collect_code', 'Tray')
@@ -302,18 +303,7 @@ class ButtonProductController extends Controller implements ICrud, IValidate
         $distributor_id = $filter['distributor_id'];
         $product_id     = $filter['product_id'];
 
-        $tray_products = ButtonProduct::where('button_products.active', true)
-            ->leftJoin('products', 'products.id', '=', 'button_products.product_id')
-            ->leftJoin('devices', 'devices.id', '=', 'button_products.button_id')
-            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
-            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
-            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
-            ->select('button_products.id', 'button_products.button_id', 'button_products.total_quantum', 'products.name as product_name'
-                , 'devices.code as tray_code', 'devices.name as tray_name', 'devices.description as tray_description', 'devices.quantum_product as tray_quantum_product'
-                , 'io_centers.code as io_center_code', 'io_centers.name as io_center_name', 'io_centers.description as io_center_description'
-                , 'cabinets.code as cabinet_code', 'cabinets.name as cabinet_name', 'cabinets.description as cabinet_description'
-                , 'distributors.name as distributor_name'
-            );
+        $tray_products = $this->skeleton;
 
         $tray_products = $this->searchFromDateToDate($tray_products, 'button_products.created_date', $from_date, $to_date);
 

@@ -29,6 +29,7 @@ class UserController extends Controller implements ICrud, IValidate
     private $carbon_format_date;
     private $fake_pwd;
     private $auth_unam_pwd;
+    private $skeleton;
 
     private $class_name = User::class;
 
@@ -54,6 +55,9 @@ class UserController extends Controller implements ICrud, IValidate
         $this->fake_pwd           = substr(config('app.key'), 10);
         $this->auth_unam_pwd      = ($this->user->position_id == 1) ? true : false;
         $this->table_name         = 'user';
+        $this->skeleton = User::where('users.active', true)
+            ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
+            ->leftJoin('user_cards', 'user_cards.id', '=', 'users.id');
     }
 
     /** API METHOD */
@@ -124,7 +128,9 @@ class UserController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $users        = User::whereActive(true)->get();
+        $users        = $this->skeleton;
+        $users        = $this->searchFieldName($users, 'users.dis_or_sup', $this->user->dis_or_sup);
+        $users        = $users->get();
         $positions    = Position::whereActive(true)->whereNotIn('id', [1, 2])->get();
         $distributors = Distributor::whereActive(true)->get();
         $suppliers    = Supplier::whereActive(true)->get();
@@ -454,9 +460,9 @@ class UserController extends Controller implements ICrud, IValidate
         $username    = $filter['username'];
         $phone       = $filter['phone'];
 
-        $users = User::where([['users.active', true], ['users.dis_or_sup', $dis_or_sup]])
-            ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
-            ->leftJoin('user_cards', 'user_cards.id', '=', 'users.id');
+        $users = $this->skeleton;
+
+        $users = $this->searchFieldName($users, 'users.dis_or_sup', $dis_or_sup);
 
         switch ($dis_or_sup) {
             case 'sup':

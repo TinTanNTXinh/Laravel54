@@ -20,6 +20,7 @@ class UnitController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     private $class_name = Unit::class;
 
@@ -42,6 +43,8 @@ class UnitController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'unit';
+
+        $this->skeleton = Unit::whereActive(true);
     }
 
     /** API METHOD */
@@ -112,7 +115,7 @@ class UnitController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $units = Unit::whereActive(true)->get();
+        $units = $this->skeleton->get();
 
         return [
             'units'            => $units,
@@ -217,7 +220,7 @@ class UnitController extends Controller implements ICrud, IValidate
         $range     = $filter['range'];
         $unit_id   = $filter['unit_id'];
 
-        $units = Unit::whereActive(true);
+        $units = $this->skeleton;
 
         $units = $this->searchFromDateToDate($units, 'units.created_at', $from_date, $to_date);
 

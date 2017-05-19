@@ -27,6 +27,7 @@ class UserCardController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     public function __construct()
     {
@@ -46,6 +47,12 @@ class UserCardController extends Controller implements ICrud, IValidate
                 $this->user = $user_data['user'];
         }
         $this->table_name = 'user_card';
+        $this->skeleton = UserCard::where([['user_cards.active', true], ['users.dis_or_sup', $dis_or_sup]])
+            ->leftJoin('users', 'users.id', '=', 'user_cards.user_id')
+            ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
+            ->leftJoin('devices', 'devices.id', '=', 'user_cards.card_id')
+            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
+            ->leftJoin('devices as parents', 'parents.id', '=', 'devices.parent_id');
     }
 
     /** API METHOD */
@@ -116,7 +123,7 @@ class UserCardController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $user_cards = UserCard::whereActive(true)->get();
+        $user_cards = $this->skeleton->get();
 
         $staffs = User::where('users.active', true)->whereNotIn('position_id', [1, 2])
             ->whereNotIn('id', $user_cards->pluck('user_id')->toArray())
@@ -226,12 +233,7 @@ class UserCardController extends Controller implements ICrud, IValidate
         $fullname       = $filter['fullname'];
         $phone          = $filter['phone'];
 
-        $user_cards = UserCard::where([['user_cards.active', true], ['users.dis_or_sup', $dis_or_sup]])
-            ->leftJoin('users', 'users.id', '=', 'user_cards.user_id')
-            ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
-            ->leftJoin('devices', 'devices.id', '=', 'user_cards.card_id')
-            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
-            ->leftJoin('devices as parents', 'parents.id', '=', 'devices.parent_id');
+        $user_cards = $this->skeleton;
 
         switch ($dis_or_sup) {
             case 'sup':

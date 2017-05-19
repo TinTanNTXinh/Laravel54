@@ -25,6 +25,7 @@ class ProductController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     private $class_name = Product::class;
 
@@ -47,6 +48,19 @@ class ProductController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'product';
+        $this->skeleton = Product::where('products.active', true)
+            ->leftJoin('product_prices', 'product_prices.product_id', '=', 'products.id')
+            ->leftJoin('product_types', 'product_types.id', '=', 'products.product_type_id')
+            ->leftJoin('units', 'units.id', '=', 'products.unit_id')
+            ->leftJoin('producers', 'producers.id', '=', 'products.producer_id')
+            ->select('products.*'
+                , 'product_prices.price_input'
+                , DB::raw($this->getWithCurrencyFormat('product_prices.price_input', 'fc_price_input'))
+                , 'product_prices.price_output'
+                , DB::raw($this->getWithCurrencyFormat('product_prices.price_output', 'fc_price_output'))
+                , 'product_types.name as product_type_name'
+                , 'producers.name as producer_name'
+                , 'units.name as unit_name');
     }
 
     /** API METHOD */
@@ -117,20 +131,7 @@ class ProductController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $products      = Product::where('products.active', true)
-            ->leftJoin('product_prices', 'product_prices.product_id', '=', 'products.id')
-            ->leftJoin('product_types', 'product_types.id', '=', 'products.product_type_id')
-            ->leftJoin('units', 'units.id', '=', 'products.unit_id')
-            ->leftJoin('producers', 'producers.id', '=', 'products.producer_id')
-            ->select('products.*'
-                , 'product_prices.price_input'
-                , DB::raw($this->getWithCurrencyFormat('product_prices.price_input', 'fc_price_input'))
-                , 'product_prices.price_output'
-                , DB::raw($this->getWithCurrencyFormat('product_prices.price_output', 'fc_price_output'))
-                , 'product_types.name as product_type_name'
-                , 'producers.name as producer_name'
-                , 'units.name as unit_name')
-            ->get();
+        $products      = $this->skeleton->get();
         $product_types = ProductType::whereActive(true)->get();
         $units         = Unit::whereActive(true)->get();
         $producers     = Producer::whereActive(true)->get();
@@ -284,19 +285,7 @@ class ProductController extends Controller implements ICrud, IValidate
         $barcode     = $filter['barcode'];
         $name        = $filter['name'];
 
-        $products = Product::where('products.active', true)
-            ->leftJoin('product_prices', 'product_prices.product_id', '=', 'products.id')
-            ->leftJoin('product_types', 'product_types.id', '=', 'products.product_type_id')
-            ->leftJoin('units', 'units.id', '=', 'products.unit_id')
-            ->leftJoin('producers', 'producers.id', '=', 'products.producer_id')
-            ->select('products.*'
-                , 'product_prices.price_input'
-                , DB::raw($this->getWithCurrencyFormat('product_prices.price_input', 'fc_price_input'))
-                , 'product_prices.price_output'
-                , DB::raw($this->getWithCurrencyFormat('product_prices.price_output', 'fc_price_output'))
-                , 'product_types.name as product_type_name'
-                , 'producers.name as producer_name'
-                , 'units.name as unit_name');
+        $products = $this->skeleton;
 
         $products = $this->searchFromDateToDate($products, 'products.created_date', $from_date, $to_date);
 

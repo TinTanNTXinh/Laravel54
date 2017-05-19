@@ -20,6 +20,8 @@ class SupplierController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
+
     private $class_name = Supplier::class;
 
     public function __construct()
@@ -41,6 +43,12 @@ class SupplierController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'supplier';
+
+        $this->skeleton = Supplier::where('suppliers.active', true)
+            ->leftJoin('cities', 'cities.code', '=', 'suppliers.city_code')
+            ->leftJoin('districts', 'districts.code', '=', 'suppliers.district_code')
+            ->leftJoin('wards', 'wards.code', '=', 'suppliers.ward_code')
+            ->select('suppliers.*', 'cities.name as city', 'districts.name as district', 'wards.name as ward');
     }
 
     /** API METHOD */
@@ -111,12 +119,7 @@ class SupplierController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $suppliers = Supplier::where('suppliers.active', true)
-            ->leftJoin('cities', 'cities.code', '=', 'suppliers.city_code')
-            ->leftJoin('districts', 'districts.code', '=', 'suppliers.district_code')
-            ->leftJoin('wards', 'wards.code', '=', 'suppliers.ward_code')
-            ->select('suppliers.*', 'cities.name as city', 'districts.name as district', 'wards.name as ward')
-            ->get();
+        $suppliers = $this->skeleton->get();
 
         return [
             'suppliers'        => $suppliers,
@@ -238,11 +241,7 @@ class SupplierController extends Controller implements ICrud, IValidate
         $district_code = $filter['district_code'];
         $ward_code     = $filter['ward_code'];
 
-        $suppliers = Supplier::where('suppliers.active', true)
-            ->leftJoin('cities', 'cities.code', '=', 'suppliers.city_code')
-            ->leftJoin('districts', 'districts.code', '=', 'suppliers.district_code')
-            ->leftJoin('wards', 'wards.code', '=', 'suppliers.ward_code')
-            ->select('suppliers.*', 'cities.name as city', 'districts.name as district', 'wards.name as ward');
+        $suppliers = $this->skeleton;
 
         $suppliers = $this->searchFromDateToDate($suppliers, 'suppliers.created_at', $from_date, $to_date);
 

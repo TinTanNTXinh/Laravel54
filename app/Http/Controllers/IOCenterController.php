@@ -22,6 +22,7 @@ class IOCenterController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     public function __construct()
     {
@@ -42,6 +43,12 @@ class IOCenterController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'io_center';
+        $this->skeleton = IOCenter::where('io_centers.active', true)
+            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
+            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
+            ->select('io_centers.*'
+                , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
+                , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name');
     }
 
     /** API METHOD */
@@ -112,7 +119,7 @@ class IOCenterController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $io_centers   = IOCenter::whereActive(true)->get();
+        $io_centers   = $this->skeleton->get();
         $distributors = Distributor::whereActive(true)->get();
         $suppliers    = Supplier::whereActive(true)->get();
 
@@ -227,12 +234,7 @@ class IOCenterController extends Controller implements ICrud, IValidate
         $supplier_id    = $filter['supplier_id'];
         $distributor_id = $filter['distributor_id'];
 
-        $io_centers = IOCenter::where('io_centers.active', true)
-            ->leftJoin('distributors', 'distributors.id', '=', 'io_centers.dis_id')
-            ->leftJoin('suppliers', 'suppliers.id', '=', 'distributors.sup_id')
-            ->select('io_centers.*'
-                , 'distributors.id as distributor_id', 'distributors.name as distributor_name'
-                , 'suppliers.id as supplier_id', 'suppliers.name as supplier_name');
+        $io_centers = $this->skeleton;
 
         $io_centers = $this->searchFromDateToDate($io_centers, 'io_centers.created_date', $from_date, $to_date);
 
