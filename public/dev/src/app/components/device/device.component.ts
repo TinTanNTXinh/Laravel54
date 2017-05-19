@@ -79,6 +79,9 @@ export class DeviceComponent implements OnInit
             collect_name: {
                 title: 'Loại'
             },
+            io_center_code: {
+                title: 'Mã bộ trung tâm'
+            },
             io_center_name: {
                 title: 'Bộ trung tâm'
             },

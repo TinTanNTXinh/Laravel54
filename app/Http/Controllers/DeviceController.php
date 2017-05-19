@@ -22,6 +22,7 @@ class DeviceController extends Controller implements ICrud, IValidate
     private $user;
     private $format_date, $format_time;
     private $table_name;
+    private $skeleton;
 
     private $class_name = Device::class;
 
@@ -44,6 +45,14 @@ class DeviceController extends Controller implements ICrud, IValidate
         }
 
         $this->table_name = 'device';
+
+        $this->skeleton = Device::where('devices.active', true)
+            ->leftJoin('collections', 'collections.id', '=', 'devices.collect_id')
+            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
+            ->leftJoin('devices as parents', 'parents.id', '=', 'devices.parent_id')
+            ->select('devices.*', 'parents.name as parent_name'
+                , 'collections.code as collect_code', 'collections.name as collect_name'
+                , 'io_centers.code as io_center_code', 'io_centers.name as io_center_name');
     }
 
     /** API METHOD */
@@ -114,12 +123,7 @@ class DeviceController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $devices     = Device::where('devices.active', true)
-            ->leftJoin('collections', 'collections.id', '=', 'devices.collect_id')
-            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
-            ->leftJoin('devices as parent', 'parent.id', '=', 'devices.parent_id')
-            ->select('devices.*', 'collections.code as collect_code', 'collections.name as collect_name', 'io_centers.name as io_center_name', 'parent.name as parent_name')
-            ->get();
+        $devices     = $this->skeleton->get();
         $collections = Collection::where('collections.active', true)->get();
         $io_centers  = IOCenter::where('io_centers.active', true)->get();
         return [
@@ -265,14 +269,7 @@ class DeviceController extends Controller implements ICrud, IValidate
         $collect_code = $filter['collect_code'];
         $parent_id    = $filter['parent_id'];
 
-        $devices = Device::where('devices.active', true)
-            ->leftJoin('collections', 'collections.id', '=', 'devices.collect_id')
-            ->leftJoin('io_centers', 'io_centers.id', '=', 'devices.io_center_id')
-            ->leftJoin('devices as parents', 'parents.id', '=', 'devices.parent_id')
-            ->select('devices.*'
-                , 'collections.code as collect_code', 'collections.name as collect_name'
-                , 'io_centers.name as io_center_name'
-                , 'parents.name as parent_name');
+        $devices = $this->skeleton;
 
         $devices = $this->searchFromDateToDate($devices, 'devices.created_date', $from_date, $to_date);
 

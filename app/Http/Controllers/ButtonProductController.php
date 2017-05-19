@@ -374,7 +374,7 @@ class ButtonProductController extends Controller implements ICrud, IValidate
             DB::beginTransaction();
             $arr_tray_id = $data['arr_tray_id'];
             foreach ($arr_tray_id as $tray_id) {
-                $check_exist = ButtonProduct::where([['button_id', $tray_id], ['active', true]])->first();
+                $check_exist = ButtonProduct::whereActive(true)->where('button_id', $tray_id)->first();
                 $tray        = Device::find($tray_id);
                 $io_center   = IOCenter::find($tray->io_center_id);
 
