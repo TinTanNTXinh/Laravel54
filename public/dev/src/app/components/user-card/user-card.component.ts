@@ -357,4 +357,20 @@ export class UserCardComponent implements OnInit
             }
         );
     }
+
+    public slideCards(rfid_id: number) {
+        return this.cards.filter(function (o) {
+            return o['parent_id'] == rfid_id;
+        });
+    }
+
+    public slideStaffs(parent_id: number, type: string) {
+        let staffs = this.staffs.filter(function (o) {
+            return o['dis_or_sup'] == type;
+        });
+
+        return staffs.filter(function (o) {
+            return o['dis_or_sup_id'] == parent_id;
+        });
+    }
 }

@@ -127,14 +127,20 @@ class UserCardController extends Controller implements ICrud, IValidate
         $user_cards = $this->searchFieldName($user_cards, 'users.dis_or_sup', $this->user->dis_or_sup);
         $user_cards = $user_cards->get();
 
-        $staffs = User::where('users.active', true)->whereNotIn('position_id', [1, 2])
+        // Nhung nhan vien chua duoc phan the
+        $staffs = User::where('users.active', true)
+            ->whereNotIn('position_id', [1, 2])
             ->whereNotIn('id', $user_cards->pluck('user_id')->toArray())
+            ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
+            ->select('users.*', 'positions.name as position_name')
             ->get();
 
-        $cards = Device::where([['devices.active', true], ['collect_code', 'Card']])
+        $cards = Device::whereActive(true)
+            ->where('collect_code', 'Card')
             ->whereNotIn('id', $user_cards->pluck('card_id')->toArray())
             ->get();
 
+        // Lay tat ca user de search
         $users        = User::whereActive(true)->get();
         $suppliers    = Supplier::whereActive(true)->get();
         $distributors = Distributor::whereActive(true)->get();

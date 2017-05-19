@@ -371,5 +371,9 @@ export class ButtonProductComponent implements OnInit
         );
     }
 
-
+    public slideTrays(cabinet_id: number) {
+        return this.trays.filter(function (o) {
+            return o['parent_id'] == cabinet_id;
+        });
+    }
 }

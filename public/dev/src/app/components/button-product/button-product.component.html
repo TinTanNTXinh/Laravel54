@@ -119,23 +119,38 @@
                       <form class="bs-example form-horizontal">
                         <div class="row">
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-sm-2 control-label">{{_deviceCaptionService.tray}}:</label>
-                              <div class="col-sm-10">
-                                <div class="checkbox" *ngFor="let tray of trays">
-                                  <label class="i-checks">
-                                    <input #traycb type="checkbox" (change)="checkTray(traycb.checked, tray.id)">
-                                    <i></i>
-                                    {{ tray.code }} | {{ tray.name }} | {{ tray.cabinet_code }} | {{ tray.cabinet_name }}
-                                  </label>
+                            <div class="panel panel-success">
+                              <div class="panel-heading">
+                                {{_deviceCaptionService.tray}}
+                              </div>
+                              <div class="panel-body">
+                                <div class="dd">
+                                  <ul class="dd-list">
+                                    <ng-container *ngFor="let cabinet of cabinets">
+                                      <li class="dd-item dd3-item">
+                                        <div class="dd-handle dd3-handle">{{cabinet.code}} | {{cabinet.name}}</div>
+                                        <div class="dd3-content">
+                                          <div class="checkbox" *ngFor="let tray of slideTrays(cabinet.id)">
+                                            <label class="i-checks">
+                                              <input #traycb type="checkbox" (change)="checkTray(traycb.checked, tray.id)">
+                                              <i></i>
+                                              {{ tray.code }} | {{ tray.name }}
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </li>
+                                    </ng-container>
+                                  </ul>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="col-sm-2 control-label">Sản phẩm:</label>
-                              <div class="col-sm-10">
+                            <div class="panel panel-info">
+                              <div class="panel-heading">
+                                Sản phẩm
+                              </div>
+                              <div class="panel-body">
                                 <select [(ngModel)]="tray_product.product_id" name="product_id"
                                         class="form-control m-b">
                                   <option *ngFor="let product of products" value="{{ product.id }}">
