@@ -14,13 +14,6 @@ class GroupRolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $array_code = [
-            'MD',
-            'DLBD',
-            'CDTB',
-            'BC'
-        ];
-
         $array_name = [
             'Mặc định',
             'Dữ liệu ban đầu',
@@ -28,11 +21,24 @@ class GroupRolesTableSeeder extends Seeder
             'Báo cáo'
         ];
 
+        $array_index = [
+            1, 2, 3, 4
+        ];
+
+        $array_icon_name = [
+            '',
+            'glyphicon-align-left icon',
+            'glyphicon-cog icon',
+            'glyphicon-stats icon',
+        ];
+
         foreach($array_name as $key => $name){
             \App\GroupRole::create([
                 'code'        => $this->generateCode(\App\GroupRole::class, 'GROUP_ROLE'),
                 'name'        => $array_name[$key],
                 'description' => $array_name[$key],
+                'icon_name'   => $array_icon_name[$key],
+                'index'       => $array_index[$key],
                 'active'      => true
             ]);
         }

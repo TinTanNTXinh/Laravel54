@@ -126,8 +126,13 @@ class ButtonProductController extends Controller implements ICrud, IValidate
                 , 'distributors.name as distributor_name'
             )
             ->get();
-        $products      = Product::where('products.active', true)->get();
-        $trays         = Device::whereActive(true)->where('collect_code', 'Tray')->whereNotIn('id', $tray_products->pluck('button_id')->toArray())->get();
+        $products      = Product::whereActive(true)->get();
+        $trays         = Device::where('devices.active', true)
+            ->where('devices.collect_code', 'Tray')
+            ->whereNotIn('devices.id', $tray_products->pluck('button_id')->toArray())
+            ->leftJoin('devices as cabinets', 'cabinets.id', '=', 'devices.parent_id')
+            ->select('devices.*', 'cabinets.code as cabinet_code', 'cabinets.name as cabinet_name')
+            ->get();
 
         $io_centers   = IOCenter::whereActive(true)->get();
         $cabinets     = Device::whereActive(true)->where('collect_code', 'Cabinet')->get();

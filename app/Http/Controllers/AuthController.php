@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Role;
 use App\UserRole;
+use App\GroupRole;
 use Hash;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -84,6 +85,13 @@ class AuthController extends Controller
         if (!$roles)
             return ['error' => 'role is not exist', 'status_code' => 401];
 
-        return ['user' => $user, 'roles' => $roles, 'status_code' => 201];
+        $group_roles = GroupRole::whereActive(true)->get();
+
+        return [
+            'user' => $user,
+            'roles' => $roles,
+            'group_roles' => $group_roles,
+            'status_code' => 201
+        ];
     }
 }
