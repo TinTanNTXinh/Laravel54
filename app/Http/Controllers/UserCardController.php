@@ -47,7 +47,7 @@ class UserCardController extends Controller implements ICrud, IValidate
                 $this->user = $user_data['user'];
         }
         $this->table_name = 'user_card';
-        $this->skeleton = UserCard::where([['user_cards.active', true], ['users.dis_or_sup', $dis_or_sup]])
+        $this->skeleton = UserCard::where('user_cards.active', true)
             ->leftJoin('users', 'users.id', '=', 'user_cards.user_id')
             ->leftJoin('positions', 'positions.id', '=', 'users.position_id')
             ->leftJoin('devices', 'devices.id', '=', 'user_cards.card_id')
@@ -123,7 +123,9 @@ class UserCardController extends Controller implements ICrud, IValidate
     /** LOGIC METHOD */
     public function readAll()
     {
-        $user_cards = $this->skeleton->get();
+        $user_cards = $this->skeleton;
+        $user_cards = $this->searchFieldName($user_cards, 'users.dis_or_sup', $this->user->dis_or_sup);
+        $user_cards = $user_cards->get();
 
         $staffs = User::where('users.active', true)->whereNotIn('position_id', [1, 2])
             ->whereNotIn('id', $user_cards->pluck('user_id')->toArray())
@@ -234,6 +236,8 @@ class UserCardController extends Controller implements ICrud, IValidate
         $phone          = $filter['phone'];
 
         $user_cards = $this->skeleton;
+
+        $user_cards = $this->searchFieldName($user_cards, 'users.dis_or_sup', $dis_or_sup);
 
         switch ($dis_or_sup) {
             case 'sup':
