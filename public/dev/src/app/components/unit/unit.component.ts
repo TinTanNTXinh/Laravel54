@@ -162,6 +162,7 @@ export class UnitComponent implements OnInit
         this.httpClientService.patch(this.prefix_url, {"id": id}).subscribe(
             (success: any) => {
                 this.reloadData(success);
+                this.search();
                 this.toastrHelperService.showToastr('success', 'Hủy thành công.');
                 this.domHelperService.toggleModal('modal-confirm');
             },

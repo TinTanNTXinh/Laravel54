@@ -83,7 +83,8 @@ trait DBHelper
 
     public function checkExistData($class_name, $field_name, $value, $skip_id = [])
     {
-        $exists = $class_name::whereActive(true)->where($field_name, $value)->whereNotIn('id', $skip_id)->get();
+        // Check luôn cả dữ liệu đã deactive [whereActive(true)]
+        $exists = $class_name::where($field_name, $value)->whereNotIn('id', $skip_id)->get();
         // $exists = app($class_name)->whereActive(true)->where($field_name, $value)->get();
         return ($exists->count() > 0);
     }

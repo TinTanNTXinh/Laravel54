@@ -198,6 +198,7 @@ export class ButtonProductComponent implements OnInit
         this.httpClientService.patch(this.prefix_url, {"id": id}).subscribe(
             (success: any) => {
                 this.reloadData(success);
+                this.search();
                 this.toastrHelperService.showToastr('success', 'Hủy thành công.');
                 this.domHelperService.toggleModal('modal-confirm');
             },
@@ -358,6 +359,7 @@ export class ButtonProductComponent implements OnInit
 
         this.httpClientService.post(this.prefix_url, {"tray_product": this.tray_product}).subscribe(
             (success: any) => {
+                this.tray_product.arr_tray_id = [];
                 this.reloadData(success);
                 this.toastrHelperService.showToastr('success', 'Tác vụ thành công.');
             },
