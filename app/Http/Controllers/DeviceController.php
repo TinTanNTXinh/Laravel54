@@ -213,6 +213,26 @@ class DeviceController extends Controller implements ICrud, IValidate
                 return false;
             }
 
+            if ($data['quantum_tray'] > 0 && $data['collect_code'] == 'Cabinet') {
+                $collection = Collection::whereCode('Tray')->first();
+                for ($i = 1; $i <= $data['quantum_tray']; $i++) {
+                    $two                  = new Device();
+                    $two->collect_code    = 'Tray';
+                    $two->code            = $i;
+                    $two->name            = 'Box ' . $i;
+                    $two->description     = null;
+                    $two->quantum_product = $data['quantum_product'];
+                    $two->active          = true;
+                    $two->collect_id      = $collection->id;
+                    $two->io_center_id    = $data['io_center_id'];
+                    $two->parent_id       = $one->id;
+                    if (!$two->save()) {
+                        DB::rollback();
+                        return false;
+                    }
+                }
+            }
+
             DB::commit();
             return true;
         } catch (Exception $ex) {
@@ -323,6 +343,13 @@ class DeviceController extends Controller implements ICrud, IValidate
 
 //        if ($this->checkExistData(Device::class, 'name', $data['name'], $skip_id))
 //            array_push($msg_error, 'Tên thiết bị đã tồn tại.');
+
+        if ($data['quantum_tray'] > 0 && $data['collect_code'] == 'Cabinet') {
+            $childs = Device::whereActive(true)->whereIn('parent_id', $skip_id)->count();
+            if($childs > 0) {
+                array_push($msg_error, 'Chỉ được nhập nhanh box khi tủ không có box nào.');
+            }
+        }
 
         return [
             'status' => count($msg_error) > 0 ? false : true,

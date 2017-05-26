@@ -10,126 +10,86 @@
 
 namespace App{
 /**
- * App\Logging
- *
- * @property int $id
- * @property string $name
- * @property string $description
- * @property int $count
- * @property string $json
- * @property string $created_by
- * @property string $error_type
- * @property bool $active
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCount($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCreatedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereErrorType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereJson($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Logging whereUpdatedAt($value)
- */
-	class Logging extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\SessionVsys
- *
- * @property int $id
- * @property int $io_center_id
- * @property int $card_id
- * @property int $user_id
- * @property int $count
- * @property string $vsys_date
- * @property string $created_date
- * @property string $updated_date
- * @property bool $active
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCardId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCount($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereIoCenterId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUpdatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereVsysDate($value)
- */
-	class SessionVsys extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\Role
+ * App\District
  *
  * @property int $id
  * @property string $code Mã
  * @property string $name Tên
- * @property string $description Mô tả
- * @property string $router_link router link cho angular
- * @property string $icon_name icon cho aside
- * @property int $index vị trí thứ tự
- * @property int $group_role_id Nhóm quyền
+ * @property string $type Loại
+ * @property string $city_code Thành phố
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereGroupRoleId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereIconName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereIndex($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereRouterLink($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Role whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereCityCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\District whereUpdatedAt($value)
  */
-	class Role extends \Eloquent {}
+	class District extends \Eloquent {}
 }
 
 namespace App{
 /**
- * App\ButtonProduct
+ * App\Supplier
  *
  * @property int $id
- * @property int $dis_id Distributor
- * @property int $button_id Box
- * @property int $product_id Sản phẩm
- * @property int $total_quantum Số sản phẩm hiện tại
- * @property int $count Biến đếm
- * @property int $created_by Người tạo
- * @property int $updated_by Nguời cập nhật
- * @property string $created_date Ngày tạo
- * @property string $updated_date Ngày cập nhật
- * @property string $vsys_date Ngày bộ trung tâm
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $address Địa chỉ
+ * @property string $ward_code Phường, xã
+ * @property string $district_code Quận, huyện
+ * @property string $city_code Tỉnh, thành phố
+ * @property string $phone Điện thoại
+ * @property string $email Email
+ * @property string $fax fax
+ * @property string $note Ghi chú
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereButtonId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCount($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereDisId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereProductId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereTotalQuantum($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereVsysDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereAddress($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCityCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereDistrictCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereFax($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereNote($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereWardCode($value)
  */
-	class ButtonProduct extends \Eloquent {}
+	class Supplier extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\City
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $type Loại
+ * @property string $nation_code Quốc gia
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereNationCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\City whereUpdatedAt($value)
+ */
+	class City extends \Eloquent {}
 }
 
 namespace App{
@@ -154,70 +114,6 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\Ward whereUpdatedAt($value)
  */
 	class Ward extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\UserRole
- *
- * @property int $id
- * @property int $user_id Nguời dùng
- * @property int $role_id Quyền
- * @property int $created_by Người tạo
- * @property int $updated_by Người cập nhật
- * @property string $created_date Ngày tạo
- * @property string $updated_date Ngày cập nhật
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereRoleId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUserId($value)
- */
-	class UserRole extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\Producer
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $address Địa chỉ
- * @property string $ward_code Phường, xã
- * @property string $district_code Quận, huyện
- * @property string $city_code Tỉnh, thành phố
- * @property string $phone Điện thoại
- * @property string $email Email
- * @property string $fax fax
- * @property string $note Ghi chú
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereAddress($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCityCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereDistrictCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereFax($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereNote($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer wherePhone($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Producer whereWardCode($value)
- */
-	class Producer extends \Eloquent {}
 }
 
 namespace App{
@@ -275,100 +171,6 @@ namespace App{
 
 namespace App{
 /**
- * App\Device
- *
- * @property int $id
- * @property string $collect_code Mã bộ sưu tập
- * @property string $code Mã
- * @property string $name Tên
- * @property string $description Mô tả
- * @property int $quantum_product Số lượng sản phẩm
- * @property bool $active Kích hoạt
- * @property int $collect_id Bộ sưu tập
- * @property int $io_center_id Bộ trung tâm
- * @property int $parent_id Thiết bị cha
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereCollectCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereCollectId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereIoCenterId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereParentId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereQuantumProduct($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Device whereUpdatedAt($value)
- */
-	class Device extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\File
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $extension Phần mở rộng
- * @property string $mime_type MIME Type
- * @property string $path Đường dẫn
- * @property int $size Dung lượng
- * @property string $table_name Tên bảng
- * @property int $table_id Mã bảng
- * @property string $note Ghi chú
- * @property string $created_date Ngày tạo
- * @property string $updated_date Ngày cập nhật
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\File whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereExtension($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereMimeType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereNote($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File wherePath($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereSize($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereTableId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereTableName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedDate($value)
- */
-	class File extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\City
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $type Loại
- * @property string $nation_code Quốc gia
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\City whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereNationCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\City whereUpdatedAt($value)
- */
-	class City extends \Eloquent {}
-}
-
-namespace App{
-/**
  * App\UserCardMoney
  *
  * @property int $id
@@ -407,26 +209,128 @@ namespace App{
 
 namespace App{
 /**
- * App\District
+ * App\Unit
  *
  * @property int $id
  * @property string $code Mã
  * @property string $name Tên
- * @property string $type Loại
- * @property string $city_code Thành phố
+ * @property string $description Mô tả
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\District whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereCityCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\District whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Unit whereUpdatedAt($value)
  */
-	class District extends \Eloquent {}
+	class Unit extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Nation
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Nation whereUpdatedAt($value)
+ */
+	class Nation extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\GroupRole
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $description Mô tả
+ * @property string $icon_name icon cho aside
+ * @property int $index vị trí thứ tự
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIconName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIndex($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereUpdatedAt($value)
+ */
+	class GroupRole extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Collection
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $description Mô tả
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Collection whereUpdatedAt($value)
+ */
+	class Collection extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\ButtonProduct
+ *
+ * @property int $id
+ * @property int $dis_id Distributor
+ * @property int $button_id Box
+ * @property int $product_id Sản phẩm
+ * @property int $total_quantum Số sản phẩm hiện tại
+ * @property int $count Biến đếm
+ * @property int $created_by Người tạo
+ * @property int $updated_by Nguời cập nhật
+ * @property string $created_date Ngày tạo
+ * @property string $updated_date Ngày cập nhật
+ * @property string $vsys_date Ngày bộ trung tâm
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereButtonId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCount($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereCreatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereDisId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereProductId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereTotalQuantum($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereUpdatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ButtonProduct whereVsysDate($value)
+ */
+	class ButtonProduct extends \Eloquent {}
 }
 
 namespace App{
@@ -493,6 +397,116 @@ namespace App{
 
 namespace App{
 /**
+ * App\Position
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $description Mô tả
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Position whereUpdatedAt($value)
+ */
+	class Position extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\SessionVsys
+ *
+ * @property int $id
+ * @property int $io_center_id
+ * @property int $card_id
+ * @property int $user_id
+ * @property int $count
+ * @property string $vsys_date
+ * @property string $created_date
+ * @property string $updated_date
+ * @property bool $active
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCardId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCount($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereCreatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereIoCenterId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUpdatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\SessionVsys whereVsysDate($value)
+ */
+	class SessionVsys extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\UserRole
+ *
+ * @property int $id
+ * @property int $user_id Nguời dùng
+ * @property int $role_id Quyền
+ * @property int $created_by Người tạo
+ * @property int $updated_by Người cập nhật
+ * @property string $created_date Ngày tạo
+ * @property string $updated_date Ngày cập nhật
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereCreatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereRoleId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUpdatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\UserRole whereUserId($value)
+ */
+	class UserRole extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Role
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $description Mô tả
+ * @property string $router_link router link cho angular
+ * @property string $icon_name icon cho aside
+ * @property int $index vị trí thứ tự
+ * @property int $group_role_id Nhóm quyền
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereGroupRoleId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereIconName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereIndex($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereRouterLink($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Role whereUpdatedAt($value)
+ */
+	class Role extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\Distributor
  *
  * @property int $id
@@ -531,28 +545,6 @@ namespace App{
 
 namespace App{
 /**
- * App\Collection
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $description Mô tả
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Collection whereUpdatedAt($value)
- */
-	class Collection extends \Eloquent {}
-}
-
-namespace App{
-/**
  * App\IOCenter
  *
  * @property int $id
@@ -583,75 +575,35 @@ namespace App{
 
 namespace App{
 /**
- * App\GroupRole
+ * App\Logging
  *
  * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $description Mô tả
- * @property string $icon_name icon cho aside
- * @property int $index vị trí thứ tự
- * @property bool $active Kích hoạt
+ * @property string $name
+ * @property string $description
+ * @property int $count
+ * @property string $json
+ * @property string $created_by
+ * @property string $error_type
+ * @property bool $active
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIconName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereIndex($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\GroupRole whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCount($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereCreatedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereErrorType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereJson($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Logging whereUpdatedAt($value)
  */
-	class GroupRole extends \Eloquent {}
+	class Logging extends \Eloquent {}
 }
 
 namespace App{
 /**
- * App\Unit
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $description Mô tả
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Unit whereUpdatedAt($value)
- */
-	class Unit extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\Nation
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Nation whereUpdatedAt($value)
- */
-	class Nation extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\Supplier
+ * App\Producer
  *
  * @property int $id
  * @property string $code Mã
@@ -667,44 +619,22 @@ namespace App{
  * @property bool $active Kích hoạt
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereAddress($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCityCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereDistrictCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereFax($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereNote($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier wherePhone($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Supplier whereWardCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereAddress($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCityCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereDistrictCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereEmail($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereFax($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereNote($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer wherePhone($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Producer whereWardCode($value)
  */
-	class Supplier extends \Eloquent {}
-}
-
-namespace App{
-/**
- * App\Position
- *
- * @property int $id
- * @property string $code Mã
- * @property string $name Tên
- * @property string $description Mô tả
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereCode($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Position whereUpdatedAt($value)
- */
-	class Position extends \Eloquent {}
+	class Producer extends \Eloquent {}
 }
 
 namespace App{
@@ -749,32 +679,6 @@ namespace App{
 
 namespace App{
 /**
- * App\ProductPrice
- *
- * @property int $id
- * @property int $product_id Sản phẩm
- * @property float $price_input Giá nhập
- * @property float $price_output Giá bán
- * @property string $created_date Ngày tạo
- * @property string $updated_date Ngày cập nhật
- * @property bool $active Kích hoạt
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereActive($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereCreatedDate($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice wherePriceInput($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice wherePriceOutput($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereProductId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereUpdatedDate($value)
- */
-	class ProductPrice extends \Eloquent {}
-}
-
-namespace App{
-/**
  * App\UserCard
  *
  * @property int $id
@@ -813,6 +717,44 @@ namespace App{
 
 namespace App{
 /**
+ * App\File
+ *
+ * @property int $id
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $extension Phần mở rộng
+ * @property string $mime_type MIME Type
+ * @property string $path Đường dẫn
+ * @property int $size Dung lượng
+ * @property string $table_name Tên bảng
+ * @property int $table_id Mã bảng
+ * @property string $note Ghi chú
+ * @property string $created_date Ngày tạo
+ * @property string $updated_date Ngày cập nhật
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereCreatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereExtension($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereMimeType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereNote($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File wherePath($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereSize($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereTableId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereTableName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\File whereUpdatedDate($value)
+ */
+	class File extends \Eloquent {}
+}
+
+namespace App{
+/**
  * App\ProductType
  *
  * @property int $id
@@ -831,5 +773,63 @@ namespace App{
  * @method static \Illuminate\Database\Query\Builder|\App\ProductType whereUpdatedAt($value)
  */
 	class ProductType extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\Device
+ *
+ * @property int $id
+ * @property string $collect_code Mã bộ sưu tập
+ * @property string $code Mã
+ * @property string $name Tên
+ * @property string $description Mô tả
+ * @property int $quantum_product Số lượng sản phẩm
+ * @property bool $active Kích hoạt
+ * @property int $collect_id Bộ sưu tập
+ * @property int $io_center_id Bộ trung tâm
+ * @property int $parent_id Thiết bị cha
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereCollectCode($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereCollectId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereIoCenterId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereParentId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereQuantumProduct($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Device whereUpdatedAt($value)
+ */
+	class Device extends \Eloquent {}
+}
+
+namespace App{
+/**
+ * App\ProductPrice
+ *
+ * @property int $id
+ * @property int $product_id Sản phẩm
+ * @property float $price_input Giá nhập
+ * @property float $price_output Giá bán
+ * @property string $created_date Ngày tạo
+ * @property string $updated_date Ngày cập nhật
+ * @property bool $active Kích hoạt
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereActive($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereCreatedDate($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice wherePriceInput($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice wherePriceOutput($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereProductId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\ProductPrice whereUpdatedDate($value)
+ */
+	class ProductPrice extends \Eloquent {}
 }
 
